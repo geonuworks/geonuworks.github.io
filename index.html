@@ -41,7 +41,7 @@
             position: relative;
         }
         .hero {
-            background-color: var(--background-color); /* 배경 색상 설정 */
+            background-color: var(--background-color);
             position: relative;
             display: flex;
             flex-direction: column;
@@ -60,11 +60,11 @@
             object-fit: cover;
             opacity: 0.2;
             mix-blend-mode: multiply;
-            z-index: 0; /* 영상이 배경으로 오도록 설정 */
+            z-index: 0;
         }
         .hero-content {
             position: relative;
-            z-index: 1; /* 텍스트가 영상 위에 오도록 설정 */
+            z-index: 1;
         }
         .hero-content h1 {
             color: var(--highlight-color);
@@ -74,6 +74,7 @@
             flex-direction: row;
             align-items: center;
             padding: 20px;
+            width: 100%;
         }
         .content-left img {
             width: 50%;
@@ -92,6 +93,24 @@
         }
         h2 {
             color: var(--highlight-color);
+        }
+
+        /* 모바일 환경에서의 스타일 */
+        @media (max-width: 768px) {
+            .content-left {
+                flex-direction: column;
+                height: 100%;
+            }
+            .content-left img {
+                width: 100%; /* 이미지가 화면을 꽉 채우도록 설정 */
+                height: 50%; /* 화면의 절반 차지 */
+                object-fit: cover;
+            }
+            .text-box {
+                width: 100%; /* 텍스트 박스를 화면 아래로 확장 */
+                text-align: center;
+                margin-top: 20px;
+            }
         }
     </style>
 </head>
