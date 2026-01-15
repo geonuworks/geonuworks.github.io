@@ -28,7 +28,11 @@
       overflow: hidden;
     }
 
-    .current { width: 100%; }
+    .current {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
 
     .archive {
       display: flex;
@@ -78,11 +82,22 @@
       align-items: center;
     }
 
-    /* 방금 입력된 메시지: 해 모양 원, 두 배 크기, 아래로 투명 */
+    /* 해 모양 메시지 */
+    .message.new {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
     .message.new .content.sun-shape {
-      width: 400px;      
-      height: 400px;     
-      background: #FFFCEB; 
+      width: 400px;
+      height: 400px;
+      max-width: 400px;
+      max-height: 400px;
+      min-width: 400px;
+      min-height: 400px;
+      background: #FFFCEB;
       border-radius: 50%;
       display: flex;
       flex-direction: column;
@@ -93,10 +108,8 @@
       font-size: 16px;
       color: #111;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      margin: 0 auto;
-
-      /* 아래로 갈수록 점점 투명 */
-      -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+      margin: 0;
+      -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 70%);
       -webkit-mask-repeat: no-repeat;
       -webkit-mask-size: cover;
       mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 70%);
@@ -117,13 +130,21 @@
 
     .content .name { font-weight: 600; margin-right: 6px; }
 
+    /* 누적 메시지: 기본 둥근 직사각형 */
+    .message.old .content {
+      border-radius: 18px;
+      padding: 10px 14px;
+      background: #f0f0f0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
     .input-bar {
       z-index: 10; position: absolute; bottom: 0; left: 0; right: 0;
-      padding: 16px; 
+      padding: 16px;
       display: flex; gap: 8px; align-items: center;
       backdrop-filter: blur(10px);
     }
-    .name-input { width: 80px; flex-shrink: 0; padding: 14px 16px; border-radius: 999px; font-size: 14px; border: none; outline: none; }
+    .name-input { width: 73%; max-width: 110px; flex-shrink: 0; padding: 14px 16px; border-radius: 999px; font-size: 14px; border: none; outline: none; }
     .age-input { width: 60px; flex-shrink: 0; padding: 14px 16px; border-radius: 999px; font-size: 14px; border: none; outline: none; }
     .text-input { flex: 1; padding: 14px 16px; border-radius: 999px; font-size: 14px; border: none; outline: none; }
     .send-btn {
@@ -148,8 +169,8 @@
     </div>
 
     <div class="input-bar">
-      <input class="name-input" id="nameInput" type="text" placeholder="닉네임" />
-      <input class="age-input" id="ageInput" type="text" placeholder="나이" />
+      <input class="name-input" id="nameInput" type="text" placeholder="닉네임" maxlength="6" />
+      <input class="age-input" id="ageInput" type="text" placeholder="나이" maxlength="2" />
       <input class="text-input" id="textInput" type="text" placeholder="텍스트를 입력하세요" maxlength="80" />
       <button class="send-btn" id="sendBtn">→</button>
     </div>
@@ -170,6 +191,11 @@
         const l = 90; 
         return `hsl(${h}, ${s}%, ${l}%)`;
       }
+
+      // 나이는 숫자만 입력
+      ageInput.addEventListener('input', () => {
+        ageInput.value = ageInput.value.replace(/[^0-9]/g, '').slice(0,2);
+      });
 
       function addMessage() {
         const text = textInput.value.trim();
