@@ -1,255 +1,187 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Simple Feed - Sun Shape</title>
-  <style>
-    * { box-sizing: border-box; }
-    html, body {
-      margin: 0; padding: 0; height: 100%;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: linear-gradient(to top, hsl(50, 60%, 90%), hsl(10, 60%, 85%));
-      color: #111; overflow: hidden;
-    }
-
-    .page { position: relative; height: 100%; display: flex; flex-direction: column; }
-
-    .header {
-      position: relative; padding-top: 16px; padding-bottom: 8px; text-align: center; z-index: 2;
-    }
-    .title.small { font-size: 24px; font-weight: 400; margin-bottom: 2px; }
-    .title.large { font-size: 40px; font-weight: 600; margin-bottom: 4px; }
-    .title.desc { font-size: 18px; opacity: 0.8; }
-
-    .feed {
-      position: relative;
-      flex: 1;
-      overflow: hidden;
-    }
-
-    .current {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-    }
-
-    .archive {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      position: absolute;
-      top: 40%;
-      left: 0;
-      right: 0;
-      padding: 0 24px;
-      justify-content: center;
-      max-height: 60%;
-      overflow-y: auto;
-    }
-
-    .message {
-      display: inline-flex;
-      max-width: 320px;
-      transition: opacity 0.25s ease, transform 0.25s ease;
-    }
-
-    .message.old {
-      opacity: 0.6;
-      animation: floatCloud 6s ease-in-out infinite;
-    }
-
-    @keyframes floatCloud {
-      0% { transform: translateY(0px) translateX(0px); }
-      25% { transform: translateY(-4px) translateX(2px); }
-      50% { transform: translateY(0px) translateX(4px); }
-      75% { transform: translateY(4px) translateX(2px); }
-      100% { transform: translateY(0px) translateX(0px); }
-    }
-
-    .content {
-      background: #ffffff;
-      border-radius: 18px;
-      padding: 10px 14px;
-      font-size: 14px;
-      line-height: 1.4;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-      word-break: break-word;
-      overflow-wrap: anywhere;
-      white-space: normal;
-      max-width: 100%;
-      display: inline-flex;
-      align-items: center;
-    }
-
-    /* 해 모양 메시지 */
-    .message.new {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-    }
-
-    .message.new .content.sun-shape {
-      width: 400px;
-      height: 400px;
-      max-width: 400px;
-      max-height: 400px;
-      min-width: 400px;
-      min-height: 400px;
-      background: #FFFCEB;
-      border-radius: 50%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 16px;
-      font-size: 16px;
-      color: #111;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      margin: 0;
-      -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 70%);
-      -webkit-mask-repeat: no-repeat;
-      -webkit-mask-size: cover;
-      mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 70%);
-      mask-repeat: no-repeat;
-      mask-size: cover;
-    }
-
-    .sun-name {
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-
-    .sun-text {
-      font-size: 18px;
-      line-height: 1.4;
-      word-break: break-word;
-    }
-
-    .content .name { font-weight: 600; margin-right: 6px; }
-
-    /* 누적 메시지: 기본 둥근 직사각형 */
-    .message.old .content {
-      border-radius: 18px;
-      padding: 10px 14px;
-      background: #f0f0f0;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    }
-
-    .input-bar {
-      z-index: 10; position: absolute; bottom: 0; left: 0; right: 0;
-      padding: 16px;
-      display: flex; gap: 8px; align-items: center;
-      backdrop-filter: blur(10px);
-    }
-    .name-input { width: 73%; max-width: 110px; flex-shrink: 0; padding: 14px 16px; border-radius: 999px; font-size: 14px; border: none; outline: none; }
-    .age-input { width: 60px; flex-shrink: 0; padding: 14px 16px; border-radius: 999px; font-size: 14px; border: none; outline: none; }
-    .text-input { flex: 1; padding: 14px 16px; border-radius: 999px; font-size: 14px; border: none; outline: none; }
-    .send-btn {
-      width: 48px; height: 48px; border-radius: 50%; border: none;
-      background: #111; color: #fff; font-size: 20px; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Simple Feed - Sun Shape</title>
+<style>
+* { box-sizing: border-box; }
+html, body {
+  margin:0; padding:0; height:100%;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  background:linear-gradient(to top,hsl(50,60%,90%),hsl(10,60%,85%));
+  overflow:hidden; color:#111;
+}
+.page{position:relative;height:100%;display:flex;flex-direction:column;}
+.header{position:relative;padding-top:16px;padding-bottom:8px;text-align:center;z-index:2;}
+.title.small{font-size:32px;margin-bottom:2px;}
+.title.large{font-size:64px;margin-bottom:4px;}
+.title.desc{font-size:48px;}
+.feed{position:relative;flex:1;overflow:hidden;}
+.current{position:absolute;top:5%;left:50%;transform:translateX(-50%);width:400px;height:400px;display:flex;justify-content:center;align-items:center;}
+.sun-shape{width:100%;height:100%;background:#FFFCEB;border-radius:50%;-webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,1) 0%,rgba(0,0,0,0) 70%);-webkit-mask-repeat:no-repeat;-webkit-mask-size:cover;mask-image:linear-gradient(to bottom,rgba(0,0,0,1) 0%,rgba(0,0,0,0) 70%);mask-repeat:no-repeat;mask-size:cover;z-index:1;position:relative;}
+.text-layer{position:absolute;top:20%;left:50%;transform:translate(-50%,calc(-50% + 50px));text-align:center;z-index:2;}
+.text-layer .sun-name{font-weight:600;margin-bottom:8px;font-size:18px;}
+.text-layer .sun-text{font-size:18px;line-height:1.4;}
+.archive{position:absolute;top:40%;left:0;right:0;padding:0 24px;max-height:40%;overflow-y:auto; display:flex; flex-wrap:wrap; overflow:visible;}
+.message{
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  background:#ffffff;
+  border-radius:9999px;
+  padding:10px 21px;
+  font-size:14px;
+  line-height:1.2;
+  text-align:center;
+  cursor:pointer;
+  margin:4px;
+}
+.message.old{animation:floatCloud 6s ease-in-out infinite;}
+@keyframes floatCloud{0%{transform:translateY(0px) translateX(0px);}25%{transform:translateY(-4px) translateX(1px);}50%{transform:translateY(0px) translateX(4px);}75%{transform:translateY(4px) translateX(1px);}100%{transform:translateY(0px) translateX(0px);}}
+.small-rect{
+  position: absolute;
+  bottom: 0; /* 1번째 사각형 하단에 맞춤 */
+  left: 25%;
+  width: 50%;
+  height: 130%; /* 1.3배 높이 */
+  background: #ffffff;
+  border-radius: 9999px;
+  z-index: -1;
+}
+.input-bar{z-index:10;position:absolute;bottom:0;left:0;right:0;padding:16px;display:flex;gap:8px;align-items:center;backdrop-filter:blur(10px);}
+.name-input{width:73%;max-width:110px;flex-shrink:0;padding:14px 16px;border-radius:999px;font-size:14px;border:none;outline:none;}
+.age-input{width:60px;flex-shrink:0;padding:14px 16px;border-radius:999px;font-size:14px;border:none;outline:none;}
+.text-input{flex:1;padding:14px 16px;border-radius:999px;font-size:14px;border:none;outline:none;}
+.send-btn{width:48px;height:48px;border-radius:50%;border:none;background:#111;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.input-error{color:#d00000;border:1px solid #d00000;}
+.input-error::placeholder{color:#d00000;}
+.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:20;}
+.modal{background:#fff;padding:20px;border-radius:12px;width:300px;display:flex;flex-direction:column;gap:12px;align-items:center;position:relative;}
+.modal p{margin:0;font-size:14px;text-align:center;}
+.modal input{width:80%;padding:10px;border-radius:8px;border:1px solid #ccc;}
+.modal button{padding:8px 12px;border:none;border-radius:8px;background:#111;color:#fff;cursor:pointer;}
+.modal .close-btn{position:absolute;top:8px;right:8px;background:transparent;color:#111;font-size:18px;font-weight:bold;border:none;cursor:pointer;}
+</style>
 </head>
 <body>
-  <div class="page">
-
-    <div class="header">
-      <div class="title small">월곡꿈그림도서관</div>
-      <div class="title large">2026년 새해맞이</div>
-      <div class="title.desc">새해를 맞이하는 나의 다짐을 적어보세요!</div>
-    </div>
-
-    <div class="feed">
-      <div class="current" id="current"></div>
-      <div class="archive" id="archive"></div>
-    </div>
-
-    <div class="input-bar">
-      <input class="name-input" id="nameInput" type="text" placeholder="닉네임" maxlength="6" />
-      <input class="age-input" id="ageInput" type="text" placeholder="나이" maxlength="2" />
-      <input class="text-input" id="textInput" type="text" placeholder="텍스트를 입력하세요" maxlength="80" />
-      <button class="send-btn" id="sendBtn">→</button>
-    </div>
+<div class="page">
+  <div class="header">
+    <div class="title small">성북구립 월곡꿈그림도서관</div>
+    <div class="title large">2026년 새해다짐</div>
+    <div class="title.desc">새해를 맞이하는 나의 다짐을 적어보세요!</div>
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const current = document.getElementById('current');
-      const archive = document.getElementById('archive');
-      const nameInput = document.getElementById('nameInput');
-      const ageInput = document.getElementById('ageInput');
-      const textInput = document.getElementById('textInput');
-      const sendBtn = document.getElementById('sendBtn');
+  <div class="feed">
+    <div class="current">
+      <div class="sun-shape"></div>
+      <div class="text-layer" id="textLayer"></div>
+    </div>
+    <div class="archive" id="archive"></div>
+  </div>
 
-      function randomPastelColor() {
-        const h = Math.floor(Math.random() * 360);
-        const s = 25; 
-        const l = 90; 
-        return `hsl(${h}, ${s}%, ${l}%)`;
+  <div class="input-bar">
+    <input class="name-input" id="nameInput" type="text" placeholder="닉네임" maxlength="6" />
+    <input class="age-input" id="ageInput" type="text" placeholder="나이" maxlength="2" />
+    <input class="text-input" id="textInput" type="text" placeholder="텍스트를 입력하세요" maxlength="50" />
+    <button class="send-btn" id="sendBtn">→</button>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const textLayer = document.getElementById('textLayer');
+  const archive = document.getElementById('archive');
+  const nameInput = document.getElementById('nameInput');
+  const ageInput = document.getElementById('ageInput');
+  const textInput = document.getElementById('textInput');
+  const sendBtn = document.getElementById('sendBtn');
+
+  ageInput.addEventListener('input', () => { ageInput.value = ageInput.value.replace(/[^0-9]/g,'').slice(0,2); });
+
+  function updateTextLayer() {
+    const lastMsg = archive.lastElementChild;
+    if(lastMsg){
+      const clone = lastMsg.querySelector('div').cloneNode(true);
+      const smallRect = clone.querySelector('.small-rect');
+      if(smallRect) smallRect.remove();
+      textLayer.innerHTML = clone.innerHTML;
+    } else {
+      textLayer.innerHTML = '';
+    }
+  }
+
+  function addMessage(nameVal=null, ageVal=null, textVal=null) {
+    if (nameVal===null) nameVal = nameInput.value.trim();
+    if (ageVal===null) ageVal = ageInput.value.trim();
+    if (textVal===null) textVal = textInput.value.trim();
+
+    [nameInput, ageInput, textInput].forEach(i => i.classList.remove('input-error'));
+    let hasError = false;
+    if (!nameVal) { nameInput.classList.add('input-error'); hasError=true; }
+    if (!ageVal) { ageInput.classList.add('input-error'); hasError=true; }
+    if (!textVal) { textInput.classList.add('input-error'); hasError=true; }
+    if (hasError) return;
+
+    const messageDiv = document.createElement('div');
+    messageDiv.className='message old';
+    messageDiv.innerHTML=`
+      <div>
+        <div class="small-rect"></div>
+        <strong>${nameVal} (${ageVal})</strong><br>
+        <span style='white-space:nowrap;'>${textVal}</span>
+      </div>
+    `;
+    archive.appendChild(messageDiv);
+
+    messageDiv.addEventListener('click', () => {
+      const overlay = document.createElement('div');
+      overlay.className='modal-overlay';
+      overlay.innerHTML=`
+        <div class="modal">
+          <button class="close-btn">×</button>
+          <p>삭제하려면 데스크에 문의해주세요!</p>
+          <input type="password" placeholder="비밀번호 입력" />
+          <button>확인</button>
+        </div>`;
+      document.body.appendChild(overlay);
+
+      const input = overlay.querySelector('input');
+      const btn = overlay.querySelector('button:last-of-type');
+      const closeBtn = overlay.querySelector('.close-btn');
+
+      function closeModal() { document.body.removeChild(overlay); }
+
+      function checkPassword() {
+        if (input.value === '1553') {
+          const isCurrentText = textLayer.textContent === messageDiv.textContent;
+          archive.removeChild(messageDiv);
+          closeModal();
+          if(isCurrentText) updateTextLayer();
+        } else {
+          input.value = '';
+          input.placeholder='잘못된 비밀번호';
+          input.classList.add('input-error');
+        }
       }
 
-      // 나이는 숫자만 입력
-      ageInput.addEventListener('input', () => {
-        ageInput.value = ageInput.value.replace(/[^0-9]/g, '').slice(0,2);
-      });
-
-      function addMessage() {
-        const text = textInput.value.trim();
-        if (!text) return;
-        const name = nameInput.value.trim() || '닉네임';
-        const age = ageInput.value.trim() ? ` (${ageInput.value.trim()})` : '';
-
-        const prevCurrent = current.querySelector('.message');
-        if (prevCurrent) {
-          prevCurrent.classList.remove('new');
-          prevCurrent.classList.add('old');
-
-          const contentDiv = prevCurrent.querySelector('.content');
-
-          if (contentDiv.classList.contains('sun-shape')) {
-            const nameAge = contentDiv.querySelector('.sun-name').innerText;
-            const textContent = contentDiv.querySelector('.sun-text').innerText;
-            contentDiv.classList.remove('sun-shape');
-            contentDiv.style.background = randomPastelColor();
-            contentDiv.innerHTML = `<span class="name">${nameAge}</span>${textContent}`;
-          } else {
-            contentDiv.style.background = randomPastelColor();
-          }
-
-          archive.prepend(prevCurrent);
-        }
-
-        const message = document.createElement('div');
-        message.className = 'message new';
-
-        const content = document.createElement('div');
-        content.className = 'content sun-shape';
-        content.innerHTML = `
-          <div class="sun-name">${name}${age}</div>
-          <div class="sun-text">${text}</div>
-        `;
-
-        message.appendChild(content);
-        current.innerHTML = '';
-        current.appendChild(message);
-
-        textInput.value = '';
-        nameInput.value = '';
-        ageInput.value = '';
-      }
-
-      sendBtn.addEventListener('click', addMessage);
-      textInput.addEventListener('keydown', e => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          addMessage();
-        }
-      });
+      btn.addEventListener('click', checkPassword);
+      input.addEventListener('keydown', e => { if(e.key==='Enter'){ e.preventDefault(); checkPassword(); } });
+      closeBtn.addEventListener('click', closeModal);
     });
-  </script>
+
+    nameInput.value=''; ageInput.value=''; textInput.value='';
+    updateTextLayer();
+  }
+
+  sendBtn.addEventListener('click', addMessage);
+  [nameInput, ageInput, textInput].forEach(input => {
+    input.addEventListener('input', () => { input.classList.remove('input-error'); input.style.color='#111'; });
+    input.addEventListener('keydown', e => { if(e.key==='Enter'){ e.preventDefault(); addMessage(); } });
+  });
+
+  addMessage('홍길동','10','1일 1책 읽기!');
+});
+</script>
 </body>
 </html>
