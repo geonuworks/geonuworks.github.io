@@ -81,7 +81,7 @@ html, body {
 
 .text-layer{
   position:absolute;
-  top:20%;
+  top:30%;
   left:50%;
   transform:translate(-50%,-50%);
   text-align:center;
@@ -90,13 +90,13 @@ html, body {
 
 .sun-name{
   font-family:'Pretendard-Bold';
-  font-size:18px;
+  font-size:24px;
   margin-bottom:6px;
 }
 
 .sun-text{
   font-family:'Pretendard-Regular';
-  font-size:18px;
+  font-size:24px;
   line-height:1.4;
   word-break:break-word;
   white-space:normal;
@@ -187,10 +187,26 @@ input{
   border:1px solid #d00000;
   color:#d00000;
 }
+
+
+/* 금지어 잠금 오버레이 */
+.lock-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:'Pretendard-Bold';
+  font-size:24px;
+  z-index:9999;
+}
 </style>
 </head>
 
 <body>
+<div class="lock-overlay" id="lockOverlay" style="display:none;">금지어가 포함되어 있어 1분간 입력이 제한됩니다.</div>
 <div class="page">
 
   <div class="header">
@@ -262,10 +278,38 @@ function addMessageWithValues(n,a,t){
 }
 
 /* 사용자 입력 */
+// 금지어 목록
+const forbiddenWords = ['금지어1','금지어2'];
+let isLocked = false;
+
+function lockScreen(){
+  isLocked = true;
+  const overlay = document.getElementById('lockOverlay');
+  overlay.style.display = 'flex';
+  setTimeout(()=>{
+    isLocked = false;
+    overlay.style.display = 'none';
+  },60000);
+}
+
 function addMessage(){
+  if(isLocked) return;
+
   const n = nameInput.value.trim();
   const a = ageInput.value.trim();
   const t = textInput.value.trim();
+
+  const combined = `${n} ${a} ${t}`;
+  for(const w of forbiddenWords){
+    if(combined.includes(w)){
+      alert('금지어가 포함되어 있습니다. 1분간 입력이 제한됩니다.');
+      nameInput.value='';
+      ageInput.value='';
+      textInput.value='';
+      lockScreen();
+      return;
+    }
+  }
 
   [nameInput, ageInput, textInput].forEach(i =>
     i.classList.remove('input-error')
