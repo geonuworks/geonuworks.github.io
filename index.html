@@ -111,6 +111,23 @@ html, body {
   padding:0 24px;
   display:flex;
   flex-wrap:wrap;
+  z-index:1;
+}
+
+/* 🔽 누적 말풍선 페이드 마스크 */
+.archive-fade{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:260px;
+  background:linear-gradient(
+    to bottom,
+    rgba(255,252,235,0) 0%,
+    rgba(255,252,235,0.9) 60%
+  );
+  pointer-events:none;
+  z-index:2;
 }
 
 /* 말풍선 */
@@ -159,6 +176,7 @@ html, body {
   padding:60px;
   display:flex;
   gap:8px;
+  z-index:3;
 }
 
 input{
@@ -167,6 +185,7 @@ input{
   padding:14px 16px;
   font-family:'Pretendard-Regular';
   font-size:14px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.1);
 }
 
 .name-input{width:110px}
@@ -181,6 +200,7 @@ input{
   background:#111;
   color:#fff;
   font-size:20px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.1);
 }
 
 .input-error{
@@ -188,8 +208,7 @@ input{
   color:#d00000;
 }
 
-
-/* 금지어 잠금 오버레이 */
+/* 금지어 잠금 */
 .lock-overlay{
   position:fixed;
   inset:0;
@@ -202,61 +221,15 @@ input{
   font-size:24px;
   z-index:9999;
 }
-/* --- 삭제 모달 --- */
-.modal-overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.5);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:9998;
-}
-.modal{
-  background:#fff;
-  padding:20px;
-  border-radius:12px;
-  width:300px;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  align-items:center;
-  position:relative;
-}
-.modal p{margin:0;font-size:14px;text-align:center;}
-.modal input{
-  width:80%;
-  padding:10px;
-  border-radius:8px;
-  border:1px solid #ccc;
-  font-family:'Pretendard-Regular';
-}
-.modal button{
-  padding:8px 12px;
-  border:none;
-  border-radius:8px;
-  background:#111;
-  color:#fff;
-  cursor:pointer;
-}
-.modal .close-btn{
-  position:absolute;
-  top:8px;
-  right:8px;
-  background:transparent;
-  color:#111;
-  font-size:18px;
-  font-weight:bold;
-  border:none;
-  cursor:pointer;
-}
 </style>
 </head>
 
 <body>
-<div class="lock-overlay" id="lockOverlay" style="display:none;">금지어가 포함되어 있어 1분간 입력이 제한됩니다.</div>
-<div class="page">
+<div class="lock-overlay" id="lockOverlay" style="display:none;">
+  금지어가 포함되어 있어 1분간 입력이 제한됩니다.
+</div>
 
+<div class="page">
   <div class="header">
     <div class="title small">성북구립 월곡꿈그림도서관</div>
     <div class="title large">2026년 새해다짐</div>
@@ -268,7 +241,9 @@ input{
       <div class="sun-shape"></div>
       <div class="text-layer" id="textLayer"></div>
     </div>
+
     <div class="archive" id="archive"></div>
+    <div class="archive-fade"></div>
   </div>
 
   <div class="input-bar">
@@ -277,7 +252,6 @@ input{
     <input id="textInput" class="text-input" placeholder="텍스트를 입력하세요" maxlength="50">
     <button id="sendBtn" class="send-btn">→</button>
   </div>
-
 </div>
 
 <script>
@@ -288,18 +262,13 @@ const ageInput = document.getElementById('ageInput');
 const textInput = document.getElementById('textInput');
 const sendBtn = document.getElementById('sendBtn');
 
-/* 나이 숫자만 */
 ageInput.addEventListener('input',()=>{
   ageInput.value = ageInput.value.replace(/[^0-9]/g,'');
 });
 
-/* 해 텍스트 업데이트 */
 function updateTextLayer(){
   const last = archive.lastElementChild;
-  if(!last){
-    textLayer.innerHTML='';
-    return;
-  }
+  if(!last){ textLayer.innerHTML=''; return; }
 
   const strong = last.querySelector('strong')?.innerText || '';
   const span = last.querySelector('span')?.innerText || '';
@@ -310,7 +279,6 @@ function updateTextLayer(){
   `;
 }
 
-/* 내부용 */
 function addMessageWithValues(n,a,t){
   const msg = document.createElement('div');
   msg.className = 'message old';
@@ -321,57 +289,12 @@ function addMessageWithValues(n,a,t){
       <span>${t}</span>
     </div>
   `;
-
-  // ✅ 말풍선 클릭 시 삭제 모달
-  msg.addEventListener('click', ()=>{
-    const overlay = document.createElement('div');
-    overlay.className = 'modal-overlay';
-    overlay.innerHTML = `
-      <div class="modal">
-        <button class="close-btn">×</button>
-        <p>삭제하려면 데스크에 문의해주세요!</p>
-        <input type="password" placeholder="비밀번호 입력" />
-        <button>확인</button>
-      </div>
-    `;
-    document.body.appendChild(overlay);
-
-    const input = overlay.querySelector('input');
-    const confirmBtn = overlay.querySelector('button:last-of-type');
-    const closeBtn = overlay.querySelector('.close-btn');
-
-    function closeModal(){ document.body.removeChild(overlay); }
-
-    function checkPassword(){
-      if(input.value === '1553'){
-        const isCurrent = textLayer.textContent === msg.textContent;
-        archive.removeChild(msg);
-        closeModal();
-        if(isCurrent) updateTextLayer();
-      }else{
-        input.value='';
-        input.placeholder='잘못된 비밀번호';
-        input.classList.add('input-error');
-      }
-    }
-
-    confirmBtn.addEventListener('click', checkPassword);
-    input.addEventListener('keydown', e=>{
-      if(e.key==='Enter'){
-        e.preventDefault();
-        checkPassword();
-      }
-    });
-    closeBtn.addEventListener('click', closeModal);
-  });
-
+  msg.addEventListener('click',()=>msg.remove());
   archive.appendChild(msg);
   updateTextLayer();
 }
 
-/* 사용자 입력 */
-// 금지어 목록
-const forbiddenWords = ['금지어1','금지어2'];
+const forbiddenWords = ['금지어1','금지어2','금지어3'];
 let isLocked = false;
 
 function lockScreen(){
@@ -394,7 +317,7 @@ function addMessage(){
   const combined = `${n} ${a} ${t}`;
   for(const w of forbiddenWords){
     if(combined.includes(w)){
-      alert('금지어가 포함되어 있습니다. 1분간 입력이 제한됩니다.');
+      alert('금지어가 포함되어 있습니다.');
       nameInput.value='';
       ageInput.value='';
       textInput.value='';
@@ -403,17 +326,13 @@ function addMessage(){
     }
   }
 
-  [nameInput, ageInput, textInput].forEach(i =>
-    i.classList.remove('input-error')
-  );
+  [nameInput, ageInput, textInput].forEach(i=>i.classList.remove('input-error'));
 
-  let hasError = false;
-
-  if(!n) { nameInput.classList.add('input-error'); hasError=true; }
-  if(!a) { ageInput.classList.add('input-error'); hasError=true; }
-  if(!t) { textInput.classList.add('input-error'); hasError=true; }
-
-  if(hasError) return;
+  let err=false;
+  if(!n){nameInput.classList.add('input-error'); err=true;}
+  if(!a){ageInput.classList.add('input-error'); err=true;}
+  if(!t){textInput.classList.add('input-error'); err=true;}
+  if(err) return;
 
   addMessageWithValues(n,a,t);
   nameInput.value='';
@@ -421,20 +340,13 @@ function addMessage(){
   textInput.value='';
 }
 
-/* 버튼 */
 sendBtn.addEventListener('click', addMessage);
-
-/* ✅ 엔터 입력 복구 (이게 빠져 있었음) */
-[nameInput, ageInput, textInput].forEach(input=>{
-  input.addEventListener('keydown', e=>{
-    if(e.key === 'Enter'){
-      e.preventDefault();
-      addMessage();
-    }
+[nameInput, ageInput, textInput].forEach(i=>{
+  i.addEventListener('keydown',e=>{
+    if(e.key==='Enter'){ e.preventDefault(); addMessage(); }
   });
 });
 
-/* 초기 말풍선 */
 addMessageWithValues('홍길동','10','1일 1책 읽기!');
 </script>
 </body>
