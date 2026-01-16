@@ -33,7 +33,7 @@ html, body {
 }
 .page{position:relative;height:100%;display:flex;flex-direction:column;}
 
-/* --- 헤더 텍스트 폰트 및 크기 보정 --- */
+/* --- 헤더 --- */
 .header {
   position: relative;
   padding-top:16px;
@@ -42,29 +42,28 @@ html, body {
   z-index:2;
 }
 .header .title {
-  display: block;
-  margin: 0 auto;
-  transform: none;
+  display:block;
+  margin:0 auto;
+  transform:none;
 }
 .title.small {
-  font-family: 'Pretendard-Bold', sans-serif;
-  font-size: 24px !important;
-  line-height: 30px !important;
-  margin-bottom: 2px;
+  font-family:'Pretendard-Bold',sans-serif;
+  font-size:32px !important;
+  line-height:38px !important;
+  margin-bottom:2px;
 }
 .title.large {
-  font-family: 'MaruBuri-Bold', sans-serif;
-  font-size: 64px !important;
-  line-height: 72px !important;
-  margin-bottom: 10px;
+  font-family:'MaruBuri-Bold',sans-serif;
+  font-size:64px !important;
+  line-height:72px !important;
+  margin-bottom:4px;
 }
 .title.desc {
-  display: inline-block; /* 핵심 수정 */
-  font-family: 'MaruBuri-SemiBold', sans-serif !important;
-  font-size: 32px !important;
-  line-height: 36px !important;
-  margin: 0 auto;
-  transform: none;
+  display:inline-block;
+  font-family:'MaruBuri-SemiBold',sans-serif !important;
+  font-size:48px !important;
+  line-height:56px !important;
+  margin:0 auto;
 }
 
 /* --- 피드 --- */
@@ -82,8 +81,14 @@ html, body {
   position:absolute;top:20%;left:50%;transform:translate(-50%,calc(-50% + 50px));
   text-align:center;z-index:2;
 }
-.text-layer .sun-name{font-weight:600;margin-bottom:8px;font-size:18px;font-family:'Pretendard-Bold',sans-serif;}
-.text-layer .sun-text{font-size:18px;line-height:1.4;font-family:'Pretendard-Regular',sans-serif;}
+.text-layer .sun-name{
+  font-family:'Pretendard-Bold',sans-serif;
+  font-weight:600;margin-bottom:8px;font-size:18px;
+}
+.text-layer .sun-text{
+  font-family:'Pretendard-Regular',sans-serif;
+  font-size:18px;line-height:1.4;
+}
 
 .archive{
   position:absolute;top:40%;left:0;right:0;padding:0 24px;
@@ -131,9 +136,9 @@ html, body {
   display:flex;flex-direction:column;gap:12px;align-items:center;position:relative;
 }
 .modal p{margin:0;font-size:14px;text-align:center;}
-.modal input{width:80%;padding:10px;border-radius:8px;border:1px solid #ccc;}
-.modal button{padding:8px 12px;border:none;border-radius:8px;background:#111;color:#fff;cursor:pointer;}
-.modal .close-btn{position:absolute;top:8px;right:8px;background:transparent;color:#111;font-size:18px;font-weight:bold;border:none;cursor:pointer;}
+.modal input{width:80%;padding:10px;border-radius:8px;border:1px solid #ccc;font-family:'Pretendard-Regular',sans-serif;}
+.modal button{padding:8px 12px;border:none;border-radius:8px;background:#111;color:#fff;cursor:pointer;font-family:'Pretendard-Regular',sans-serif;}
+.modal .close-btn{position:absolute;top:8px;right:8px;background:transparent;color:#111;font-size:18px;font-weight:bold;border:none;cursor:pointer;font-family:'Pretendard-Regular',sans-serif;}
 </style>
 </head>
 <body>
