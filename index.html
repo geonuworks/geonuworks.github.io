@@ -78,16 +78,37 @@ html, body {
   z-index:1;position:relative;
 }
 .text-layer{
-  position:absolute;top:20%;left:50%;transform:translate(-50%,calc(-50% + 50px));
-  text-align:center;z-index:2;
+  position:absolute;
+  top:20%;
+  left:50%;
+  transform:translate(-50%,calc(-50% + 50px));
+  text-align:center;
+  z-index:2;
 }
+
+/* ⭐ 해 안에 들어갈 텍스트 박스 */
+.sun-text-box{
+  max-width:260px;          /* 해 도형 크기에 맞게 조절 */
+  padding:12px 16px;
+  box-sizing:border-box;
+  word-break:keep-all;      /* 한국어 자연 줄바꿈 */
+  overflow-wrap:break-word; /* 긴 단어 강제 줄바꿈 */
+}
+
+/* 이름 */
 .text-layer .sun-name{
   font-family:'Pretendard-Bold',sans-serif;
-  font-weight:600;margin-bottom:8px;font-size:18px;
+  font-weight:600;
+  margin-bottom:8px;
+  font-size:18px;
 }
+
+/* 본문 텍스트 */
 .text-layer .sun-text{
   font-family:'Pretendard-Regular',sans-serif;
-  font-size:18px;line-height:1.4;
+  font-size:18px;
+  line-height:1.4;
+  white-space:normal;       /* 줄바꿈 허용 (중요) */
 }
 
 .archive{
