@@ -9,18 +9,22 @@
 @font-face {
   font-family: 'MaruBuri-Bold';
   src: url('./MaruBuri-Bold.otf') format('opentype');
+  font-display: swap;
 }
 @font-face {
   font-family: 'MaruBuri-SemiBold';
   src: url('./MaruBuri-SemiBold.otf') format('opentype');
+  font-display: swap;
 }
 @font-face {
   font-family: 'Pretendard-Bold';
   src: url('./Pretendard-Bold.otf') format('opentype');
+  font-display: swap;
 }
 @font-face {
   font-family: 'Pretendard-Regular';
   src: url('./Pretendard-Regular.otf') format('opentype');
+  font-display: swap;
 }
 
 /* --- 기본 스타일 --- */
@@ -34,10 +38,19 @@ html, body {
 .page{position:relative;height:100%;display:flex;flex-direction:column;}
 .header{position:relative;padding-top:16px;padding-bottom:8px;text-align:center;z-index:2;}
 
-/* --- 헤더 텍스트 폰트 --- */
-.title.small{font-size:32px;margin-bottom:2px;font-family:'Pretendard-Bold',sans-serif;}
-.title.large{font-size:64px;margin-bottom:4px;font-family:'MaruBuri-Bold',sans-serif;}
-.title.desc{font-size:48px;font-family:'MaruBuri-SemiBold',sans-serif;}
+/* --- 헤더 텍스트 폰트 적용 --- */
+.title.small{
+  font-size:32px;margin-bottom:2px;
+  font-family:'Pretendard-Bold',sans-serif !important;
+}
+.title.large{
+  font-size:64px;margin-bottom:4px;
+  font-family:'MaruBuri-Bold',sans-serif !important;
+}
+.title.desc{
+  font-size:48px;
+  font-family:'MaruBuri-SemiBold',sans-serif !important;
+}
 
 /* --- 피드 --- */
 .feed{position:relative;flex:1;overflow:hidden;}
@@ -54,8 +67,8 @@ html, body {
   position:absolute;top:20%;left:50%;transform:translate(-50%,calc(-50% + 50px));
   text-align:center;z-index:2;
 }
-.text-layer .sun-name{font-weight:600;margin-bottom:8px;font-size:18px;font-family:'Pretendard-Bold',sans-serif;}
-.text-layer .sun-text{font-size:18px;line-height:1.4;font-family:'Pretendard-Regular',sans-serif;}
+.text-layer .sun-name{font-weight:600;margin-bottom:8px;font-size:18px;font-family:'Pretendard-Bold',sans-serif !important;}
+.text-layer .sun-text{font-size:18px;line-height:1.4;font-family:'Pretendard-Regular',sans-serif !important;}
 
 .archive{
   position:absolute;top:40%;left:0;right:0;padding:0 24px;
@@ -66,8 +79,8 @@ html, body {
   background:#ffffff; border-radius:9999px; padding:10px 21px;
   font-size:14px; line-height:1.2; text-align:center; cursor:pointer; margin:4px;
 }
-.message strong{font-family:'Pretendard-Bold',sans-serif;} /* 이름 + 나이 */
-.message span{font-family:'Pretendard-Regular',sans-serif;} /* 내용 */
+.message strong{font-family:'Pretendard-Bold',sans-serif !important;} /* 이름 + 나이 */
+.message span{font-family:'Pretendard-Regular',sans-serif !important;} /* 내용 */
 .message.old{animation:floatCloud 6s ease-in-out infinite;}
 @keyframes floatCloud{
   0%{transform:translateY(0px) translateX(0px);}
@@ -87,7 +100,7 @@ html, body {
   padding:16px;display:flex;gap:8px;align-items:center;backdrop-filter:blur(10px);
 }
 .name-input, .age-input, .text-input{
-  font-family:'Pretendard-Regular',sans-serif;
+  font-family:'Pretendard-Regular',sans-serif !important;
 }
 .name-input{width:73%;max-width:110px;flex-shrink:0;padding:14px 16px;border-radius:999px;font-size:14px;border:none;outline:none;}
 .age-input{width:60px;flex-shrink:0;padding:14px 16px;border-radius:999px;font-size:14px;border:none;outline:none;}
