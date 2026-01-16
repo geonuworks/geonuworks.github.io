@@ -6,6 +6,7 @@
 <title>Simple Feed - Sun Shape</title>
 
 <style>
+/* --- 폰트 --- */
 @font-face {
   font-family: 'MaruBuri-Bold';
   src: url('./MaruBuri-Bold.otf') format('opentype');
@@ -26,41 +27,41 @@
 * { box-sizing: border-box; }
 html, body {
   margin:0; padding:0; height:100%;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
   background:linear-gradient(to top,hsl(50,60%,90%),hsl(10,60%,85%));
   overflow:hidden; color:#111;
 }
 
 .page{
-  position:relative;
   height:100%;
   display:flex;
   flex-direction:column;
 }
 
 /* 헤더 */
-.header {
+.header{
   padding-top:64px;
-  padding-bottom:8px;
   text-align:center;
-  z-index:2;
 }
-.title.small {
+.title.small{
   font-family:'Pretendard-Bold';
   font-size:24px;
 }
-.title.large {
+.title.large{
   font-family:'MaruBuri-Bold';
   font-size:64px;
 }
-.title.desc {
+.title.desc{
   font-family:'MaruBuri-SemiBold';
   font-size:36px;
 }
 
 /* 피드 */
-.feed{position:relative;flex:1;overflow:hidden;}
+.feed{
+  position:relative;
+  flex:1;
+}
 
+/* 현재(해) */
 .current{
   position:absolute;
   top:5%;
@@ -84,17 +85,21 @@ html, body {
   left:50%;
   transform:translate(-50%,-50%);
   text-align:center;
+  width:70%;
 }
 
 .sun-name{
   font-family:'Pretendard-Bold';
   font-size:18px;
-  margin-bottom:8px;
+  margin-bottom:6px;
 }
+
 .sun-text{
   font-family:'Pretendard-Regular';
   font-size:18px;
   line-height:1.4;
+  word-break:break-word;
+  white-space:normal;
 }
 
 /* archive */
@@ -108,14 +113,22 @@ html, body {
   flex-wrap:wrap;
 }
 
+/* 말풍선 */
 .message{
-  background:#fff;
+  position:relative;
+  display:inline-block;
+  vertical-align:top;
+  background:#ffffff;
   border-radius:9999px;
   padding:10px 21px;
   margin:24px;
+  font-family:'Pretendard-Regular';
+  font-size:14px;
+  line-height:1.4;
+  text-align:center;
   cursor:pointer;
-  position:relative;
 }
+
 .message.old{
   animation:floatCloud 6s ease-in-out infinite;
 }
@@ -137,27 +150,25 @@ html, body {
   z-index:-1;
 }
 
-/* 입력바 */
+/* 입력 */
 .input-bar{
   position:absolute;
   bottom:0;
   left:0;
   right:0;
-  max-width:1000px;
-  margin:0 auto;
   padding:60px;
   display:flex;
   gap:8px;
-  backdrop-filter:blur(10px);
 }
 
 input{
   border:none;
-  outline:none;
   border-radius:999px;
   padding:14px 16px;
   font-family:'Pretendard-Regular';
+  font-size:14px;
 }
+
 .name-input{width:110px}
 .age-input{width:60px}
 .text-input{flex:1}
@@ -170,29 +181,11 @@ input{
   background:#111;
   color:#fff;
   font-size:20px;
-  cursor:pointer;
 }
 
 .input-error{
   border:1px solid #d00000;
   color:#d00000;
-}
-
-/* 모달 */
-.modal-overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.5);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-.modal{
-  background:#fff;
-  padding:20px;
-  border-radius:12px;
-  width:300px;
-  text-align:center;
 }
 </style>
 </head>
@@ -231,35 +224,33 @@ const ageInput = document.getElementById('ageInput');
 const textInput = document.getElementById('textInput');
 const sendBtn = document.getElementById('sendBtn');
 
+/* 나이 숫자만 */
 ageInput.addEventListener('input',()=>{
   ageInput.value = ageInput.value.replace(/[^0-9]/g,'');
 });
 
+/* 해 텍스트 업데이트 */
 function updateTextLayer(){
   const last = archive.lastElementChild;
-  if(!last){ textLayer.innerHTML=''; return; }
-  const clone = last.querySelector('div').cloneNode(true);
-  const rect = clone.querySelector('.small-rect');
-  if(rect) rect.remove();
-  textLayer.innerHTML = clone.innerHTML;
-}
-
-function addMessage(){
-  const n=nameInput.value.trim();
-  const a=ageInput.value.trim();
-  const t=textInput.value.trim();
-
-  [nameInput,ageInput,textInput].forEach(i=>i.classList.remove('input-error'));
-  if(!n||!a||!t){
-    if(!n)nameInput.classList.add('input-error');
-    if(!a)ageInput.classList.add('input-error');
-    if(!t)textInput.classList.add('input-error');
+  if(!last){
+    textLayer.innerHTML='';
     return;
   }
 
-  const msg=document.createElement('div');
-  msg.className='message old';
-  msg.innerHTML=`
+  const strong = last.querySelector('strong')?.innerText || '';
+  const span = last.querySelector('span')?.innerText || '';
+
+  textLayer.innerHTML = `
+    <div class="sun-name">${strong}</div>
+    <div class="sun-text">${span}</div>
+  `;
+}
+
+/* 내부용 */
+function addMessageWithValues(n,a,t){
+  const msg = document.createElement('div');
+  msg.className = 'message old';
+  msg.innerHTML = `
     <div>
       <div class="small-rect"></div>
       <strong>${n} (${a})</strong><br>
@@ -268,21 +259,47 @@ function addMessage(){
   `;
   archive.appendChild(msg);
   updateTextLayer();
+}
 
+/* 사용자 입력 */
+function addMessage(){
+  const n = nameInput.value.trim();
+  const a = ageInput.value.trim();
+  const t = textInput.value.trim();
+
+  [nameInput, ageInput, textInput].forEach(i =>
+    i.classList.remove('input-error')
+  );
+
+  let hasError = false;
+
+  if(!n) { nameInput.classList.add('input-error'); hasError=true; }
+  if(!a) { ageInput.classList.add('input-error'); hasError=true; }
+  if(!t) { textInput.classList.add('input-error'); hasError=true; }
+
+  if(hasError) return;
+
+  addMessageWithValues(n,a,t);
   nameInput.value='';
   ageInput.value='';
   textInput.value='';
 }
 
-sendBtn.onclick=addMessage;
-[textInput,nameInput,ageInput].forEach(i=>{
-  i.addEventListener('keydown',e=>{
-    if(e.key==='Enter'){ e.preventDefault(); addMessage(); }
+/* 버튼 */
+sendBtn.addEventListener('click', addMessage);
+
+/* ✅ 엔터 입력 복구 (이게 빠져 있었음) */
+[nameInput, ageInput, textInput].forEach(input=>{
+  input.addEventListener('keydown', e=>{
+    if(e.key === 'Enter'){
+      e.preventDefault();
+      addMessage();
+    }
   });
 });
 
-/* 초기 샘플 */
-addMessage.call({},{},'홍길동','10','1일 1책 읽기!');
+/* 초기 말풍선 */
+addMessageWithValues('홍길동','10','1일 1책 읽기!');
 </script>
 </body>
 </html>
