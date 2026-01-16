@@ -233,13 +233,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const messageDiv = document.createElement('div');
     messageDiv.className='message old';
-    messageDiv.innerHTML=`
-      <div>
-        <div class="small-rect"></div>
-        <strong>${nameVal} (${ageVal})</strong><br>
-        <span style='white-space:nowrap;'>${textVal}</span>
-      </div>
-    `;
+    messageDiv.innerHTML = `
+  <div class="sun-text-box">
+    <div class="small-rect"></div>
+    <div class="sun-name">${nameVal} (${ageVal})</div>
+    <div class="sun-text">${textVal}</div>
+  </div>
+`;
+
     archive.appendChild(messageDiv);
 
     messageDiv.addEventListener('click', () => {
