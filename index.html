@@ -5,6 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Simple Feed - Sun Shape</title>
 <style>
+/* --- 폰트 정의 --- */
+@font-face {
+  font-family: 'MaruBuri-Bold';
+  src: url('./MaruBuri-Bold.otf') format('opentype');
+}
+@font-face {
+  font-family: 'MaruBuri-SemiBold';
+  src: url('./MaruBuri-SemiBold.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Pretendard-Bold';
+  src: url('./Pretendard-Bold.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Pretendard-Regular';
+  src: url('./Pretendard-Regular.otf') format('opentype');
+}
+
+/* --- 기본 스타일 --- */
 * { box-sizing: border-box; }
 html, body {
   margin:0; padding:0; height:100%;
@@ -14,50 +33,75 @@ html, body {
 }
 .page{position:relative;height:100%;display:flex;flex-direction:column;}
 .header{position:relative;padding-top:16px;padding-bottom:8px;text-align:center;z-index:2;}
-.title.small{font-size:32px;margin-bottom:2px;}
-.title.large{font-size:64px;margin-bottom:4px;}
-.title.desc{font-size:48px;}
+
+/* --- 헤더 텍스트 폰트 --- */
+.title.small{font-size:32px;margin-bottom:2px;font-family:'Pretendard-Bold',sans-serif;}
+.title.large{font-size:64px;margin-bottom:4px;font-family:'MaruBuri-Bold',sans-serif;}
+.title.desc{font-size:48px;font-family:'MaruBuri-SemiBold',sans-serif;}
+
+/* --- 피드 --- */
 .feed{position:relative;flex:1;overflow:hidden;}
 .current{position:absolute;top:5%;left:50%;transform:translateX(-50%);width:400px;height:400px;display:flex;justify-content:center;align-items:center;}
-.sun-shape{width:100%;height:100%;background:#FFFCEB;border-radius:50%;-webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,1) 0%,rgba(0,0,0,0) 70%);-webkit-mask-repeat:no-repeat;-webkit-mask-size:cover;mask-image:linear-gradient(to bottom,rgba(0,0,0,1) 0%,rgba(0,0,0,0) 70%);mask-repeat:no-repeat;mask-size:cover;z-index:1;position:relative;}
-.text-layer{position:absolute;top:20%;left:50%;transform:translate(-50%,calc(-50% + 50px));text-align:center;z-index:2;}
-.text-layer .sun-name{font-weight:600;margin-bottom:8px;font-size:18px;}
-.text-layer .sun-text{font-size:18px;line-height:1.4;}
-.archive{position:absolute;top:40%;left:0;right:0;padding:0 24px;max-height:40%;overflow-y:auto; display:flex; flex-wrap:wrap; overflow:visible;}
+.sun-shape{
+  width:100%;height:100%;background:#FFFCEB;border-radius:50%;
+  -webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,1) 0%,rgba(0,0,0,0) 70%);
+  -webkit-mask-repeat:no-repeat;-webkit-mask-size:cover;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,1) 0%,rgba(0,0,0,0) 70%);
+  mask-repeat:no-repeat;mask-size:cover;
+  z-index:1;position:relative;
+}
+.text-layer{
+  position:absolute;top:20%;left:50%;transform:translate(-50%,calc(-50% + 50px));
+  text-align:center;z-index:2;
+}
+.text-layer .sun-name{font-weight:600;margin-bottom:8px;font-size:18px;font-family:'Pretendard-Bold',sans-serif;}
+.text-layer .sun-text{font-size:18px;line-height:1.4;font-family:'Pretendard-Regular',sans-serif;}
+
+.archive{
+  position:absolute;top:40%;left:0;right:0;padding:0 24px;
+  max-height:40%;overflow-y:auto;display:flex;flex-wrap:wrap;overflow:visible;
+}
 .message{
-  position: relative;
-  display: inline-block;
-  vertical-align: top;
-  background:#ffffff;
-  border-radius:9999px;
-  padding:10px 21px;
-  font-size:14px;
-  line-height:1.2;
-  text-align:center;
-  cursor:pointer;
-  margin:4px;
+  position: relative; display: inline-block; vertical-align: top;
+  background:#ffffff; border-radius:9999px; padding:10px 21px;
+  font-size:14px; line-height:1.2; text-align:center; cursor:pointer; margin:4px;
 }
+.message strong{font-family:'Pretendard-Bold',sans-serif;} /* 이름 + 나이 */
+.message span{font-family:'Pretendard-Regular',sans-serif;} /* 내용 */
 .message.old{animation:floatCloud 6s ease-in-out infinite;}
-@keyframes floatCloud{0%{transform:translateY(0px) translateX(0px);}25%{transform:translateY(-4px) translateX(1px);}50%{transform:translateY(0px) translateX(4px);}75%{transform:translateY(4px) translateX(1px);}100%{transform:translateY(0px) translateX(0px);}}
-.small-rect{
-  position: absolute;
-  bottom: 0; /* 1번째 사각형 하단에 맞춤 */
-  left: 25%;
-  width: 50%;
-  height: 130%; /* 1.3배 높이 */
-  background: #ffffff;
-  border-radius: 9999px;
-  z-index: -1;
+@keyframes floatCloud{
+  0%{transform:translateY(0px) translateX(0px);}
+  25%{transform:translateY(-4px) translateX(1px);}
+  50%{transform:translateY(0px) translateX(4px);}
+  75%{transform:translateY(4px) translateX(1px);}
+  100%{transform:translateY(0px) translateX(0px);}
 }
-.input-bar{z-index:10;position:absolute;bottom:0;left:0;right:0;padding:16px;display:flex;gap:8px;align-items:center;backdrop-filter:blur(10px);}
+.small-rect{
+  position: absolute; bottom:0; left:25%; width:50%; height:130%;
+  background:#ffffff; border-radius:9999px; z-index:-1;
+}
+
+/* --- 입력바 --- */
+.input-bar{
+  z-index:10;position:absolute;bottom:0;left:0;right:0;
+  padding:16px;display:flex;gap:8px;align-items:center;backdrop-filter:blur(10px);
+}
+.name-input, .age-input, .text-input{
+  font-family:'Pretendard-Regular',sans-serif;
+}
 .name-input{width:73%;max-width:110px;flex-shrink:0;padding:14px 16px;border-radius:999px;font-size:14px;border:none;outline:none;}
 .age-input{width:60px;flex-shrink:0;padding:14px 16px;border-radius:999px;font-size:14px;border:none;outline:none;}
 .text-input{flex:1;padding:14px 16px;border-radius:999px;font-size:14px;border:none;outline:none;}
 .send-btn{width:48px;height:48px;border-radius:50%;border:none;background:#111;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 .input-error{color:#d00000;border:1px solid #d00000;}
 .input-error::placeholder{color:#d00000;}
+
+/* --- 모달 --- */
 .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:20;}
-.modal{background:#fff;padding:20px;border-radius:12px;width:300px;display:flex;flex-direction:column;gap:12px;align-items:center;position:relative;}
+.modal{
+  background:#fff;padding:20px;border-radius:12px;width:300px;
+  display:flex;flex-direction:column;gap:12px;align-items:center;position:relative;
+}
 .modal p{margin:0;font-size:14px;text-align:center;}
 .modal input{width:80%;padding:10px;border-radius:8px;border:1px solid #ccc;}
 .modal button{padding:8px 12px;border:none;border-radius:8px;background:#111;color:#fff;cursor:pointer;}
