@@ -8,109 +8,109 @@
 <style>
 /* --- 폰트 --- */
 @font-face {
-font-family: 'MaruBuri-Bold';
-src: url('./MaruBuri-Bold.otf') format('opentype');
+  font-family: 'MaruBuri-Bold';
+  src: url('./MaruBuri-Bold.otf') format('opentype');
 }
 @font-face {
-font-family: 'MaruBuri-SemiBold';
-src: url('./MaruBuri-SemiBold.otf') format('opentype');
+  font-family: 'MaruBuri-SemiBold';
+  src: url('./MaruBuri-SemiBold.otf') format('opentype');
 }
 @font-face {
-font-family: 'Pretendard-Bold';
-src: url('./Pretendard-Bold.woff2') format('woff2');
+  font-family: 'Pretendard-Bold';
+  src: url('./Pretendard-Bold.woff2') format('woff2');
 }
 @font-face {
-font-family: 'Pretendard-Regular';
-src: url('./Pretendard-Regular.woff2') format('woff2');
+  font-family: 'Pretendard-Regular';
+  src: url('./Pretendard-Regular.woff2') format('woff2');
 }
 
 * { box-sizing: border-box; }
 html, body {
-margin:0; padding:0; height:100%;
-background:linear-gradient(to top,hsl(50,60%,90%),hsl(10,60%,85%));
-overflow:hidden; color:#111;
+  margin:0; padding:0; height:100%;
+  background:linear-gradient(to top,hsl(50,60%,90%),hsl(10,60%,85%));
+  overflow:hidden; color:#111;
 }
 
 .page{
-height:100%;
-display:flex;
-flex-direction:column;
+  height:100%;
+  display:flex;
+  flex-direction:column;
 }
 
 /* 헤더 */
 .header{
-padding-top:64px;
-text-align:center;
+  padding-top:64px;
+  text-align:center;
 }
 .title.small{
-font-family:'Pretendard-Bold';
-font-size:24px;
+  font-family:'Pretendard-Bold';
+  font-size:24px;
 }
 .title.large{
-font-family:'MaruBuri-Bold';
-font-size:64px;
+  font-family:'MaruBuri-Bold';
+  font-size:64px;
 }
 .title.desc{
-font-family:'MaruBuri-SemiBold';
-font-size:36px;
+  font-family:'MaruBuri-SemiBold';
+  font-size:36px;
 }
 
 /* 피드 */
 .feed{
-position:relative;
-flex:1;
+  position:relative;
+  flex:1;
 }
 
 /* 현재(해) */
 .current{
-position:absolute;
-top:5%;
-left:50%;
-transform:translateX(-50%);
-width:400px;
-height:400px;
+  position:absolute;
+  top:5%;
+  left:50%;
+  transform:translateX(-50%);
+  width:400px;
+  height:400px;
 }
 
 .sun-shape{
-width:100%;
-height:100%;
-background:#FFFCEB;
-border-radius:50%;
--webkit-mask-image:linear-gradient(to bottom,#000 0%,transparent 70%);
+  width:100%;
+  height:100%;
+  background:#FFFCEB;
+  border-radius:50%;
+  -webkit-mask-image:linear-gradient(to bottom,#000 0%,transparent 70%);
 }
 
 .text-layer{
-position:absolute;
-top:30%;
-left:50%;
-transform:translate(-50%,-50%);
-text-align:center;
-width:70%;
+  position:absolute;
+  top:30%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  text-align:center;
+  width:70%;
 }
 
 .sun-name{
-font-family:'Pretendard-Bold';
-font-size:24px;
-margin-bottom:6px;
+  font-family:'Pretendard-Bold';
+  font-size:24px;
+  margin-bottom:6px;
 }
 
 .sun-text{
-font-family:'Pretendard-Regular';
-font-size:24px;
-line-height:1.4;
-word-break:break-word;
-white-space:normal;
+  font-family:'Pretendard-Regular';
+  font-size:24px;
+  line-height:1.4;
+  word-break:break-word;
+  white-space:normal;
 }
 
 /* archive */
 .archive{
-position:absolute;
-top:40%;
-left:0;
-right:0;
-padding:0 24px;
-display:flex;
-flex-wrap:wrap;
+  position:absolute;
+  top:40%;
+  left:0;
+  right:0;
+  padding:0 24px;
+  display:flex;
+  flex-wrap:wrap;
   z-index:1;
 }
 
@@ -132,59 +132,59 @@ flex-wrap:wrap;
 
 /* 말풍선 */
 .message{
-position:relative;
-display:inline-block;
-vertical-align:top;
-background:#ffffff;
-border-radius:9999px;
-padding:10px 21px;
-margin:24px;
-font-family:'Pretendard-Regular';
-font-size:14px;
-line-height:1.4;
-text-align:center;
-cursor:pointer;
+  position:relative;
+  display:inline-block;
+  vertical-align:top;
+  background:#ffffff;
+  border-radius:9999px;
+  padding:10px 21px;
+  margin:24px;
+  font-family:'Pretendard-Regular';
+  font-size:14px;
+  line-height:1.4;
+  text-align:center;
+  cursor:pointer;
 }
 
 .message.old{
-animation:floatCloud 6s ease-in-out infinite;
+  animation:floatCloud 6s ease-in-out infinite;
 }
 
 @keyframes floatCloud{
-0%{transform:translateY(0)}
-50%{transform:translateY(-4px)}
-100%{transform:translateY(0)}
+  0%{transform:translateY(0)}
+  50%{transform:translateY(-4px)}
+  100%{transform:translateY(0)}
 }
 
 .small-rect{
-position:absolute;
-bottom:0;
-left:25%;
-width:50%;
-height:130%;
-background:#fff;
-border-radius:9999px;
-z-index:-1;
+  position:absolute;
+  bottom:0;
+  left:25%;
+  width:50%;
+  height:130%;
+  background:#fff;
+  border-radius:9999px;
+  z-index:-1;
 }
 
 /* 입력 */
 .input-bar{
-position:absolute;
-bottom:0;
-left:0;
-right:0;
-padding:60px;
-display:flex;
-gap:8px;
+  position:absolute;
+  bottom:0;
+  left:0;
+  right:0;
+  padding:60px;
+  display:flex;
+  gap:8px;
   z-index:3;
 }
 
 input{
-border:none;
-border-radius:999px;
-padding:14px 16px;
-font-family:'Pretendard-Regular';
-font-size:14px;
+  border:none;
+  border-radius:999px;
+  padding:14px 16px;
+  font-family:'Pretendard-Regular';
+  font-size:14px;
   box-shadow:0 8px 20px rgba(0,0,0,0.1);
 }
 
@@ -193,118 +193,65 @@ font-size:14px;
 .text-input{flex:1}
 
 .send-btn{
-width:48px;
-height:48px;
-border-radius:50%;
-border:none;
-background:#111;
-color:#fff;
-font-size:20px;
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  border:none;
+  background:#111;
+  color:#fff;
+  font-size:20px;
   box-shadow:0 8px 20px rgba(0,0,0,0.1);
 }
 
 .input-error{
-border:1px solid #d00000;
-color:#d00000;
+  border:1px solid #d00000;
+  color:#d00000;
 }
 
-
-/* 금지어 잠금 오버레이 */
 /* 금지어 잠금 */
 .lock-overlay{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,0.6);
-color:#fff;
-display:flex;
-align-items:center;
-justify-content:center;
-font-family:'Pretendard-Bold';
-font-size:24px;
-z-index:9999;
-}
-/* --- 삭제 모달 --- */
-.modal-overlay{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,0.5);
+  background:rgba(0,0,0,0.6);
+  color:#fff;
   display:flex;
   align-items:center;
   justify-content:center;
-  z-index:9998;
-}
-.modal{
-  background:#fff;
-  padding:20px;
-  border-radius:12px;
-  width:300px;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  align-items:center;
-  position:relative;
-}
-.modal p{margin:0;font-size:14px;text-align:center;}
-.modal input{
-  width:80%;
-  padding:10px;
-  border-radius:8px;
-  border:1px solid #ccc;
-  font-family:'Pretendard-Regular';
-}
-.modal button{
-  padding:8px 12px;
-  border:none;
-  border-radius:8px;
-  background:#111;
-  color:#fff;
-  cursor:pointer;
-}
-.modal .close-btn{
-  position:absolute;
-  top:8px;
-  right:8px;
-  background:transparent;
-  color:#111;
-  font-size:18px;
-  font-weight:bold;
-  border:none;
-  cursor:pointer;
+  font-family:'Pretendard-Bold';
+  font-size:24px;
+  z-index:9999;
 }
 </style>
 </head>
 
 <body>
-<div class="lock-overlay" id="lockOverlay" style="display:none;">금지어가 포함되어 있어 1분간 입력이 제한됩니다.</div>
-<div class="page">
 <div class="lock-overlay" id="lockOverlay" style="display:none;">
   금지어가 포함되어 있어 1분간 입력이 제한됩니다.
 </div>
 
 <div class="page">
-<div class="header">
-<div class="title small">성북구립 월곡꿈그림도서관</div>
-<div class="title large">2026년 새해다짐</div>
-<div class="title desc">새해를 맞이하는 나의 다짐을 적어보세요!</div>
-</div>
+  <div class="header">
+    <div class="title small">성북구립 월곡꿈그림도서관</div>
+    <div class="title large">2026년 새해다짐</div>
+    <div class="title desc">새해를 맞이하는 나의 다짐을 적어보세요!</div>
+  </div>
 
-<div class="feed">
-<div class="current">
-<div class="sun-shape"></div>
-<div class="text-layer" id="textLayer"></div>
-</div>
+  <div class="feed">
+    <div class="current">
+      <div class="sun-shape"></div>
+      <div class="text-layer" id="textLayer"></div>
+    </div>
 
-<div class="archive" id="archive"></div>
+    <div class="archive" id="archive"></div>
     <div class="archive-fade"></div>
-</div>
+  </div>
 
-<div class="input-bar">
-<input id="nameInput" class="name-input" placeholder="닉네임" maxlength="6">
-<input id="ageInput" class="age-input" placeholder="나이" maxlength="2">
-<input id="textInput" class="text-input" placeholder="텍스트를 입력하세요" maxlength="50">
-<button id="sendBtn" class="send-btn">→</button>
-</div>
-
+  <div class="input-bar">
+    <input id="nameInput" class="name-input" placeholder="닉네임" maxlength="6">
+    <input id="ageInput" class="age-input" placeholder="나이" maxlength="2">
+    <input id="textInput" class="text-input" placeholder="텍스트를 입력하세요" maxlength="50">
+    <button id="sendBtn" class="send-btn">→</button>
+  </div>
 </div>
 
 <script>
@@ -315,166 +262,91 @@ const ageInput = document.getElementById('ageInput');
 const textInput = document.getElementById('textInput');
 const sendBtn = document.getElementById('sendBtn');
 
-/* 나이 숫자만 */
 ageInput.addEventListener('input',()=>{
-ageInput.value = ageInput.value.replace(/[^0-9]/g,'');
+  ageInput.value = ageInput.value.replace(/[^0-9]/g,'');
 });
 
-/* 해 텍스트 업데이트 */
 function updateTextLayer(){
-const last = archive.lastElementChild;
-  if(!last){
-    textLayer.innerHTML='';
-    return;
-  }
+  const last = archive.lastElementChild;
   if(!last){ textLayer.innerHTML=''; return; }
 
-const strong = last.querySelector('strong')?.innerText || '';
-const span = last.querySelector('span')?.innerText || '';
+  const strong = last.querySelector('strong')?.innerText || '';
+  const span = last.querySelector('span')?.innerText || '';
 
-textLayer.innerHTML = `
-   <div class="sun-name">${strong}</div>
-   <div class="sun-text">${span}</div>
- `;
+  textLayer.innerHTML = `
+    <div class="sun-name">${strong}</div>
+    <div class="sun-text">${span}</div>
+  `;
 }
 
-/* 내부용 */
 function addMessageWithValues(n,a,t){
-const msg = document.createElement('div');
-msg.className = 'message old';
-msg.innerHTML = `
-   <div>
-     <div class="small-rect"></div>
-     <strong>${n} (${a})</strong><br>
-     <span>${t}</span>
-   </div>
- `;
-
-  // ✅ 말풍선 클릭 시 삭제 모달
-  msg.addEventListener('click', ()=>{
-    const overlay = document.createElement('div');
-    overlay.className = 'modal-overlay';
-    overlay.innerHTML = `
-      <div class="modal">
-        <button class="close-btn">×</button>
-        <p>삭제하려면 데스크에 문의해주세요!</p>
-        <input type="password" placeholder="비밀번호 입력" />
-        <button>확인</button>
-      </div>
-    `;
-    document.body.appendChild(overlay);
-
-    const input = overlay.querySelector('input');
-    const confirmBtn = overlay.querySelector('button:last-of-type');
-    const closeBtn = overlay.querySelector('.close-btn');
-
-    function closeModal(){ document.body.removeChild(overlay); }
-
-    function checkPassword(){
-      if(input.value === '1553'){
-        const isCurrent = textLayer.textContent === msg.textContent;
-        archive.removeChild(msg);
-        closeModal();
-        if(isCurrent) updateTextLayer();
-      }else{
-        input.value='';
-        input.placeholder='잘못된 비밀번호';
-        input.classList.add('input-error');
-      }
-    }
-
-    confirmBtn.addEventListener('click', checkPassword);
-    input.addEventListener('keydown', e=>{
-      if(e.key==='Enter'){
-        e.preventDefault();
-        checkPassword();
-      }
-    });
-    closeBtn.addEventListener('click', closeModal);
-  });
-
+  const msg = document.createElement('div');
+  msg.className = 'message old';
+  msg.innerHTML = `
+    <div>
+      <div class="small-rect"></div>
+      <strong>${n} (${a})</strong><br>
+      <span>${t}</span>
+    </div>
+  `;
   msg.addEventListener('click',()=>msg.remove());
-archive.appendChild(msg);
-updateTextLayer();
+  archive.appendChild(msg);
+  updateTextLayer();
 }
 
-/* 사용자 입력 */
-// 금지어 목록
-const forbiddenWords = ['금지어1','금지어2'];
 const forbiddenWords = ['금지어1','금지어2','금지어3'];
 let isLocked = false;
 
 function lockScreen(){
-isLocked = true;
-const overlay = document.getElementById('lockOverlay');
-overlay.style.display = 'flex';
-setTimeout(()=>{
-isLocked = false;
-overlay.style.display = 'none';
-},60000);
+  isLocked = true;
+  const overlay = document.getElementById('lockOverlay');
+  overlay.style.display = 'flex';
+  setTimeout(()=>{
+    isLocked = false;
+    overlay.style.display = 'none';
+  },60000);
 }
 
 function addMessage(){
-if(isLocked) return;
+  if(isLocked) return;
 
-const n = nameInput.value.trim();
-const a = ageInput.value.trim();
-const t = textInput.value.trim();
+  const n = nameInput.value.trim();
+  const a = ageInput.value.trim();
+  const t = textInput.value.trim();
 
-const combined = `${n} ${a} ${t}`;
-for(const w of forbiddenWords){
-if(combined.includes(w)){
-      alert('금지어가 포함되어 있습니다. 1분간 입력이 제한됩니다.');
+  const combined = `${n} ${a} ${t}`;
+  for(const w of forbiddenWords){
+    if(combined.includes(w)){
       alert('금지어가 포함되어 있습니다.');
-nameInput.value='';
-ageInput.value='';
-textInput.value='';
-lockScreen();
-return;
-}
-}
+      nameInput.value='';
+      ageInput.value='';
+      textInput.value='';
+      lockScreen();
+      return;
+    }
+  }
 
-  [nameInput, ageInput, textInput].forEach(i =>
-    i.classList.remove('input-error')
-  );
-
-  let hasError = false;
-
-  if(!n) { nameInput.classList.add('input-error'); hasError=true; }
-  if(!a) { ageInput.classList.add('input-error'); hasError=true; }
-  if(!t) { textInput.classList.add('input-error'); hasError=true; }
   [nameInput, ageInput, textInput].forEach(i=>i.classList.remove('input-error'));
 
-  if(hasError) return;
   let err=false;
   if(!n){nameInput.classList.add('input-error'); err=true;}
   if(!a){ageInput.classList.add('input-error'); err=true;}
   if(!t){textInput.classList.add('input-error'); err=true;}
   if(err) return;
 
-addMessageWithValues(n,a,t);
-nameInput.value='';
-ageInput.value='';
-textInput.value='';
+  addMessageWithValues(n,a,t);
+  nameInput.value='';
+  ageInput.value='';
+  textInput.value='';
 }
 
-/* 버튼 */
 sendBtn.addEventListener('click', addMessage);
-
-/* ✅ 엔터 입력 복구 (이게 빠져 있었음) */
-[nameInput, ageInput, textInput].forEach(input=>{
-  input.addEventListener('keydown', e=>{
-    if(e.key === 'Enter'){
-      e.preventDefault();
-      addMessage();
-    }
 [nameInput, ageInput, textInput].forEach(i=>{
   i.addEventListener('keydown',e=>{
     if(e.key==='Enter'){ e.preventDefault(); addMessage(); }
-});
+  });
 });
 
-/* 초기 말풍선 */
 addMessageWithValues('홍길동','10','1일 1책 읽기!');
 </script>
 </body>
