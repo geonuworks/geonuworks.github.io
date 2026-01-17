@@ -111,6 +111,7 @@ html, body {
   padding:0 24px;
   display:flex;
   flex-wrap:wrap;
+  justify-content:center; /* ✅ 가운데 정렬 */
   z-index:1;
 }
 
@@ -370,7 +371,8 @@ overlay.innerHTML = `
     <button class="confirm-btn">확인</button>
   </div>
 `;
-  document.body.appendChild(overlay);
+  archive.prepend(msg);
+  updateTextLayer();
 
   const input = overlay.querySelector('input');
   const confirmBtn = overlay.querySelector('.confirm-btn');
