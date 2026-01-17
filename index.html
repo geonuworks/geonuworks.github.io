@@ -171,8 +171,10 @@ html, body {
 .input-bar{
   position:absolute;
   bottom:0;
-  left:0;
-  right:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:1000px;        /* 원하는 고정 폭 */
+  max-width:90%;      /* 작은 화면 대응 */
   padding:60px;
   display:flex;
   gap:8px;
@@ -294,7 +296,7 @@ input{
 
 <body>
 <div class="lock-overlay" id="lockOverlay" style="display:none;">
-  경고!<br>금지어가 감지되어 1분간 입력이 제한됩니다.<br><br>*욕설/비하/분쟁의 여지가 있는 단어는 금지입니다.
+  경고!<br>금지어가 감지되어 1분간 입력이 제한됩니다.<br><br>*욕설·비하·분쟁의 소지가 있는 표현은 사용할 수 없습니다.
 </div>
 
 <div class="page">
