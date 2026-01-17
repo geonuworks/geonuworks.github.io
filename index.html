@@ -140,14 +140,7 @@ html, body {
   position:relative;
   display:inline-block;
   vertical-align:top;
-  background:#ffffff;
-  border-radius:9999px;
-  padding:10px 21px;
   margin:24px;
-  font-family:'Pretendard-Regular';
-  font-size:14px;
-  line-height:1.4;
-  text-align:center;
   cursor:pointer;
 }
 
@@ -172,28 +165,39 @@ html, body {
   z-index:-1;
 }
 
+.message-inner{
+  position:relative;
+  background:#fff;
+  padding:10px 21px;
+  border-radius:9999px;
+
+  font-family:'Pretendard-Regular';
+  font-size:14px;
+  line-height:1.4;
+  text-align:center;
+}
+  
 /* === 말풍선 생성 애니메이션 === */
 .message.creating > div {
   position: relative;
 }
 
-/* 첫 번째 사각형 (말풍선 본체) */
-.message.creating {
-  transform-origin: center;
+/* 생성 애니메이션 */
+.message.creating .message-inner{
+  transform: scale(0);
   animation: cloudMainIn 0.4s ease-out forwards;
 }
 
-/* 두 번째 사각형 (small-rect) */
-.message.creating .small-rect {
+/* 작은 사각형 */
+.message.creating .small-rect{
   transform: scale(0);
-  transform-origin: center;
   animation: cloudSubIn 0.35s ease-out forwards;
   animation-delay: 0.4s;
 }
 
 /* 텍스트 */
 .message.creating strong,
-.message.creating span {
+.message.creating span{
   opacity: 0;
   animation: cloudTextIn 0.3s ease-out forwards;
   animation-delay: 0.4s;
@@ -400,12 +404,12 @@ function addMessageWithValues(n,a,t){
   const msg = document.createElement('div');
   msg.className = 'message old creating';
   msg.innerHTML = `
-    <div>
-      <div class="small-rect"></div>
-      <strong>${n} (${a})</strong><br>
-      <span>${t}</span>
-    </div>
-  `;
+  <div class="message-inner">
+    <div class="small-rect"></div>
+    <strong>${n} (${a})</strong><br>
+    <span>${t}</span>
+  </div>
+`;
 
   setTimeout(()=>{
   msg.classList.remove('creating');
