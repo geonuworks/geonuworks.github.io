@@ -106,12 +106,16 @@ html, body {
 .archive{
   position:absolute;
   top:40%;
-  left:0;
-  right:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:1000px;        /* 인풋바랑 통일하면 보기 좋음 */
+  max-width:90%;
   padding:0 24px;
+
   display:flex;
   flex-wrap:wrap;
-  justify-content:center; /* ✅ 가운데 정렬 */
+  justify-content:flex-start; /* ✅ 핵심 */
+  align-content:flex-start;
   z-index:1;
 }
 
@@ -338,11 +342,11 @@ ageInput.addEventListener('input',()=>{
 });
 
 function updateTextLayer(){
-  const last = archive.lastElementChild;
-  if(!last){ textLayer.innerHTML=''; return; }
+  const first = archive.firstElementChild;
+  if(!first){ textLayer.innerHTML=''; return; }
 
-  const strong = last.querySelector('strong')?.innerText || '';
-  const span = last.querySelector('span')?.innerText || '';
+  const strong = first.querySelector('strong')?.innerText || '';
+  const span = first.querySelector('span')?.innerText || '';
 
   textLayer.innerHTML = `
     <div class="sun-name">${strong}</div>
