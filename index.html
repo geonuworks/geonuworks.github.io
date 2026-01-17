@@ -375,7 +375,6 @@ overlay.innerHTML = `
     <button class="confirm-btn">확인</button>
   </div>
 `;
-  archive.prepend(msg);
   updateTextLayer();
 
   const input = overlay.querySelector('input');
@@ -410,7 +409,7 @@ overlay.innerHTML = `
   });
 });
 
-  archive.appendChild(msg);
+  archive.prepend(msg);
   updateTextLayer();
 }
 
