@@ -172,6 +172,48 @@ html, body {
   z-index:-1;
 }
 
+/* === 말풍선 생성 애니메이션 === */
+.message.creating > div {
+  position: relative;
+}
+
+/* 첫 번째 사각형 (말풍선 본체) */
+.message.creating {
+  transform-origin: center;
+  animation: cloudMainIn 0.4s ease-out forwards;
+}
+
+/* 두 번째 사각형 (small-rect) */
+.message.creating .small-rect {
+  transform: scale(0);
+  transform-origin: center;
+  animation: cloudSubIn 0.35s ease-out forwards;
+  animation-delay: 0.4s;
+}
+
+/* 텍스트 */
+.message.creating strong,
+.message.creating span {
+  opacity: 0;
+  animation: cloudTextIn 0.3s ease-out forwards;
+  animation-delay: 0.4s;
+}
+
+@keyframes cloudMainIn {
+  from { transform: scale(0); }
+  to   { transform: scale(1); }
+}
+
+@keyframes cloudSubIn {
+  from { transform: scale(0); }
+  to   { transform: scale(1); }
+}
+
+@keyframes cloudTextIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+  
 /* 입력 */
 .input-bar{
   position:absolute;
@@ -356,7 +398,7 @@ function updateTextLayer(){
 
 function addMessageWithValues(n,a,t){
   const msg = document.createElement('div');
-  msg.className = 'message old';
+  msg.className = 'message old creating';
   msg.innerHTML = `
     <div>
       <div class="small-rect"></div>
@@ -364,6 +406,11 @@ function addMessageWithValues(n,a,t){
       <span>${t}</span>
     </div>
   `;
+
+  setTimeout(()=>{
+  msg.classList.remove('creating');
+}, 800);
+  
   msg.addEventListener('click',()=>{
   const overlay = document.createElement('div');
   overlay.className = 'modal-overlay';
