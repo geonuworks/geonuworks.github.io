@@ -393,15 +393,6 @@ function addMessageWithValues(n,a,t){
   });
 });
 
-  confirmBtn.addEventListener('click', checkPassword);
-  input.addEventListener('keydown',e=>{
-    if(e.key === 'Enter'){
-      e.preventDefault();
-      checkPassword();
-    }
-  });
-  closeBtn.addEventListener('click', closeModal);
-});
   archive.appendChild(msg);
   updateTextLayer();
 }
