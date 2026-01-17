@@ -265,16 +265,27 @@ input{
   cursor:pointer;
 }
 
-.modal .close-btn{
-  position:absolute;
-  top:8px;
-  right:8px;
-  background:none;
-  border:none;
-  font-size:18px;
-  cursor:pointer;
-}
+.delete-modal .close-btn {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
 
+  color: #000;              /* ← 검정색으로 명확히 */
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 24px;
+  text-align: center;
+
+  background: rgba(255,255,255,0.9); /* ← 흰 배경 위에서도 보이게 */
+  border-radius: 50%;
+  z-index: 10;
+}
+.password-input.error {
+  border: 2px solid #ff3b3b;
+}
 </style>
 </head>
 
@@ -344,39 +355,43 @@ function addMessageWithValues(n,a,t){
     </div>
   `;
   msg.addEventListener('click',()=>{
-  if(isLocked) return;
-
   const overlay = document.createElement('div');
-  overlay.className = 'modal-overlay';
+  overlay.className = 'delete-overlay';
   overlay.innerHTML = `
-    <div class="modal">
+    <div class="delete-modal">
       <button class="close-btn">×</button>
       <p>삭제하려면 비밀번호를 입력하세요</p>
-      <input type="password" placeholder="비밀번호" />
-      <button>확인</button>
+      <input type="password" placeholder="비밀번호 입력">
+      <button class="confirm-btn">확인</button>
     </div>
   `;
   document.body.appendChild(overlay);
 
   const input = overlay.querySelector('input');
-  const confirmBtn = overlay.querySelector('button:last-of-type');
+  const confirmBtn = overlay.querySelector('.confirm-btn');
   const closeBtn = overlay.querySelector('.close-btn');
 
-  function closeModal(){
+  function close(){
     document.body.removeChild(overlay);
   }
 
-  function checkPassword(){
+  closeBtn.addEventListener('click', close);
+
+  confirmBtn.addEventListener('click',()=>{
     if(input.value === '1553'){
-      msg.remove();
+      archive.removeChild(msg);
       updateTextLayer();
-      closeModal();
+      close();
     }else{
       input.value = '';
-      input.placeholder = '비밀번호가 틀렸습니다';
-      input.classList.add('input-error');
+      input.classList.add('error');
     }
-  }
+  });
+
+  input.addEventListener('input',()=>{
+    input.classList.remove('error');
+  });
+});
 
   confirmBtn.addEventListener('click', checkPassword);
   input.addEventListener('keydown',e=>{
