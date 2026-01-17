@@ -474,9 +474,11 @@ function addMessageWithValues(n,a,t){
 
   // 빨간 테두리 해제
   input.addEventListener('input',()=>{
+  if(input.value.length > 0){
     input.classList.remove('error');
-  });
+  }
 });
+
   
   archive.prepend(msg);
   updateTextLayer();
