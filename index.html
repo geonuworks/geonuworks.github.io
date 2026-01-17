@@ -356,15 +356,15 @@ function addMessageWithValues(n,a,t){
   `;
   msg.addEventListener('click',()=>{
   const overlay = document.createElement('div');
-  overlay.className = 'delete-overlay';
-  overlay.innerHTML = `
-    <div class="delete-modal">
-      <button class="close-btn">×</button>
-      <p>삭제하려면 비밀번호를 입력하세요</p>
-      <input type="password" placeholder="비밀번호 입력">
-      <button class="confirm-btn">확인</button>
-    </div>
-  `;
+  overlay.className = 'modal-overlay';
+overlay.innerHTML = `
+  <div class="modal delete-modal">
+    <button class="close-btn">×</button>
+    <p>삭제하려면 비밀번호를 입력하세요</p>
+    <input type="password" class="password-input" placeholder="비밀번호 입력">
+    <button class="confirm-btn">확인</button>
+  </div>
+`;
   document.body.appendChild(overlay);
 
   const input = overlay.querySelector('input');
