@@ -410,17 +410,6 @@ function updateTextLayer(){
     <div class="sun-text">${span}</div>
   `;
 }
-  
-function checkPassword(){
-  if(input.value === DELETE_PASSWORD){
-    archive.removeChild(msg);
-    updateTextLayer();
-    close();
-  }else{
-    input.value = '';
-    input.classList.add('error');
-  }
-}
 
 function addMessageWithValues(n,a,t){
   const msg = document.createElement('div');
@@ -440,40 +429,55 @@ function addMessageWithValues(n,a,t){
   msg.addEventListener('click',()=>{
   const overlay = document.createElement('div');
   overlay.className = 'modal-overlay';
-overlay.innerHTML = `
-  <div class="modal delete-modal">
-    <button class="close-btn">×</button>
-    <p>삭제하려면 데스크에 문의해주세요</p>
-    <input type="password" class="password-input" placeholder="비밀번호 입력">
-    <button class="confirm-btn">확인</button>
-  </div>
-`;
+  overlay.innerHTML = `
+    <div class="modal delete-modal">
+      <button class="close-btn">×</button>
+      <p>삭제하려면 데스크에 문의해주세요</p>
+      <input type="password" class="password-input" placeholder="비밀번호 입력">
+      <button class="confirm-btn">확인</button>
+    </div>
+  `;
   document.body.appendChild(overlay);
 
-  const input = overlay.querySelector('input');
+  const input = overlay.querySelector('.password-input');
   const confirmBtn = overlay.querySelector('.confirm-btn');
   const closeBtn = overlay.querySelector('.close-btn');
 
   function close(){
     document.body.removeChild(overlay);
   }
-    input.addEventListener('keydown', (e)=>{
-  if(e.key === 'Enter'){
-    e.preventDefault();
-    checkPassword();   // 버튼 클릭 말고 직접 실행
+
+  function checkPassword(){
+    if(input.value === DELETE_PASSWORD){
+      archive.removeChild(msg);
+      updateTextLayer();
+      close();
+    }else{
+      input.value = '';
+      input.classList.add('error');
+    }
   }
-});
 
-  closeBtn.addEventListener('click', close);
+  // ✅ 엔터
+  input.addEventListener('keydown',(e)=>{
+    if(e.key === 'Enter'){
+      e.preventDefault();
+      checkPassword();
+    }
+  });
 
+  // ✅ 버튼
   confirmBtn.addEventListener('click', checkPassword);
 
+  // ❌표
+  closeBtn.addEventListener('click', close);
 
+  // 빨간 테두리 해제
   input.addEventListener('input',()=>{
     input.classList.remove('error');
   });
 });
-
+  
   archive.prepend(msg);
   updateTextLayer();
 }
