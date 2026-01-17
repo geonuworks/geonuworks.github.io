@@ -410,6 +410,17 @@ function updateTextLayer(){
     <div class="sun-text">${span}</div>
   `;
 }
+  
+function checkPassword(){
+  if(input.value === DELETE_PASSWORD){
+    archive.removeChild(msg);
+    updateTextLayer();
+    close();
+  }else{
+    input.value = '';
+    input.classList.add('error');
+  }
+}
 
 function addMessageWithValues(n,a,t){
   const msg = document.createElement('div');
@@ -449,22 +460,14 @@ overlay.innerHTML = `
     input.addEventListener('keydown', (e)=>{
   if(e.key === 'Enter'){
     e.preventDefault();
-    confirmBtn.click();
+    checkPassword();   // 버튼 클릭 말고 직접 실행
   }
 });
 
   closeBtn.addEventListener('click', close);
 
-  confirmBtn.addEventListener('click',()=>{
-    if(input.value === DELETE_PASSWORD){
-      archive.removeChild(msg);
-      updateTextLayer();
-      close();
-    }else{
-      input.value = '';
-      input.classList.add('error');
-    }
-  });
+  confirmBtn.addEventListener('click', checkPassword);
+
 
   input.addEventListener('input',()=>{
     input.classList.remove('error');
