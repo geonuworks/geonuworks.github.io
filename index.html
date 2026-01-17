@@ -374,14 +374,13 @@ overlay.innerHTML = `
 
   function close(){
     document.body.removeChild(overlay);
-
+  }
     input.addEventListener('keydown', (e)=>{
   if(e.key === 'Enter'){
     e.preventDefault();
     confirmBtn.click();
   }
 });
-  }
 
   closeBtn.addEventListener('click', close);
 
