@@ -253,7 +253,8 @@ input{
   width:80%;
   padding:10px;
   border-radius:8px;
-  border:1px solid #ccc;
+  border:2px solid #ccc;   /* ← 기본도 2px로 */
+  box-sizing: border-box;  /* ← 크기 고정 */
 }
 
 .modal button{
@@ -360,7 +361,7 @@ function addMessageWithValues(n,a,t){
 overlay.innerHTML = `
   <div class="modal delete-modal">
     <button class="close-btn">×</button>
-    <p>삭제하려면 비밀번호를 입력하세요</p>
+    <p>삭제하려면 데스크에 문의해주세요</p>
     <input type="password" class="password-input" placeholder="비밀번호 입력">
     <button class="confirm-btn">확인</button>
   </div>
@@ -441,6 +442,12 @@ function addMessage(){
   nameInput.value='';
   ageInput.value='';
   textInput.value='';
+  input.addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter'){
+    e.preventDefault();
+    confirmBtn.click();
+  }
+});
 }
 
 sendBtn.addEventListener('click', addMessage);
