@@ -221,6 +221,60 @@ input{
   font-size:24px;
   z-index:9999;
 }
+  .modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.5);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:10000;
+}
+
+.modal{
+  background:#fff;
+  padding:20px;
+  border-radius:12px;
+  width:300px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  align-items:center;
+  position:relative;
+}
+
+.modal p{
+  margin:0;
+  font-size:14px;
+  text-align:center;
+}
+
+.modal input{
+  width:80%;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+
+.modal button{
+  padding:8px 12px;
+  border:none;
+  border-radius:8px;
+  background:#111;
+  color:#fff;
+  cursor:pointer;
+}
+
+.modal .close-btn{
+  position:absolute;
+  top:8px;
+  right:8px;
+  background:none;
+  border:none;
+  font-size:18px;
+  cursor:pointer;
+}
+
 </style>
 </head>
 
@@ -289,7 +343,50 @@ function addMessageWithValues(n,a,t){
       <span>${t}</span>
     </div>
   `;
-  msg.addEventListener('click',()=>msg.remove());
+  msg.addEventListener('click',()=>{
+  if(isLocked) return;
+
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.innerHTML = `
+    <div class="modal">
+      <button class="close-btn">×</button>
+      <p>삭제하려면 비밀번호를 입력하세요</p>
+      <input type="password" placeholder="비밀번호" />
+      <button>확인</button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  const input = overlay.querySelector('input');
+  const confirmBtn = overlay.querySelector('button:last-of-type');
+  const closeBtn = overlay.querySelector('.close-btn');
+
+  function closeModal(){
+    document.body.removeChild(overlay);
+  }
+
+  function checkPassword(){
+    if(input.value === '1553'){
+      msg.remove();
+      updateTextLayer();
+      closeModal();
+    }else{
+      input.value = '';
+      input.placeholder = '비밀번호가 틀렸습니다';
+      input.classList.add('input-error');
+    }
+  }
+
+  confirmBtn.addEventListener('click', checkPassword);
+  input.addEventListener('keydown',e=>{
+    if(e.key === 'Enter'){
+      e.preventDefault();
+      checkPassword();
+    }
+  });
+  closeBtn.addEventListener('click', closeModal);
+});
   archive.appendChild(msg);
   updateTextLayer();
 }
