@@ -459,12 +459,12 @@ function addMessageWithValues(n,a,t){
   }
 
   // ✅ 엔터
-  input.addEventListener('keydown',(e)=>{
-    if(e.key === 'Enter'){
-      e.preventDefault();
-      checkPassword();
-    }
-  });
+  input.addEventListener('keyup', (e)=>{
+  if(e.key === 'Enter'){
+    e.preventDefault();
+    checkPassword();
+  }
+});
 
   // ✅ 버튼
   confirmBtn.addEventListener('click', checkPassword);
