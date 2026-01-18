@@ -342,6 +342,60 @@ input{
 .password-input.error {
   border: 2px solid #ff3b3b;
 }
+  /* === 연령대 선택 (위로 펼쳐짐) === */
+.age-select{
+  position: relative;
+  width: 110px;
+  z-index: 10;
+}
+
+.age-selected{
+  background:#fff;
+  border-radius:999px;
+  padding:14px 16px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.1);
+  text-align:center;
+  cursor:pointer;
+}
+
+/* 옵션 박스 */
+.age-options{
+  position:absolute;
+  bottom:0;                /* ✅ 하단 고정 */
+  left:0;
+  right:0;
+
+  background:#fff;
+  border-radius:20px;
+  padding-bottom:56px;
+
+  transform-origin: bottom; /* ✅ 아래 기준 */
+  transform: scaleY(0);
+  opacity:0;
+
+  transition:
+    transform 0.35s ease,
+    opacity 0.2s ease;
+
+  pointer-events:none;
+}
+
+/* 열렸을 때 */
+.age-select.open .age-options{
+  transform: scaleY(1);
+  opacity:1;
+  pointer-events:auto;
+}
+
+.age-options div{
+  padding:10px 0;
+  text-align:center;
+  cursor:pointer;
+}
+
+.age-options div:hover{
+  background:#f2f2f2;
+}
 </style>
 </head>
 
@@ -369,7 +423,21 @@ input{
 
   <div class="input-bar">
     <input id="nameInput" class="name-input" placeholder="닉네임" maxlength="6">
-    <input id="ageInput" class="age-input" placeholder="나이" maxlength="2">
+    <div class="age-select" id="ageSelect">
+    <div class="age-selected" id="ageSelected">연령대</div>
+
+    <div class="age-options">
+      <div data-value="10대 미만">10대 미만</div>
+      <div data-value="10대">10대</div>
+      <div data-value="20대">20대</div>
+      <div data-value="30대">30대</div>
+      <div data-value="40대">40대</div>
+      <div data-value="50대">50대</div>
+      <div data-value="60대">60대</div>
+      <div data-value="70대">70대</div>
+      <div data-value="80대 이상">80대 이상</div>
+    </div>
+  </div>
     <input id="textInput" class="text-input" placeholder="텍스트를 입력하세요" maxlength="50">
     <button id="sendBtn" class="send-btn">→</button>
   </div>
@@ -390,10 +458,29 @@ Promise.all([
 const textLayer = document.getElementById('textLayer');
 const archive = document.getElementById('archive');
 const nameInput = document.getElementById('nameInput');
-const ageInput = document.getElementById('ageInput');
+const ageSelect = document.getElementById('ageSelect');
+const ageSelected = document.getElementById('ageSelected');
+let selectedAge = '';
 const textInput = document.getElementById('textInput');
 const sendBtn = document.getElementById('sendBtn');
 
+ageSelected.addEventListener('click', (e)=>{
+  e.stopPropagation();
+  ageSelect.classList.toggle('open');
+});
+
+document.addEventListener('click', ()=>{
+  ageSelect.classList.remove('open');
+});
+
+ageSelect.querySelectorAll('.age-options div').forEach(opt=>{
+  opt.addEventListener('click', ()=>{
+    selectedAge = opt.dataset.value;
+    ageSelected.textContent = selectedAge;
+    ageSelect.classList.remove('open');
+  });
+});
+  
 ageInput.addEventListener('input',()=>{
   ageInput.value = ageInput.value.replace(/[^0-9]/g,'');
 });
@@ -516,7 +603,7 @@ function addMessage(){
   if(isLocked) return;
 
   const n = nameInput.value.trim();
-  const a = ageInput.value.trim();
+  const a = selectedAge;
   const t = textInput.value.trim();
 
   const combined = `${n} ${a} ${t}`;
@@ -535,9 +622,13 @@ function addMessage(){
 
   let err=false;
   if(!n){nameInput.classList.add('input-error'); err=true;}
-  if(!a){ageInput.classList.add('input-error'); err=true;}
+  if(!a){
+    ageSelect.classList.add('input-error');
+    err = true;
+  }
   if(!t){textInput.classList.add('input-error'); err=true;}
   if(err) return;
+  ageSelect.classList.remove('input-error');
 
   addMessageWithValues(n,a,t);
   nameInput.value='';
