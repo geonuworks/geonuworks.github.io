@@ -440,12 +440,12 @@ function addMessageWithValues(n,a,t){
     </div>
   `;
   document.body.appendChild(overlay);
-  input.focus();
-  
   
   const input = overlay.querySelector('.password-input');
   const confirmBtn = overlay.querySelector('.confirm-btn');
   const closeBtn = overlay.querySelector('.close-btn');
+  
+  input.focus();   // ✅ 선언 이후로 이동
 
   function close(){
     document.body.removeChild(overlay);
