@@ -351,7 +351,7 @@ input{
 
 .age-selected{
   background:#fff;
-  border-radius:999px;
+  border-radius:20px;
   padding:14px 16px;
   box-shadow:0 8px 20px rgba(0,0,0,0.1);
   text-align:center;
@@ -383,9 +383,14 @@ input{
   cursor:pointer;
 }
 
-.age-options div:hover{
-  background:#f2f2f2;
+.age-options div{
+  color:#888;
 }
+
+.age-options div:hover{
+  color:#000;
+}
+
 .age-select.input-error .age-selected{
   border:1px solid #d00000;
   color:#d00000;
@@ -396,6 +401,9 @@ input{
 .age-options div {
   font-family: 'Pretendard-Regular';
   font-size: 14px;
+}
+  .age-selected{
+  color:#888;          /* 입력 placeholder와 동일 톤 */
 }
 </style>
 </head>
