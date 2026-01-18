@@ -396,6 +396,10 @@ input{
 .age-options div:hover{
   background:#f2f2f2;
 }
+.age-select.input-error .age-selected{
+  border:1px solid #d00000;
+  color:#d00000;
+}
 </style>
 </head>
 
@@ -480,10 +484,6 @@ ageSelect.querySelectorAll('.age-options div').forEach(opt=>{
     ageSelect.classList.remove('open');
   });
 });
-  
-ageInput.addEventListener('input',()=>{
-  ageInput.value = ageInput.value.replace(/[^0-9]/g,'');
-});
 
 function updateTextLayer(){
   const first = archive.firstElementChild;
@@ -502,89 +502,89 @@ function addMessageWithValues(n,a,t){
   const msg = document.createElement('div');
   msg.className = 'message old creating';
   msg.innerHTML = `
-  <div class="message-inner">
-    <div class="small-rect"></div>
-    <strong>${n} (${a})</strong><br>
-    <span>${t}</span>
-  </div>
-`;
-
+    <div class="message-inner">
+      <div class="small-rect"></div>
+      <strong>${n} (${a})</strong><br>
+      <span>${t}</span>
+    </div>
+  `;
+  
   setTimeout(()=>{
-  msg.classList.remove('creating');
-}, 800);
+    msg.classList.remove('creating');
+  }, 800);
   
   msg.addEventListener('click',()=>{
     if(document.querySelector('.modal-overlay')) return;
+    
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.innerHTML = `
+      <div class="modal delete-modal">
+        <button class="close-btn">×</button>
+        <p>삭제하려면 데스크에 문의해주세요</p>
+        <input type="password" class="password-input" placeholder="비밀번호 입력">
+        <button class="confirm-btn">확인</button>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+    
+    const input = overlay.querySelector('.password-input');
+    const confirmBtn = overlay.querySelector('.confirm-btn');
+    const closeBtn = overlay.querySelector('.close-btn');
+    
+    input.focus();   // ✅ 선언 이후로 이동
   
-  const overlay = document.createElement('div');
-  overlay.className = 'modal-overlay';
-  overlay.innerHTML = `
-    <div class="modal delete-modal">
-      <button class="close-btn">×</button>
-      <p>삭제하려면 데스크에 문의해주세요</p>
-      <input type="password" class="password-input" placeholder="비밀번호 입력">
-      <button class="confirm-btn">확인</button>
-    </div>
-  `;
-  document.body.appendChild(overlay);
-  
-  const input = overlay.querySelector('.password-input');
-  const confirmBtn = overlay.querySelector('.confirm-btn');
-  const closeBtn = overlay.querySelector('.close-btn');
-  
-  input.focus();   // ✅ 선언 이후로 이동
-
-  function close(){
-    document.body.removeChild(overlay);
-  }
-  function escHandler(e){
-    if(e.key === 'Escape'){
+    function close(){
+      document.body.removeChild(overlay);
+    }
+    function escHandler(e){
+      if(e.key === 'Escape'){
+        close();
+        document.removeEventListener('keydown', escHandler);
+      }
+    }
+    document.addEventListener('keydown', escHandler);
+    
+    function checkPassword(){
+    if(!DELETE_PASSWORD){
+      alert('잠시 후 다시 시도해주세요.');
+      return;
+    }
+    
+    if(input.value === DELETE_PASSWORD){
+      archive.removeChild(msg);
+      updateTextLayer();
       close();
-      document.removeEventListener('keydown', escHandler);
+    }else{
+      input.classList.add('error');
+      input.focus();
     }
   }
-  document.addEventListener('keydown', escHandler);
   
-  function checkPassword(){
-  if(!DELETE_PASSWORD){
-    alert('잠시 후 다시 시도해주세요.');
-    return;
-  }
   
-  if(input.value === DELETE_PASSWORD){
-    archive.removeChild(msg);
-    updateTextLayer();
-    close();
-  }else{
-    input.classList.add('error');
-    input.focus();
-  }
-}
-
-
-  // 엔터
-  input.addEventListener('keyup',(e)=>{
-    if(e.key === 'Enter'){
-      e.preventDefault();
-      checkPassword();
-    }
+    // 엔터
+    input.addEventListener('keyup',(e)=>{
+      if(e.key === 'Enter'){
+        e.preventDefault();
+        checkPassword();
+      }
+    });
+    
+    // 버튼
+    confirmBtn.addEventListener('click', checkPassword);
+    
+    // X 버튼
+    closeBtn.addEventListener('click', close);
+    
+    // 사용자가 다시 입력할 때만 에러 제거
+    input.addEventListener('input',()=>{
+      input.classList.remove('error');
+    });
   });
-
-  // 버튼
-  confirmBtn.addEventListener('click', checkPassword);
-
-  // X 버튼
-  closeBtn.addEventListener('click', close);
-
-  // 사용자가 다시 입력할 때만 에러 제거
-  input.addEventListener('input',()=>{
-    input.classList.remove('error');
-  });
-});
-
-// ✅ 반드시 여기!
-archive.prepend(msg);
-updateTextLayer();
+  
+  // ✅ 반드시 여기!
+  archive.prepend(msg);
+  updateTextLayer();
 }
 
 let isLocked = false;
@@ -611,14 +611,13 @@ function addMessage(){
     if(combined.includes(w)){
       alert('금지어가 포함되어 있습니다.');
       nameInput.value='';
-      ageInput.value='';
       textInput.value='';
       lockScreen();
       return;
     }
   }
 
-  [nameInput, ageInput, textInput].forEach(i=>i.classList.remove('input-error'));
+  [nameInput, textInput].forEach(i=>i.classList.remove('input-error'));
 
   let err=false;
   if(!n){nameInput.classList.add('input-error'); err=true;}
@@ -632,18 +631,19 @@ function addMessage(){
 
   addMessageWithValues(n,a,t);
   nameInput.value='';
-  ageInput.value='';
   textInput.value='';
+  selectedAge = '';
+  ageSelected.textContent = '연령대';
 }
 
 sendBtn.addEventListener('click', addMessage);
-[nameInput, ageInput, textInput].forEach(i=>{
+[nameInput, textInput].forEach(i=>{
   i.addEventListener('keydown',e=>{
     if(e.key==='Enter'){ e.preventDefault(); addMessage(); }
   });
 });
 
-addMessageWithValues('홍길동','10','1일 1책 읽기!');
+addMessageWithValues('홍길동','10대','1일 1책 읽기!');
 </script>
 </body>
 </html>
