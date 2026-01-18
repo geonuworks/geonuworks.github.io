@@ -361,7 +361,7 @@ input{
 /* 옵션 박스 */
 .age-options{
   position:absolute;
-  bottom:0;                /* ✅ 하단 고정 */
+  bottom:0;
   left:0;
   right:0;
 
@@ -369,22 +369,12 @@ input{
   border-radius:20px;
   padding-bottom:56px;
 
-  transform-origin: bottom; /* ✅ 아래 기준 */
-  transform: scaleY(0);
-  opacity:0;
-
-  transition:
-    transform 0.35s ease,
-    opacity 0.2s ease;
-
-  pointer-events:none;
+  display:none;
+  pointer-events:auto;
 }
 
-/* 열렸을 때 */
 .age-select.open .age-options{
-  transform: scaleY(1);
-  opacity:1;
-  pointer-events:auto;
+  display:block;
 }
 
 .age-options div{
@@ -399,6 +389,13 @@ input{
 .age-select.input-error .age-selected{
   border:1px solid #d00000;
   color:#d00000;
+}
+/* 연령대 선택 폰트 통일 */
+.age-selected,
+.age-options,
+.age-options div {
+  font-family: 'Pretendard-Regular';
+  font-size: 14px;
 }
 </style>
 </head>
