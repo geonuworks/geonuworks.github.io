@@ -6,7 +6,6 @@
 <title>Simple Feed - Sun Shape</title>
 
 <style>
-/* --- 폰트 --- */
 @font-face {
   font-family: 'MaruBuri-Bold';
   src: url('./MaruBuri-Bold.otf') format('opentype');
@@ -37,7 +36,6 @@ html, body {
   flex-direction:column;
 }
 
-/* 헤더 */
 .header{
   padding-top:64px;
   text-align:center;
@@ -55,13 +53,11 @@ html, body {
   font-size:36px;
 }
 
-/* 피드 */
 .feed{
   position:relative;
   flex:1;
 }
 
-/* 현재(해) */
 .current{
   position:absolute;
   top:5%;
@@ -102,24 +98,22 @@ html, body {
   white-space:normal;
 }
 
-/* archive */
 .archive{
   position:absolute;
   top:40%;
   left:50%;
   transform:translateX(-50%);
-  width:1600px;        /* 인풋바랑 통일하면 보기 좋음 */
+  width:1600px;
   max-width:90%;
   padding:0 24px;
 
   display:flex;
   flex-wrap:wrap;
-  justify-content:flex-start; /* ✅ 핵심 */
+  justify-content:flex-start;
   align-content:flex-start;
   z-index:1;
 }
 
-/* 🔽 누적 말풍선 페이드 마스크 */
 .archive-fade{
   position:absolute;
   left:0;
@@ -135,7 +129,6 @@ html, body {
   z-index:2;
 }
 
-/* 말풍선 */
 .message{
   position:relative;
   display:inline-block;
@@ -177,25 +170,21 @@ html, body {
   text-align:center;
 }
   
-/* === 말풍선 생성 애니메이션 === */
 .message.creating > div {
   position: relative;
 }
 
-/* 생성 애니메이션 */
 .message.creating .message-inner{
   transform: scale(0);
   animation: cloudMainIn 0.4s ease-out forwards;
 }
 
-/* 작은 사각형 */
 .message.creating .small-rect{
   transform: scale(0);
   animation: cloudSubIn 0.35s ease-out forwards;
   animation-delay: 0.1s;
 }
 
-/* 텍스트 */
 .message.creating strong,
 .message.creating span{
   opacity: 0;
@@ -217,15 +206,14 @@ html, body {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
-  
-/* 입력 */
+
 .input-bar{
   position:absolute;
   bottom:0;
   left:50%;
   transform:translateX(-50%);
-  width:1000px;        /* 원하는 고정 폭 */
-  max-width:90%;      /* 작은 화면 대응 */
+  width:1000px;
+  max-width:90%;
   padding:60px;
   display:flex;
   gap:8px;
@@ -261,7 +249,6 @@ input{
   color:#d00000;
 }
 
-/* 금지어 잠금 */
 .lock-overlay{
   position:fixed;
   inset:0;
@@ -269,8 +256,8 @@ input{
   color:#fff;
   display:flex;
   align-items:center;
-  text-align:center;       /* 텍스트 가운데 */
-  white-space: pre-line;   /* 줄바꿈 유지 */
+  text-align:center;
+  white-space: pre-line;
   justify-content:center;
   font-family:'Pretendard-Bold';
   font-size:24px;
@@ -308,8 +295,8 @@ input{
   width:80%;
   padding:10px;
   border-radius:8px;
-  border:2px solid #ccc;   /* ← 기본도 2px로 */
-  box-sizing: border-box;  /* ← 크기 고정 */
+  border:2px solid #ccc;
+  box-sizing: border-box;
 }
 
 .modal button{
@@ -329,20 +316,19 @@ input{
   height: 24px;
   cursor: pointer;
 
-  color: #000;              /* ← 검정색으로 명확히 */
+  color: #000;
   font-size: 18px;
   font-weight: bold;
   line-height: 24px;
   text-align: center;
 
-  background: rgba(255,255,255,0.9); /* ← 흰 배경 위에서도 보이게 */
+  background: rgba(255,255,255,0.9);
   border-radius: 50%;
   z-index: 10;
 }
 .password-input.error {
   border: 2px solid #ff3b3b;
 }
-  /* === 연령대 선택 (위로 펼쳐짐) === */
 .age-select{
   position: relative;
   width: 80px;
@@ -351,15 +337,22 @@ input{
 }
 
 .age-selected{
+  height: 48px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   background:#fff;
   border-radius:24px;
-  padding:14px 16px;
   box-shadow:0 8px 20px rgba(0,0,0,0.1);
-  text-align:center;
   cursor:pointer;
+
+  font-family:'Pretendard-Regular';
+  font-size:14px;
+  color:#888;
 }
 
-/* 옵션 박스 */
 .age-options{
   position:absolute;
   bottom:0;
@@ -395,7 +388,6 @@ input{
   border:1px solid #d00000;
   color:#d00000;
 }
-/* 연령대 선택 폰트 통일 */
 .age-selected,
 .age-options,
 .age-options div {
@@ -403,7 +395,7 @@ input{
   font-size: 14px;
 }
   .age-selected{
-  color:#888;          /* 입력 placeholder와 동일 톤 */
+  color:#888;
 }
 </style>
 </head>
@@ -537,8 +529,8 @@ function addMessageWithValues(n,a,t){
     const confirmBtn = overlay.querySelector('.confirm-btn');
     const closeBtn = overlay.querySelector('.close-btn');
     
-    input.focus();   // ✅ 선언 이후로 이동
-  
+    input.focus();
+    
     function close(){
       document.body.removeChild(overlay);
     }
@@ -551,11 +543,10 @@ function addMessageWithValues(n,a,t){
     document.addEventListener('keydown', escHandler);
     
     function checkPassword(){
-    if(!DELETE_PASSWORD){
-      alert('잠시 후 다시 시도해주세요.');
-      return;
-    }
-    
+      if(!DELETE_PASSWORD){
+        alert('잠시 후 다시 시도해주세요.');
+        return;
+      }
     if(input.value === DELETE_PASSWORD){
       archive.removeChild(msg);
       updateTextLayer();
@@ -565,29 +556,20 @@ function addMessageWithValues(n,a,t){
       input.focus();
     }
   }
-  
-  
-    // 엔터
+    
     input.addEventListener('keyup',(e)=>{
       if(e.key === 'Enter'){
         e.preventDefault();
         checkPassword();
       }
     });
-    
-    // 버튼
     confirmBtn.addEventListener('click', checkPassword);
-    
-    // X 버튼
     closeBtn.addEventListener('click', close);
-    
-    // 사용자가 다시 입력할 때만 에러 제거
     input.addEventListener('input',()=>{
       input.classList.remove('error');
     });
   });
   
-  // ✅ 반드시 여기!
   archive.prepend(msg);
   updateTextLayer();
 }
@@ -606,11 +588,9 @@ function lockScreen(){
 
 function addMessage(){
   if(isLocked) return;
-
   const n = nameInput.value.trim();
   const a = selectedAge;
   const t = textInput.value.trim();
-
   const combined = `${n} ${a} ${t}`;
   for(const w of forbiddenWords){
     if(combined.includes(w)){
@@ -621,9 +601,7 @@ function addMessage(){
       return;
     }
   }
-
   [nameInput, textInput].forEach(i=>i.classList.remove('input-error'));
-
   let err=false;
   if(!n){nameInput.classList.add('input-error'); err=true;}
   if(!a){
