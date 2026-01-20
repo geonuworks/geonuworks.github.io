@@ -73,10 +73,11 @@ html, body {
   z-index: 1;
 }
 
-.sun{
-  position: relative;   /* 또는 이 줄 자체 삭제 */
-  width:100%;
-  height:100%;
+.sun {
+  position:absolute;
+  inset:0;
+  transform: translateY(0);
+  opacity: 1;
 }
 
 .current.fixed{
@@ -441,11 +442,11 @@ input{
 
 @keyframes sunExit {
   from {
-    transform: translateY(0);
+    transform: translateY(0); scale(1);
     opacity: 1;
   }
   to {
-    transform: translateY(12px);
+    transform: translateY(12px); scale(0.95);
     opacity: 0;
   }
 }
@@ -562,7 +563,7 @@ function updateCurrentSun(){
 
   if(oldSun){
     oldSun.classList.add('sun-exit');
-
+    oldSun.offsetHeight;
     setTimeout(()=>{
       current.innerHTML = ''; // 🔥 완전 제거
 
