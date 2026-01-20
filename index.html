@@ -587,7 +587,7 @@ function createNewSun(name, age, text) {
     `;
     current.appendChild(newSun);
 
-    smoothScrollToTop(300);
+    scrollToTopSmoothly(300);
     
     // 다음 프레임에서 enter
     requestAnimationFrame(() => {
@@ -814,18 +814,20 @@ function updateSunFromArchive(){
   createNewSun(name, age, text);
 }
 
-function smoothScrollToTop(duration = 300) {
+function scrollToTopSmoothly(duration = 300) {
   const start = window.scrollY;
+  if (start === 0) return; // 이미 최상단이면 종료
+
   const startTime = performance.now();
 
   function step(currentTime) {
     const elapsed = currentTime - startTime;
     const progress = Math.min(elapsed / duration, 1);
-    window.scrollTo(0, start * (1 - progress));
+    // ease-out 효과 적용 (부드럽게 감소)
+    const ease = 1 - Math.pow(1 - progress, 3);
+    window.scrollTo(0, start * (1 - ease));
 
-    if (progress < 1) {
-      requestAnimationFrame(step);
-    }
+    if (progress < 1) requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
 }
