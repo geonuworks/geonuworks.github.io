@@ -559,40 +559,38 @@ function updateCurrentSun(){
   const strong = first.querySelector('strong')?.innerText || '';
   const span = first.querySelector('span')?.innerText || '';
 
-  const oldSun = current.querySelector('.sun');
+  const existingSun = current.querySelector('.sun');
 
-  if(oldSun){
-    oldSun.classList.add('sun-exit');
+  // 1️⃣ 기존 sun이 있으면 → 복제해서 exit 처리
+  if(existingSun){
+    const exitSun = existingSun.cloneNode(true);
+    exitSun.classList.remove('sun-enter');
+    exitSun.classList.add('sun-exit');
 
-    // 🔑 다음 프레임 + 애니메이션 후 교체
+    current.appendChild(exitSun);
+
     setTimeout(() => {
-      current.innerHTML = '';
-
-      const newSun = document.createElement('div');
-      newSun.className = 'sun sun-enter';
-      newSun.innerHTML = `
-        <div class="sun-shape"></div>
-        <div class="text-layer">
-          <div class="sun-name">${strong}</div>
-          <div class="sun-text">${span}</div>
-        </div>
-      `;
-      current.appendChild(newSun);
+      exitSun.remove();
     }, 450);
-
-  } else {
-    // 최초 1회
-    const newSun = document.createElement('div');
-    newSun.className = 'sun sun-enter';
-    newSun.innerHTML = `
-      <div class="sun-shape"></div>
-      <div class="text-layer">
-        <div class="sun-name">${strong}</div>
-        <div class="sun-text">${span}</div>
-      </div>
-    `;
-    current.appendChild(newSun);
   }
+
+  // 2️⃣ 기존 sun 제거
+  if(existingSun){
+    existingSun.remove();
+  }
+
+  // 3️⃣ 새 sun 생성 (항상 새로운 DOM)
+  const newSun = document.createElement('div');
+  newSun.className = 'sun sun-enter';
+  newSun.innerHTML = `
+    <div class="sun-shape"></div>
+    <div class="text-layer">
+      <div class="sun-name">${strong}</div>
+      <div class="sun-text">${span}</div>
+    </div>
+  `;
+
+  current.appendChild(newSun);
 }
 
 function addMessageWithValues(n,a,t){
