@@ -161,7 +161,6 @@ html, body {
 }
 
 .message.old{
-  animation:floatCloud 6s ease-in-out infinite;
 }
 
 @keyframes floatCloud{
@@ -600,7 +599,11 @@ function createNewSun(name, age, text) {
 function addMessageWithValues(n,a,t){
   const msg = document.createElement('div');
   msg.className = 'message old creating';
-  
+
+  const baseDuration = 5;
+  const randomMultiplier = 0.7 + Math.random() * 0.6;
+  const duration = baseDuration * randomMultiplier;
+  msg.style.animation = `floatCloud ${duration}s ease-in-out infinite`;
   msg.dataset.name = n;
   msg.dataset.age = a;
   msg.dataset.text = t;
