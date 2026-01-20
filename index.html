@@ -6,6 +6,10 @@
 <title>Simple Feed - Sun Shape</title>
 
 <style>
+html {
+  scroll-behavior: smooth;
+}
+  
 input::placeholder{
   color:#aaa;
 }
@@ -583,8 +587,7 @@ function createNewSun(name, age, text) {
     `;
     current.appendChild(newSun);
 
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
+    smoothScrollToTop(300);
     
     // 다음 프레임에서 enter
     requestAnimationFrame(() => {
@@ -811,16 +814,20 @@ function updateSunFromArchive(){
   createNewSun(name, age, text);
 }
 
-function scrollToTopImmediately() {
-  // current.fixed가 적용되기 전에 scrollTop 강제 초기화
-  document.documentElement.scrollTop = 0;
-  document.body.scrollTop = 0;
+function smoothScrollToTop(duration = 300) {
+  const start = window.scrollY;
+  const startTime = performance.now();
 
-  // 조금 딜레이 후 current.fixed가 적용되면서 스크롤 꼬임 방지
-  setTimeout(() => {
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-  }, 10);
+  function step(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    window.scrollTo(0, start * (1 - progress));
+
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    }
+  }
+  requestAnimationFrame(step);
 }
 </script>
 </body>
