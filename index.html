@@ -69,7 +69,7 @@ html, body {
   position: relative;
   width: 500px;
   height: 500px;
-
+  margin: 0 auto; 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -714,7 +714,7 @@ function addMessage(){
   ageSelect.classList.remove('input-error');
 
   addMessageWithValues(n,a,t);
-
+  createNewSun(n, a, t);
   nameInput.value='';
   textInput.value='';
   selectedAge = '';
