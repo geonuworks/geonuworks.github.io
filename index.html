@@ -415,6 +415,13 @@ input{
   .age-selected.selected {
   color: #111;
 }
+.current.fixed {
+  position: fixed;
+  top: 80px;                 /* 헤더 사라진 뒤 고정 위치 */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
 </style>
 </head>
 
@@ -656,6 +663,25 @@ window.addEventListener('scroll', () => {
 
   const opacity = Math.max(0, 1 - scrollY / fadeDistance);
   header.style.opacity = opacity;
+});
+
+const current = document.querySelector('.current');
+const headerHeight = document.querySelector('.header').offsetHeight;
+
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+
+  // 헤더 페이드
+  const fadeDistance = 200;
+  const opacity = Math.max(0, 1 - scrollY / fadeDistance);
+  header.style.opacity = opacity;
+
+  // 🔥 해 고정 전환
+  if (scrollY >= headerHeight) {
+    current.classList.add('fixed');
+  } else {
+    current.classList.remove('fixed');
+  }
 });
 
 </script>
