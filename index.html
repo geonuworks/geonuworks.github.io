@@ -470,6 +470,14 @@ input{
   }
 }
 
+.header {
+  transition: opacity 0.2s ease-out;
+}
+
+.current.fixed .sun,
+.current.fixed .text-layer {
+  transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+}
 </style>
 </head>
 
@@ -761,18 +769,30 @@ window.addEventListener('scroll', () => {
 const current = document.querySelector('.current');
 const headerHeight = header.offsetHeight;
 
+let lastScrollY = 0;
+let ticking = false;
+
 window.addEventListener('scroll', () => {
-  const y = window.scrollY;
+  lastScrollY = window.scrollY;
 
-  // 헤더 페이드
-  const fadeDistance = headerHeight;
-  header.style.opacity = Math.max(0, 1 - y / fadeDistance);
+  if (!ticking) {
+    window.requestAnimationFrame(() => {
+      const y = lastScrollY;
+      const fadeDistance = header.offsetHeight;
 
-  // 해 고정
-  if (y >= headerHeight) {
-    current.classList.add('fixed');
-  } else {
-    current.classList.remove('fixed');
+      // 헤더 opacity
+      header.style.opacity = Math.max(0, 1 - y / fadeDistance);
+
+      // current.fixed 적용
+      if (y >= fadeDistance) {
+        current.classList.add('fixed');
+      } else {
+        current.classList.remove('fixed');
+      }
+
+      ticking = false;
+    });
+    ticking = true;
   }
 });
 
