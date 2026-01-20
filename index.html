@@ -111,18 +111,14 @@ html, body {
 
 .archive{
   position: relative;
-  margin-top: 40%;
-  left: 50%;
-  transform: translateX(-50%);
   width: 1600px;
   max-width: 90%;
+  margin: 0 auto;
   padding: 0 24px;
 
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:flex-start;
-  align-content:flex-start;
-  z-index:1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
 }
 
 .archive-fade{
@@ -439,25 +435,25 @@ input{
     <div class="title desc">새해를 맞이하는 나의 다짐을 적어보세요!</div>
   </div>
 
+<div class="current">
+  <div class="sun-shape"></div>
+  <div class="text-layer" id="textLayer"></div>
+</div>
+
 <div class="sun-spacer"></div>
   
-  <div class="feed">
-    <div class="archive" id="archive"></div>
-    <div class="archive-fade"></div>
-  </div>
+<div class="feed">
+  <div class="archive" id="archive"></div>
+  <div class="archive-fade"></div>
+</div>
   
-  <div class="current">
-    <div class="sun-shape"></div>
-    <div class="text-layer" id="textLayer"></div>
-  </div>
-  
-  <div class="input-bar">
-    <input id="nameInput" class="name-input" placeholder="닉네임" maxlength="6">
-    <div class="age-select" id="ageSelect">
-    <div class="age-selected" id="ageSelected">연령대</div>
+<div class="input-bar">
+  <input id="nameInput" class="name-input" placeholder="닉네임" maxlength="6">
+  <div class="age-select" id="ageSelect">
+  <div class="age-selected" id="ageSelected">연령대</div>
 
-    <div class="age-options">
-      <div data-value="10대 미만">10세 미만</div>
+  <div class="age-options">
+    <div data-value="10대 미만">10세 미만</div>
       <div data-value="10대">10대</div>
       <div data-value="20대">20대</div>
       <div data-value="30대">30대</div>
@@ -667,6 +663,24 @@ window.addEventListener('scroll', () => {
 
   const opacity = Math.max(0, 1 - scrollY / fadeDistance);
   header.style.opacity = opacity;
+});
+
+const current = document.querySelector('.current');
+const headerHeight = header.offsetHeight;
+
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+
+  // 헤더 페이드
+  const fadeDistance = headerHeight;
+  header.style.opacity = Math.max(0, 1 - y / fadeDistance);
+
+  // 해 고정
+  if (y >= headerHeight) {
+    current.classList.add('fixed');
+  } else {
+    current.classList.remove('fixed');
+  }
 });
 
 </script>
