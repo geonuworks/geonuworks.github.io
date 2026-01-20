@@ -30,13 +30,15 @@ input::placeholder{
 html, body {
   margin:0; padding:0; height:100%;
   background:linear-gradient(to top,hsl(50,60%,90%),hsl(10,60%,85%));
-  overflow:hidden; color:#111;
+  overflow-y: auto; color:#111;
 }
 
 .page{
   height:100%;
   display:flex;
   flex-direction:column;
+  min-height: 200vh;
+  padding-bottom: 220px;
 }
 
 .header{
@@ -211,7 +213,7 @@ html, body {
 }
 
 .input-bar{
-  position:absolute;
+  position:fixed;
   bottom:0;
   left:50%;
   transform:translateX(-50%);
@@ -645,6 +647,17 @@ sendBtn.addEventListener('click', addMessage);
 });
 
 addMessageWithValues('홍길동','10대','1일 1책 읽기!');
+
+const header = document.querySelector('.header');
+
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  const fadeDistance = 200; // 페이드가 끝나는 거리(px)
+
+  const opacity = Math.max(0, 1 - scrollY / fadeDistance);
+  header.style.opacity = opacity;
+});
+
 </script>
 </body>
 </html>
