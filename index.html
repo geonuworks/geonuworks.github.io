@@ -430,7 +430,15 @@ input{
 .sun-exit {
   animation: sunExit 0.45s ease forwards;
 }
+.sun {
+  animation: sunFadeIn 0.25s ease;
+}
 
+@keyframes sunFadeIn {
+  from { opacity: 0 }
+  to   { opacity: 1 }
+}
+  
 @keyframes sunExit {
   from {
     transform: translateY(0);
@@ -442,21 +450,6 @@ input{
   }
 }
 
-/* 해 등장 */
-.sun-enter {
-  animation: sunEnter 0.45s ease forwards;
-}
-
-@keyframes sunEnter {
-  from {
-    transform: translateY(24px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
 </style>
 </head>
 
@@ -567,12 +560,12 @@ function updateCurrentSun(){
   `;
 
   if(oldSun){
-    oldSun.classList.add('sun-exit');
-
+  oldSun.classList.add('sun-exit');
     setTimeout(()=>{
       oldSun.remove();
       current.appendChild(newSun);
-    }, 450); // CSS animation 시간과 동일
+    }, 450);
+  }
   }else{
     current.appendChild(newSun);
   }
