@@ -532,11 +532,11 @@ input{
     <button id="sendBtn" class="send-btn">↑</button>
   </div>
 </div>
-
 <script>
 let forbiddenWords = [];
 let DELETE_PASSWORD = '';
 
+// 🔹 config 로드
 Promise.all([
   fetch('./config/forbidden.json').then(r => r.json()),
   fetch('./config/password.json').then(r => r.json())
@@ -545,6 +545,7 @@ Promise.all([
   DELETE_PASSWORD = secretData.deletePassword;
 });
 
+// 🔹 DOM 요소
 const archive = document.getElementById('archive');
 const nameInput = document.getElementById('nameInput');
 const ageSelect = document.getElementById('ageSelect');
@@ -552,8 +553,11 @@ const ageSelected = document.getElementById('ageSelected');
 let selectedAge = '';
 const textInput = document.getElementById('textInput');
 const sendBtn = document.getElementById('sendBtn');
+const header = document.querySelector('.header');
+const current = document.querySelector('.current');
 
-ageSelected.addEventListener('click', (e)=>{
+// 🔹 연령대 선택
+ageSelected.addEventListener('click', e=>{
   e.stopPropagation();
   ageSelect.classList.toggle('open');
 });
@@ -571,45 +575,7 @@ ageSelect.querySelectorAll('.age-options div').forEach(opt=>{
   });
 });
 
-function createNewSun(name, age, text) {
-  const current = document.querySelector('.current');
-  const oldSun = current.querySelector('.sun');
-
-  function createAndEnter() {
-    const newSun = document.createElement('div');
-    newSun.className = 'sun';
-    newSun.innerHTML = `
-      <div class="sun-shape"></div>
-      <div class="text-layer">
-        <div class="sun-name">${name} (${age})</div>
-        <div class="sun-text">${text}</div>
-      </div>
-    `;
-    current.appendChild(newSun);
-
-    scrollToTopSmoothly(300);
-    
-    // 다음 프레임에서 enter
-    requestAnimationFrame(() => {
-      newSun.classList.add('sun-enter');
-    });
-  }
-
-  // 기존 해가 있으면 → exit 후 생성
-  if (oldSun) {
-    oldSun.classList.add('sun-exit');
-
-    oldSun.addEventListener('animationend', () => {
-      oldSun.remove();
-      createAndEnter();
-    }, { once: true });
-
-  } else {
-    // 처음 실행 시
-    createAndEnter();
-  }
-}
-  
+// 🔹 메시지 추가
 function addMessageWithValues(n,a,t){
   const msg = document.createElement('div');
   msg.className = 'message old creating';
@@ -628,14 +594,15 @@ function addMessageWithValues(n,a,t){
       <span>${t}</span>
     </div>
   `;
-  
+
   setTimeout(()=>{
     msg.classList.remove('creating');
   }, 800);
-  
+
+  // 삭제 모달
   msg.addEventListener('click',()=>{
     if(document.querySelector('.modal-overlay')) return;
-    
+
     const overlay = document.createElement('div');
     overlay.className = 'modal-overlay';
     overlay.innerHTML = `
@@ -647,13 +614,13 @@ function addMessageWithValues(n,a,t){
       </div>
     `;
     document.body.appendChild(overlay);
-    
+
     const input = overlay.querySelector('.password-input');
     const confirmBtn = overlay.querySelector('.confirm-btn');
     const closeBtn = overlay.querySelector('.close-btn');
-    
+
     input.focus();
-    
+
     function close(){
       document.body.removeChild(overlay);
     }
@@ -664,40 +631,35 @@ function addMessageWithValues(n,a,t){
       }
     }
     document.addEventListener('keydown', escHandler);
-    
+
     function checkPassword(){
       if(!DELETE_PASSWORD){
         alert('잠시 후 다시 시도해주세요.');
         return;
       }
-    if(input.value === DELETE_PASSWORD){
-      archive.removeChild(msg);
-      close();
-      updateSunFromArchive();
-    }else{
-      input.classList.add('error');
-      input.focus();
-    }
-  }
-    
-    input.addEventListener('keyup',(e)=>{
-      if(e.key === 'Enter'){
-        e.preventDefault();
-        checkPassword();
+      if(input.value === DELETE_PASSWORD){
+        archive.removeChild(msg);
+        close();
+        updateSunFromArchive();
+      } else {
+        input.classList.add('error');
+        input.focus();
       }
+    }
+
+    input.addEventListener('keyup',(e)=>{
+      if(e.key==='Enter'){ e.preventDefault(); checkPassword(); }
     });
     confirmBtn.addEventListener('click', checkPassword);
     closeBtn.addEventListener('click', close);
-    input.addEventListener('input',()=>{
-      input.classList.remove('error');
-    });
+    input.addEventListener('input',()=>input.classList.remove('error'));
   });
-  
+
   archive.prepend(msg);
 }
 
+// 🔹 금지어 잠금
 let isLocked = false;
-
 function lockScreen(){
   isLocked = true;
   const overlay = document.getElementById('lockOverlay');
@@ -708,6 +670,7 @@ function lockScreen(){
   },60000);
 }
 
+// 🔹 메시지 추가 처리
 function addMessage(){
   if(isLocked) return;
   const n = nameInput.value.trim();
@@ -727,21 +690,16 @@ function addMessage(){
 
   [nameInput, textInput].forEach(i=>i.classList.remove('input-error'));
   let err=false;
-
   if(!n){nameInput.classList.add('input-error'); err=true;}
-  if(!a){
-    ageSelect.classList.add('input-error');
-    err = true;
-  }
+  if(!a){ageSelect.classList.add('input-error'); err = true;}
   if(!t){textInput.classList.add('input-error'); err=true;}
   if(err) return;
-
   ageSelect.classList.remove('input-error');
 
   addMessageWithValues(n,a,t);
-  createNewSun(n, a, t);
-  nameInput.value='';
-  textInput.value='';
+  createNewSun(n,a,t);
+
+  nameInput.value=''; textInput.value='';
   selectedAge = '';
   ageSelected.textContent = '연령대';
   ageSelected.classList.remove('selected');
@@ -750,48 +708,28 @@ function addMessage(){
 }
 
 sendBtn.addEventListener('click', addMessage);
-[nameInput, textInput].forEach(i=>{
+[nameInput,textInput].forEach(i=>{
   i.addEventListener('keydown',e=>{
     if(e.key==='Enter'){ e.preventDefault(); addMessage(); }
   });
 });
 
-addMessageWithValues('홍길동','10대','1일 1책 읽기!');
-createNewSun('홍길동','10대','1일 1책 읽기!');
-
-const header = document.querySelector('.header');
-
-window.addEventListener('scroll', () => {
-  const scrollY = window.scrollY;
-  const fadeDistance = 200; // 페이드가 끝나는 거리(px)
-
-  const opacity = Math.max(0, 1 - scrollY / fadeDistance);
-  header.style.opacity = opacity;
-});
-
-const current = document.querySelector('.current');
-const headerHeight = header.offsetHeight;
-
+// 🔹 스크롤 이벤트 통합 (헤더 페이드 + current.fixed)
 let lastScrollY = 0;
 let ticking = false;
-
 window.addEventListener('scroll', () => {
   lastScrollY = window.scrollY;
-
-  if (!ticking) {
-    window.requestAnimationFrame(() => {
+  if(!ticking){
+    requestAnimationFrame(()=>{
       const y = lastScrollY;
-      const fadeDistance = header.offsetHeight;
+      const fadeDistance = 200;
 
-      // 헤더 opacity
+      // 헤더 페이드
       header.style.opacity = Math.max(0, 1 - y / fadeDistance);
 
       // current.fixed 적용
-      if (y >= fadeDistance) {
-        current.classList.add('fixed');
-      } else {
-        current.classList.remove('fixed');
-      }
+      if(y>=fadeDistance) current.classList.add('fixed');
+      else current.classList.remove('fixed');
 
       ticking = false;
     });
@@ -799,38 +737,71 @@ window.addEventListener('scroll', () => {
   }
 });
 
+// 🔹 해 생성/교체
+function createNewSun(name, age, text){
+  const oldSun = current.querySelector('.sun');
+
+  function createAndEnter(){
+    const newSun = document.createElement('div');
+    newSun.className = 'sun';
+    newSun.innerHTML = `
+      <div class="sun-shape"></div>
+      <div class="text-layer">
+        <div class="sun-name">${name} (${age})</div>
+        <div class="sun-text">${text}</div>
+      </div>
+    `;
+    current.appendChild(newSun);
+
+    // 스크롤 초기화
+    scrollToTopSmoothly(300);
+
+    // 다음 프레임에서 enter 애니메이션
+    requestAnimationFrame(()=> newSun.classList.add('sun-enter'));
+  }
+
+  if(oldSun){
+    oldSun.classList.add('sun-exit');
+    oldSun.addEventListener('animationend',()=>{
+      oldSun.remove();
+      createAndEnter();
+    },{once:true});
+  } else {
+    createAndEnter();
+  }
+}
+
+// 🔹 archive에서 첫 메시지 가져와 해 갱신
 function updateSunFromArchive(){
   const firstMsg = archive.querySelector('.message');
-
   if(!firstMsg){
-    // 메시지가 하나도 없으면 해 제거
-    const current = document.querySelector('.current');
     const sun = current.querySelector('.sun');
     if(sun) sun.remove();
     return;
   }
-
-  const { name, age, text } = firstMsg.dataset;
+  const {name, age, text} = firstMsg.dataset;
   createNewSun(name, age, text);
 }
 
-function scrollToTopSmoothly(duration = 300) {
+// 🔹 부드러운 최상단 스크롤
+function scrollToTopSmoothly(duration=300){
   const start = window.scrollY;
-  if (start === 0) return; // 이미 최상단이면 종료
-
+  if(start===0) return;
   const startTime = performance.now();
 
-  function step(currentTime) {
-    const elapsed = currentTime - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-    // ease-out 효과 적용 (부드럽게 감소)
-    const ease = 1 - Math.pow(1 - progress, 3);
-    window.scrollTo(0, start * (1 - ease));
-
-    if (progress < 1) requestAnimationFrame(step);
+  function step(now){
+    const elapsed = now-startTime;
+    const progress = Math.min(elapsed/duration,1);
+    const ease = 1-Math.pow(1-progress,3);
+    window.scrollTo(0,start*(1-ease));
+    if(progress<1) requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
 }
+
+// 🔹 초기 메시지
+addMessageWithValues('홍길동','10대','1일 1책 읽기!');
+createNewSun('홍길동','10대','1일 1책 읽기!');
 </script>
 </body>
 </html>
