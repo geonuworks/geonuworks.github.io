@@ -560,48 +560,43 @@ ageSelect.querySelectorAll('.age-options div').forEach(opt=>{
   });
 });
 
-function createNewSun(name, age, text){
+function createNewSun(name, age, text) {
   const current = document.querySelector('.current');
   const oldSun = current.querySelector('.sun');
 
-  /* 1️⃣ 기존 해 → exit 복제 */
-  if(oldSun){
-    const exitSun = oldSun.cloneNode(true);
-    exitSun.className = 'sun sun-exit';
+  function createAndEnter() {
+    const newSun = document.createElement('div');
+    newSun.className = 'sun';
+    newSun.innerHTML = `
+      <div class="sun-shape"></div>
+      <div class="text-layer">
+        <div class="sun-name">${name} (${age})</div>
+        <div class="sun-text">${text}</div>
+      </div>
+    `;
+    current.appendChild(newSun);
 
-    exitSun.style.position = 'absolute';
-    exitSun.style.inset = '0';
-
-    current.appendChild(exitSun);
-    oldSun.remove();
-
-    exitSun.addEventListener('animationend', () => {
-      exitSun.remove();
+    // 다음 프레임에서 enter
+    requestAnimationFrame(() => {
+      newSun.classList.add('sun-enter');
     });
   }
 
-  /* 2️⃣ 새 해 생성 */
-  const newSun = document.createElement('div');
-  newSun.className = 'sun sun-enter';
-  newSun.innerHTML = `
-    <div class="sun-shape"></div>
-    <div class="text-layer">
-      <div class="sun-name">${name} (${age})</div>
-      <div class="sun-text">${text}</div>
-    </div>
-  `;
+  // 기존 해가 있으면 → exit 후 생성
+  if (oldSun) {
+    oldSun.classList.add('sun-exit');
 
-  current.appendChild(newSun);
+    oldSun.addEventListener('animationend', () => {
+      oldSun.remove();
+      createAndEnter();
+    }, { once: true });
 
-  newSun.addEventListener('animationend', () => {
-  window.scrollTo({
-    top: 0,
-    left: 0,
-    behavior: 'smooth'
-  });
-}, { once: true });
+  } else {
+    // 처음 실행 시
+    createAndEnter();
+  }
 }
-
+  
 function addMessageWithValues(n,a,t){
   const msg = document.createElement('div');
   msg.className = 'message old creating';
