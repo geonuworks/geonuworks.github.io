@@ -410,6 +410,9 @@ input{
   font-family: 'Pretendard-Regular';
   font-size: 14px;
 }
+  .age-selected.selected {
+  color: #111;
+}
 </style>
 </head>
 
@@ -491,6 +494,7 @@ ageSelect.querySelectorAll('.age-options div').forEach(opt=>{
   opt.addEventListener('click', ()=>{
     selectedAge = opt.dataset.value;
     ageSelected.textContent = selectedAge;
+    ageSelected.classList.add('selected');
     ageSelect.classList.remove('open');
   });
 });
@@ -630,6 +634,7 @@ function addMessage(){
   textInput.value='';
   selectedAge = '';
   ageSelected.textContent = '연령대';
+  ageSelected.classList.remove('selected');
 }
 
 sendBtn.addEventListener('click', addMessage);
