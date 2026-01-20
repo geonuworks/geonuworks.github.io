@@ -413,9 +413,13 @@ input{
   font-family: 'Pretendard-Regular';
   font-size: 14px;
 }
-  .age-selected.selected {
+.age-selected.selected {
   color: #111;
 }
+.current-placeholder{
+  height: 500px; /* 해 높이와 동일 */
+}
+
 </style>
 </head>
 
@@ -436,7 +440,7 @@ input{
   <div class="text-layer" id="textLayer"></div>
 </div>
 
-<div class="sun-spacer"></div>
+<div class="current-placeholder"></div>
   
 <div class="feed">
   <div class="archive" id="archive"></div>
@@ -640,6 +644,10 @@ function addMessage(){
   selectedAge = '';
   ageSelected.textContent = '연령대';
   ageSelected.classList.remove('selected');
+
+  window.scrollTo({
+  top: 0,
+  behavior: 'smooth'
 }
 
 sendBtn.addEventListener('click', addMessage);
