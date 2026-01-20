@@ -575,6 +575,9 @@ function createNewSun(name, age, text) {
     `;
     current.appendChild(newSun);
 
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    
     // 다음 프레임에서 enter
     requestAnimationFrame(() => {
       newSun.classList.add('sun-enter');
@@ -786,6 +789,18 @@ function updateSunFromArchive(){
 
   const { name, age, text } = firstMsg.dataset;
   createNewSun(name, age, text);
+}
+
+function scrollToTopImmediately() {
+  // current.fixed가 적용되기 전에 scrollTop 강제 초기화
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+
+  // 조금 딜레이 후 current.fixed가 적용되면서 스크롤 꼬임 방지
+  setTimeout(() => {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, 10);
 }
 </script>
 </body>
