@@ -650,9 +650,15 @@ function addMessage(){
   ageSelected.textContent = '연령대';
   ageSelected.classList.remove('selected');
 
-  requestAnimationFrame(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
+  document.activeElement.blur();
+  
+  setTimeout(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+  }, 50);
 }
 
 sendBtn.addEventListener('click', addMessage);
