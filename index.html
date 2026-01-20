@@ -64,13 +64,18 @@ html, body {
 }
 
 .current{
+  position: relative;     /* 처음엔 흐름 안에 */
+  margin: 120px auto 0;   /* 헤더 아래 자연스럽게 */
+  width: 400px;
+  height: 400px;
+  z-index: 1;
+}
+
+.current.fixed{
   position: fixed;
   top: 80px;
   left: 50%;
   transform: translateX(-50%);
-  width: 400px;
-  height: 400px;
-  z-index: 1;
 }
 
 .sun-shape{
@@ -105,13 +110,13 @@ html, body {
 }
 
 .archive{
-  position:absolute;
-  top:40%;
-  left:50%;
-  transform:translateX(-50%);
-  width:1600px;
-  max-width:90%;
-  padding:0 24px;
+  position: relative;
+  margin-top: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1600px;
+  max-width: 90%;
+  padding: 0 24px;
 
   display:flex;
   flex-wrap:wrap;
@@ -416,8 +421,8 @@ input{
   .age-selected.selected {
   color: #111;
 }
-.header-spacer{
-  height: 480px; /* 해 높이 + 여백 */
+.sun-spacer{
+  height: 400px; /* 해 높이와 동일 */
 }
 </style>
 </head>
@@ -429,11 +434,12 @@ input{
 
 <div class="page">
   <div class="header">
-    <div class="header-spacer"></div>
     <div class="title small">성북구립 월곡꿈그림도서관</div>
     <div class="title large">2026년 새해다짐</div>
     <div class="title desc">새해를 맞이하는 나의 다짐을 적어보세요!</div>
   </div>
+
+<div class="sun-spacer"></div>
   
   <div class="feed">
     <div class="archive" id="archive"></div>
