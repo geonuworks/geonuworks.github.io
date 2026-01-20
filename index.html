@@ -72,9 +72,11 @@ html, body {
   height: 500px;
   z-index: 1;
 }
+
 .sun{
-  position:absolute;
-  inset:0;
+  position: relative;   /* 또는 이 줄 자체 삭제 */
+  width:100%;
+  height:100%;
 }
 
 .current.fixed{
@@ -550,34 +552,44 @@ ageSelect.querySelectorAll('.age-options div').forEach(opt=>{
 
 function updateCurrentSun(){
   const current = document.getElementById('current');
-  const oldSun = current.querySelector('.sun');
   const first = archive.firstElementChild;
-
   if(!first) return;
 
   const strong = first.querySelector('strong')?.innerText || '';
   const span = first.querySelector('span')?.innerText || '';
 
-  const newSun = document.createElement('div');
-  newSun.className = 'sun sun-enter';
-  newSun.innerHTML = `
-    <div class="sun-shape"></div>
-    <div class="text-layer">
-      <div class="sun-name">${strong}</div>
-      <div class="sun-text">${span}</div>
-    </div>
-  `;
+  const oldSun = current.querySelector('.sun');
 
-  if (oldSun) {
+  if(oldSun){
     oldSun.classList.add('sun-exit');
 
-    // 기존 해가 완전히 사라진 후 제거 + 새 해 추가
-    setTimeout(() => {
-      oldSun.remove();
+    setTimeout(()=>{
+      current.innerHTML = ''; // 🔥 완전 제거
+
+      const newSun = document.createElement('div');
+      newSun.className = 'sun sun-enter';
+      newSun.innerHTML = `
+        <div class="sun-shape"></div>
+        <div class="text-layer">
+          <div class="sun-name">${strong}</div>
+          <div class="sun-text">${span}</div>
+        </div>
+      `;
       current.appendChild(newSun);
     }, 450);
 
-  } else {
+  }else{
+    current.innerHTML = '';
+
+    const newSun = document.createElement('div');
+    newSun.className = 'sun sun-enter';
+    newSun.innerHTML = `
+      <div class="sun-shape"></div>
+      <div class="text-layer">
+        <div class="sun-name">${strong}</div>
+        <div class="sun-text">${span}</div>
+      </div>
+    `;
     current.appendChild(newSun);
   }
 }
