@@ -597,6 +597,10 @@ function createNewSun(name, age, text){
 function addMessageWithValues(n,a,t){
   const msg = document.createElement('div');
   msg.className = 'message old creating';
+  
+  msg.dataset.name = n;
+  msg.dataset.age = a;
+  msg.dataset.text = t;
   msg.innerHTML = `
     <div class="message-inner">
       <div class="small-rect"></div>
@@ -649,6 +653,7 @@ function addMessageWithValues(n,a,t){
     if(input.value === DELETE_PASSWORD){
       archive.removeChild(msg);
       close();
+      updateSunFromArchive();
     }else{
       input.classList.add('error');
       input.focus();
@@ -770,6 +775,20 @@ window.addEventListener('scroll', () => {
   }
 });
 
+function updateSunFromArchive(){
+  const firstMsg = archive.querySelector('.message');
+
+  if(!firstMsg){
+    // 메시지가 하나도 없으면 해 제거
+    const current = document.querySelector('.current');
+    const sun = current.querySelector('.sun');
+    if(sun) sun.remove();
+    return;
+  }
+
+  const { name, age, text } = firstMsg.dataset;
+  createNewSun(name, age, text);
+}
 </script>
 </body>
 </html>
