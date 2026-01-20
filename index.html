@@ -592,6 +592,14 @@ function createNewSun(name, age, text){
   `;
 
   current.appendChild(newSun);
+
+  newSun.addEventListener('animationend', () => {
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: 'smooth'
+  });
+}, { once: true });
 }
 
 function addMessageWithValues(n,a,t){
@@ -727,14 +735,6 @@ function addMessage(){
   ageSelected.classList.remove('selected');
 
   document.activeElement.blur();
-  
-  requestAnimationFrame(() => {
-  window.scrollTo({
-    top: 0,
-    left: 0,
-    behavior: 'smooth'
-  });
-});
 }
 
 sendBtn.addEventListener('click', addMessage);
