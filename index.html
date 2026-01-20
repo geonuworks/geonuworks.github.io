@@ -426,19 +426,36 @@ input{
 .current-placeholder{
   height: 200px; /* 해 높이와 동일 */
 }
-/* 해 퇴장 */
+
+  /* 기존 해 사라질 때 */
 .sun-exit {
   animation: sunExit 0.45s ease forwards;
 }
-  
+
+/* 새 해 등장 */
+.sun-enter {
+  animation: sunEnter 0.45s ease forwards;
+}
+
 @keyframes sunExit {
   from {
     transform: translateY(0);
     opacity: 1;
   }
   to {
-    transform: translateY(24px);
+    transform: translateY(12px);
     opacity: 0;
+  }
+}
+
+@keyframes sunEnter {
+  from {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
   }
 }
 
@@ -542,7 +559,7 @@ function updateCurrentSun(){
   const span = first.querySelector('span')?.innerText || '';
 
   const newSun = document.createElement('div');
-  newSun.className = 'sun';
+  newSun.className = 'sun sun-enter';
   newSun.innerHTML = `
     <div class="sun-shape"></div>
     <div class="text-layer">
@@ -554,10 +571,12 @@ function updateCurrentSun(){
   if (oldSun) {
     oldSun.classList.add('sun-exit');
 
+    // 기존 해가 완전히 사라진 후 제거 + 새 해 추가
     setTimeout(() => {
       oldSun.remove();
       current.appendChild(newSun);
     }, 450);
+
   } else {
     current.appendChild(newSun);
   }
