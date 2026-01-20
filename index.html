@@ -711,26 +711,20 @@ sendBtn.addEventListener('click', addMessage);
 });
 
 // 🔹 스크롤 이벤트 통합 (헤더 페이드 + current.fixed)
-let lastScrollY = 0;
-let ticking = false;
+let scrolling = false; // 🔹 추가
+
 window.addEventListener('scroll', () => {
-  lastScrollY = window.scrollY;
-  if(!ticking){
-    requestAnimationFrame(()=>{
-      const y = lastScrollY;
-      const fadeDistance = 200;
+  if(scrolling) return; // 🔹 scrollToTop 중에는 무시
 
-      // 헤더 페이드
-      header.style.opacity = Math.max(0, 1 - y / fadeDistance);
+  const y = window.scrollY;
+  const fadeDistance = 200;
 
-      // current.fixed 적용
-      if(y>=fadeDistance) current.classList.add('fixed');
-      else current.classList.remove('fixed');
+  // 헤더 opacity
+  header.style.opacity = Math.max(0, 1 - y / fadeDistance);
 
-      ticking = false;
-    });
-    ticking = true;
-  }
+  // current.fixed 적용
+  if(y >= fadeDistance) current.classList.add('fixed');
+  else current.classList.remove('fixed');
 });
 
 // 🔹 해 생성/교체
@@ -782,26 +776,26 @@ function updateSunFromArchive(){
 // 🔹 부드러운 최상단 스크롤
 function scrollToTopSmoothly(duration=300){
   const start = window.scrollY;
-  if(start===0) return;
+  if(start === 0) return;
 
+  scrolling = true; // 🔹 scroll 이벤트 잠금
   const startTime = performance.now();
-  ticking = true; // scroll 이벤트 잠시 막기
 
   function step(now){
     const elapsed = now - startTime;
-    const progress = Math.min(elapsed/duration, 1);
-    const ease = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+    const progress = Math.min(elapsed / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
     const currentY = start * (1 - ease);
     window.scrollTo(0, currentY);
 
-    // header opacity & current.fixed 반영
+    // 🔹 scroll 이벤트 대신 직접 처리
     const fadeDistance = 200;
     header.style.opacity = Math.max(0, 1 - currentY / fadeDistance);
     if(currentY >= fadeDistance) current.classList.add('fixed');
     else current.classList.remove('fixed');
 
     if(progress < 1) requestAnimationFrame(step);
-    else ticking = false;
+    else scrolling = false; // 완료 후 scroll 이벤트 다시 활성화
   }
 
   requestAnimationFrame(step);
