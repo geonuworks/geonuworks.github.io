@@ -34,10 +34,9 @@ html, body {
 }
 
 .page{
-  height:100%;
+  min-height:100vh;
   display:flex;
   flex-direction:column;
-  min-height: 200vh;
   padding-bottom: 220px;
 }
 
@@ -65,7 +64,7 @@ html, body {
 
 .current{
   position: relative;     /* 처음엔 흐름 안에 */
-  margin: 60px auto 0;   /* 헤더 아래 자연스럽게 */
+  margin: 60px auto 40px;   /* 헤더 아래 자연스럽게 */
   width: 500px;
   height: 500px;
   z-index: 1;
@@ -416,9 +415,6 @@ input{
 }
   .age-selected.selected {
   color: #111;
-}
-.sun-spacer{
-  height: 400px; /* 해 높이와 동일 */
 }
 </style>
 </head>
