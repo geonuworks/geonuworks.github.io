@@ -64,12 +64,13 @@ html, body {
 }
 
 .current{
-  position:absolute;
-  top:5%;
-  left:50%;
-  transform:translateX(-50%);
-  width:400px;
-  height:400px;
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 400px;
+  height: 400px;
+  z-index: 1;
 }
 
 .sun-shape{
@@ -415,12 +416,8 @@ input{
   .age-selected.selected {
   color: #111;
 }
-.current.fixed {
-  position: fixed;
-  top: 80px;                 /* 헤더 사라진 뒤 고정 위치 */
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1;
+.header-spacer{
+  height: 480px; /* 해 높이 + 여백 */
 }
 </style>
 </head>
@@ -432,19 +429,20 @@ input{
 
 <div class="page">
   <div class="header">
+    <div class="header-spacer"></div>
     <div class="title small">성북구립 월곡꿈그림도서관</div>
     <div class="title large">2026년 새해다짐</div>
     <div class="title desc">새해를 맞이하는 나의 다짐을 적어보세요!</div>
   </div>
   
   <div class="feed">
-    <div class="current">
-      <div class="sun-shape"></div>
-      <div class="text-layer" id="textLayer"></div>
-    </div>
-    
     <div class="archive" id="archive"></div>
     <div class="archive-fade"></div>
+  </div>
+  
+  <div class="current">
+    <div class="sun-shape"></div>
+    <div class="text-layer" id="textLayer"></div>
   </div>
   
   <div class="input-bar">
@@ -663,25 +661,6 @@ window.addEventListener('scroll', () => {
 
   const opacity = Math.max(0, 1 - scrollY / fadeDistance);
   header.style.opacity = opacity;
-});
-
-const current = document.querySelector('.current');
-const headerHeight = document.querySelector('.header').offsetHeight;
-
-window.addEventListener('scroll', () => {
-  const scrollY = window.scrollY;
-
-  // 헤더 페이드
-  const fadeDistance = 200;
-  const opacity = Math.max(0, 1 - scrollY / fadeDistance);
-  header.style.opacity = opacity;
-
-  // 🔥 해 고정 전환
-  if (scrollY >= headerHeight) {
-    current.classList.add('fixed');
-  } else {
-    current.classList.remove('fixed');
-  }
 });
 
 </script>
