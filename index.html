@@ -561,25 +561,18 @@ function updateCurrentSun(){
 
   const existingSun = current.querySelector('.sun');
 
-  // 1️⃣ 기존 sun이 있으면 → 복제해서 exit 처리
+  // 1️⃣ 기존 sun이 있으면 → exit 상태로 전환
   if(existingSun){
-    const exitSun = existingSun.cloneNode(true);
-    exitSun.classList.remove('sun-enter');
-    exitSun.classList.add('sun-exit');
-
-    current.appendChild(exitSun);
-
+    existingSun.classList.remove('sun-enter');
+    existingSun.classList.add('sun-exit');
+    existingSun.classList.remove('sun'); // ⭐ 핵심!!
+    
     setTimeout(() => {
-      exitSun.remove();
+      existingSun.remove();
     }, 450);
   }
 
-  // 2️⃣ 기존 sun 제거
-  if(existingSun){
-    existingSun.remove();
-  }
-
-  // 3️⃣ 새 sun 생성 (항상 새로운 DOM)
+  // 2️⃣ 새 sun 생성 (항상 하나만)
   const newSun = document.createElement('div');
   newSun.className = 'sun sun-enter';
   newSun.innerHTML = `
