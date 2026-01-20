@@ -6,10 +6,6 @@
 <title>Simple Feed - Sun Shape</title>
 
 <style>
-html {
-  scroll-behavior: smooth;
-}
-  
 input::placeholder{
   color:#aaa;
 }
@@ -787,15 +783,27 @@ function updateSunFromArchive(){
 function scrollToTopSmoothly(duration=300){
   const start = window.scrollY;
   if(start===0) return;
+
   const startTime = performance.now();
+  ticking = true; // scroll 이벤트 잠시 막기
 
   function step(now){
-    const elapsed = now-startTime;
-    const progress = Math.min(elapsed/duration,1);
-    const ease = 1-Math.pow(1-progress,3);
-    window.scrollTo(0,start*(1-ease));
-    if(progress<1) requestAnimationFrame(step);
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed/duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+    const currentY = start * (1 - ease);
+    window.scrollTo(0, currentY);
+
+    // header opacity & current.fixed 반영
+    const fadeDistance = 200;
+    header.style.opacity = Math.max(0, 1 - currentY / fadeDistance);
+    if(currentY >= fadeDistance) current.classList.add('fixed');
+    else current.classList.remove('fixed');
+
+    if(progress < 1) requestAnimationFrame(step);
+    else ticking = false;
   }
+
   requestAnimationFrame(step);
 }
 
