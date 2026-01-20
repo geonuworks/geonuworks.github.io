@@ -650,10 +650,8 @@ function addMessage(){
   ageSelected.textContent = '연령대';
   ageSelected.classList.remove('selected');
 
-  /* ✅ 스크롤 최상단 */
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
+  requestAnimationFrame(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 }
 
