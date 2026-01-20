@@ -430,14 +430,6 @@ input{
 .sun-exit {
   animation: sunExit 0.45s ease forwards;
 }
-.sun {
-  animation: sunFadeIn 0.25s ease;
-}
-
-@keyframes sunFadeIn {
-  from { opacity: 0 }
-  to   { opacity: 1 }
-}
   
 @keyframes sunExit {
   from {
@@ -466,7 +458,7 @@ input{
   </div>
 
 <div class="current" id="current">
-  <div class="sun sun-enter">
+  <div class="sun">
     <div class="sun-shape"></div>
     <div class="text-layer"></div>
   </div>
@@ -550,7 +542,7 @@ function updateCurrentSun(){
   const span = first.querySelector('span')?.innerText || '';
 
   const newSun = document.createElement('div');
-  newSun.className = 'sun sun-enter';
+  newSun.className = 'sun';
   newSun.innerHTML = `
     <div class="sun-shape"></div>
     <div class="text-layer">
@@ -559,14 +551,14 @@ function updateCurrentSun(){
     </div>
   `;
 
-  if(oldSun){
-  oldSun.classList.add('sun-exit');
-    setTimeout(()=>{
+  if (oldSun) {
+    oldSun.classList.add('sun-exit');
+
+    setTimeout(() => {
       oldSun.remove();
       current.appendChild(newSun);
     }, 450);
-  }
-  }else{
+  } else {
     current.appendChild(newSun);
   }
 }
