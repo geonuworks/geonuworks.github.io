@@ -618,6 +618,7 @@ function addMessage(){
   const a = selectedAge;
   const t = textInput.value.trim();
   const combined = `${n} ${a} ${t}`;
+
   for(const w of forbiddenWords){
     if(combined.includes(w)){
       alert('금지어가 포함되어 있습니다.');
@@ -627,8 +628,10 @@ function addMessage(){
       return;
     }
   }
+
   [nameInput, textInput].forEach(i=>i.classList.remove('input-error'));
   let err=false;
+
   if(!n){nameInput.classList.add('input-error'); err=true;}
   if(!a){
     ageSelect.classList.add('input-error');
@@ -636,18 +639,22 @@ function addMessage(){
   }
   if(!t){textInput.classList.add('input-error'); err=true;}
   if(err) return;
+
   ageSelect.classList.remove('input-error');
 
   addMessageWithValues(n,a,t);
+
   nameInput.value='';
   textInput.value='';
   selectedAge = '';
   ageSelected.textContent = '연령대';
   ageSelected.classList.remove('selected');
 
+  /* ✅ 스크롤 최상단 */
   window.scrollTo({
-  top: 0,
-  behavior: 'smooth'
+    top: 0,
+    behavior: 'smooth'
+  });
 }
 
 sendBtn.addEventListener('click', addMessage);
