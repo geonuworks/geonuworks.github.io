@@ -563,9 +563,10 @@ function updateCurrentSun(){
 
   if(oldSun){
     oldSun.classList.add('sun-exit');
-    oldSun.offsetHeight;
-    setTimeout(()=>{
-      current.innerHTML = ''; // 🔥 완전 제거
+
+    // 🔑 다음 프레임 + 애니메이션 후 교체
+    setTimeout(() => {
+      current.innerHTML = '';
 
       const newSun = document.createElement('div');
       newSun.className = 'sun sun-enter';
@@ -579,9 +580,8 @@ function updateCurrentSun(){
       current.appendChild(newSun);
     }, 450);
 
-  }else{
-    current.innerHTML = '';
-
+  } else {
+    // 최초 1회
     const newSun = document.createElement('div');
     newSun.className = 'sun sun-enter';
     newSun.innerHTML = `
