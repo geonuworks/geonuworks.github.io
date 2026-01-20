@@ -72,6 +72,10 @@ html, body {
   height: 500px;
   z-index: 1;
 }
+.sun{
+  position:absolute;
+  inset:0;
+}
 
 .current.fixed{
   position: fixed;
@@ -422,7 +426,37 @@ input{
 .current-placeholder{
   height: 200px; /* 해 높이와 동일 */
 }
+/* 해 퇴장 */
+.sun-exit {
+  animation: sunExit 0.45s ease forwards;
+}
 
+@keyframes sunExit {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+}
+
+/* 해 등장 */
+.sun-enter {
+  animation: sunEnter 0.45s ease forwards;
+}
+
+@keyframes sunEnter {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
 </style>
 </head>
 
@@ -438,9 +472,11 @@ input{
     <div class="title desc">새해를 맞이하는 나의 다짐을 적어보세요!</div>
   </div>
 
-<div class="current">
-  <div class="sun-shape"></div>
-  <div class="text-layer" id="textLayer"></div>
+<div class="current" id="current">
+  <div class="sun sun-enter">
+    <div class="sun-shape"></div>
+    <div class="text-layer"></div>
+  </div>
 </div>
 
 <div class="current-placeholder"></div>
@@ -484,7 +520,6 @@ Promise.all([
   DELETE_PASSWORD = secretData.deletePassword;
 });
 
-const textLayer = document.getElementById('textLayer');
 const archive = document.getElementById('archive');
 const nameInput = document.getElementById('nameInput');
 const ageSelect = document.getElementById('ageSelect');
@@ -511,17 +546,36 @@ ageSelect.querySelectorAll('.age-options div').forEach(opt=>{
   });
 });
 
-function updateTextLayer(){
+function updateCurrentSun(){
+  const current = document.getElementById('current');
+  const oldSun = current.querySelector('.sun');
   const first = archive.firstElementChild;
-  if(!first){ textLayer.innerHTML=''; return; }
+
+  if(!first) return;
 
   const strong = first.querySelector('strong')?.innerText || '';
   const span = first.querySelector('span')?.innerText || '';
 
-  textLayer.innerHTML = `
-    <div class="sun-name">${strong}</div>
-    <div class="sun-text">${span}</div>
+  const newSun = document.createElement('div');
+  newSun.className = 'sun sun-enter';
+  newSun.innerHTML = `
+    <div class="sun-shape"></div>
+    <div class="text-layer">
+      <div class="sun-name">${strong}</div>
+      <div class="sun-text">${span}</div>
+    </div>
   `;
+
+  if(oldSun){
+    oldSun.classList.add('sun-exit');
+
+    setTimeout(()=>{
+      oldSun.remove();
+      current.appendChild(newSun);
+    }, 450); // CSS animation 시간과 동일
+  }else{
+    current.appendChild(newSun);
+  }
 }
 
 function addMessageWithValues(n,a,t){
@@ -578,7 +632,7 @@ function addMessageWithValues(n,a,t){
       }
     if(input.value === DELETE_PASSWORD){
       archive.removeChild(msg);
-      updateTextLayer();
+      updateCurrentSun();
       close();
     }else{
       input.classList.add('error');
@@ -600,7 +654,7 @@ function addMessageWithValues(n,a,t){
   });
   
   archive.prepend(msg);
-  updateTextLayer();
+  updateCurrentSun();
 }
 
 let isLocked = false;
@@ -672,6 +726,7 @@ sendBtn.addEventListener('click', addMessage);
 });
 
 addMessageWithValues('홍길동','10대','1일 1책 읽기!');
+updateCurrentSun();
 
 const header = document.querySelector('.header');
 
