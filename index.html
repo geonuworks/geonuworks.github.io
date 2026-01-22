@@ -529,6 +529,7 @@ input{
   </div>
 </div>
 <script>
+let messages = [];   // 🔹 모든 메시지 저장용
 let forbiddenWords = [];
 let DELETE_PASSWORD = '';
 
@@ -551,6 +552,8 @@ const textInput = document.getElementById('textInput');
 const sendBtn = document.getElementById('sendBtn');
 const header = document.querySelector('.header');
 const current = document.querySelector('.current');
+
+const STORAGE_KEY = 'sunMessages';
 
 // 🔹 연령대 선택
 ageSelected.addEventListener('click', e=>{
@@ -635,6 +638,15 @@ function addMessageWithValues(n,a,t){
       }
       if(input.value === DELETE_PASSWORD){
         archive.removeChild(msg);
+        
+        // 🔹 localStorage에서도 제거
+        messages = messages.filter(m =>
+          !(m.name === msg.dataset.name &&
+            m.age === msg.dataset.age &&
+            m.text === msg.dataset.text)
+        );
+        saveMessages();
+        
         close();
         updateSunFromArchive();
       } else {
@@ -694,7 +706,17 @@ function addMessage(){
 
   addMessageWithValues(n,a,t);
   createNewSun(n,a,t);
+  
+  messages.push({ name:n, age:a, text:t });
+  saveMessages();
 
+  const MAX_MESSAGES = 500;
+  if(messages.length > MAX_MESSAGES){
+    messages.shift();                 // 데이터 제거
+    archive.removeChild(archive.lastElementChild); // DOM 제거
+    saveMessages();
+  }
+  
   nameInput.value=''; textInput.value='';
   selectedAge = '';
   ageSelected.textContent = '연령대';
@@ -802,8 +824,28 @@ function scrollToTopSmoothly(duration=300){
 }
 
 // 🔹 초기 메시지
-addMessageWithValues('홍길동','10대','1일 1책 읽기!');
-createNewSun('홍길동','10대','1일 1책 읽기!');
+loadMessages();
+
+function saveMessages(){
+  localStorage.setItem('sunMessages', JSON.stringify(messages));
+}
+
+function loadMessages(){
+  const saved = localStorage.getItem('sunMessages');
+  if(!saved) return;
+
+  messages = JSON.parse(saved);
+
+  messages.forEach(m=>{
+    addMessageWithValues(m.name, m.age, m.text);
+  });
+
+  // 마지막 메시지를 current 해로
+  const last = messages[messages.length - 1];
+  if(last){
+    createNewSun(last.name, last.age, last.text);
+  }
+}
 </script>
 </body>
 </html>
