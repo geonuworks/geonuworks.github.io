@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio — Works</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a class="nav__logo" href="index.html">YOUR NAME</a>
+    <ul class="nav__links">
+      <li><a href="index.html" class="nav__link">CV</a></li>
+      <li><a href="works.html" class="nav__link active">Works</a></li>
+      <li><a href="contact.html" class="nav__link">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero hero--sm">
+    <div class="hero__tag mono">Selected Works</div>
+    <h1 class="hero__name">Works</h1>
+    <div class="hero__line"></div>
+  </header>
+
+  <!-- FILTER -->
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="design">Design</button>
+    <button class="filter-btn" data-filter="web">Web</button>
+    <button class="filter-btn" data-filter="branding">Branding</button>
+  </div>
+
+  <!-- WORKS GRID -->
+  <main class="works-grid">
+
+    <article class="work-card" data-category="design web">
+      <div class="work-card__img-wrap">
+        <div class="work-card__img work-card__img--1"></div>
+        <div class="work-card__overlay">
+          <span class="mono small">View Project →</span>
+        </div>
+      </div>
+      <div class="work-card__info">
+        <h2 class="work-card__title">Project Title One</h2>
+        <p class="work-card__meta mono small">Design · Web · 2024</p>
+      </div>
+    </article>
+
+    <article class="work-card" data-category="branding">
+      <div class="work-card__img-wrap">
+        <div class="work-card__img work-card__img--2"></div>
+        <div class="work-card__overlay">
+          <span class="mono small">View Project →</span>
+        </div>
+      </div>
+      <div class="work-card__info">
+        <h2 class="work-card__title">Brand Identity</h2>
+        <p class="work-card__meta mono small">Branding · 2023</p>
+      </div>
+    </article>
+
+    <article class="work-card work-card--wide" data-category="web">
+      <div class="work-card__img-wrap">
+        <div class="work-card__img work-card__img--3"></div>
+        <div class="work-card__overlay">
+          <span class="mono small">View Project →</span>
+        </div>
+      </div>
+      <div class="work-card__info">
+        <h2 class="work-card__title">Web Platform Redesign</h2>
+        <p class="work-card__meta mono small">Web · UX · 2023</p>
+      </div>
+    </article>
+
+    <article class="work-card" data-category="design">
+      <div class="work-card__img-wrap">
+        <div class="work-card__img work-card__img--4"></div>
+        <div class="work-card__overlay">
+          <span class="mono small">View Project →</span>
+        </div>
+      </div>
+      <div class="work-card__info">
+        <h2 class="work-card__title">Editorial Design</h2>
+        <p class="work-card__meta mono small">Design · Print · 2022</p>
+      </div>
+    </article>
+
+    <article class="work-card" data-category="branding design">
+      <div class="work-card__img-wrap">
+        <div class="work-card__img work-card__img--5"></div>
+        <div class="work-card__overlay">
+          <span class="mono small">View Project →</span>
+        </div>
+      </div>
+      <div class="work-card__info">
+        <h2 class="work-card__title">Visual Identity</h2>
+        <p class="work-card__meta mono small">Branding · Design · 2022</p>
+      </div>
+    </article>
+
+    <article class="work-card" data-category="web">
+      <div class="work-card__img-wrap">
+        <div class="work-card__img work-card__img--6"></div>
+        <div class="work-card__overlay">
+          <span class="mono small">View Project →</span>
+        </div>
+      </div>
+      <div class="work-card__info">
+        <h2 class="work-card__title">App UI Design</h2>
+        <p class="work-card__meta mono small">Web · Mobile · 2021</p>
+      </div>
+    </article>
+
+  </main>
+
+  <footer class="footer">
+    <span class="mono small">© 2024 Your Name</span>
+    <span class="mono small">Seoul, Korea</span>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
