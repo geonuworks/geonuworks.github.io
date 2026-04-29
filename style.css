@@ -386,7 +386,7 @@ img { display: block; max-width: 100%; }
   max-width: var(--max-w);
   margin: 0 auto;
   padding: 32px var(--pad);
-  border-top: 1px solid var(--ink-faint);
+  border-top: none;
   display: flex;
   justify-content: space-between;
   color: var(--ink-muted);
@@ -415,7 +415,7 @@ img { display: block; max-width: 100%; }
    ============================================= */
 .cv-layout {
   display: grid;
-  grid-template-columns: 320px 1fr;
+  grid-template-columns: 640px 1fr;
   min-height: calc(100vh - var(--nav-h));
   padding-top: var(--nav-h);
 }
@@ -423,7 +423,7 @@ img { display: block; max-width: 100%; }
 /* ── LEFT PANEL ── */
 .cv-left {
   padding: 52px 36px 52px 48px;
-  border-right: 1px solid var(--ink-faint);
+  border-right: none;
   display: flex;
   flex-direction: column;
   gap: 36px;
@@ -491,10 +491,10 @@ img { display: block; max-width: 100%; }
 }
 
 .cv-section {
-  border-top: 1px solid var(--ink-faint);
+  border-top: none;
   padding: 28px 0;
 }
-.cv-section:last-child { border-bottom: 1px solid var(--ink-faint); }
+.cv-section:last-child { border-bottom: none; }
 
 .cv-row {
   display: grid;
@@ -515,13 +515,13 @@ img { display: block; max-width: 100%; }
 
 /* Entries: Education / Award */
 .cv-entry {
-  display: grid;
-  grid-template-columns: 1fr 1fr auto;
-  gap: 0 12px;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
   align-items: baseline;
 }
-.cv-entry-name { font-size: 0.82em; font-weight: 700; color: var(--ink); }
-.cv-entry-detail { font-size: 0.8em; color: var(--ink); font-weight: 400; }
+.cv-entry-name { width: 250px; flex-shrink: 0; font-size: 0.82em; font-weight: 700; color: var(--ink); }
+.cv-entry-detail { flex-grow: 1; font-size: 0.8em; color: var(--ink); font-weight: 400; }
 .cv-entry-date { font-size: 0.74em; color: var(--ink-muted); white-space: nowrap; text-align: right; }
 
 /* Experience blocks */
@@ -529,16 +529,15 @@ img { display: block; max-width: 100%; }
 .cv-experience:last-child { padding-bottom: 0; }
 
 .cv-exp-header {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  gap: 0 8px;
+  display: flex;
+  gap: 10px;
   align-items: baseline;
 }
-.cv-exp-company { font-size: 0.82em; font-weight: 700; color: var(--ink); }
+.cv-exp-company { width: 250px; flex-shrink: 0; font-size: 0.82em; font-weight: 700; color: var(--ink); }
 .cv-exp-project { font-size: 0.8em; color: var(--ink); font-weight: 400; }
 
-.cv-exp-role { display: flex; gap: 20px; align-items: baseline; margin-top: 2px; }
-.cv-exp-title { font-size: 0.8em; font-weight: 400; }
+.cv-exp-role { display: flex; gap: 0px; align-items: baseline; margin-top: 2px; }
+.cv-exp-title { width: 250px; flex-shrink: 0; font-size: 0.8em; font-weight: 400; }
 .cv-exp-title strong { font-weight: 700; }
 .cv-exp-type { font-size: 0.76em; color: var(--ink-muted); }
 
