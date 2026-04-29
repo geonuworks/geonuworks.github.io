@@ -2,6 +2,26 @@
    PORTFOLIO — SHARED STYLES
    ============================================= */
 
+/* ── Local Fonts ── */
+@font-face {
+  font-family: 'Poppins';
+  src: url('Poppins-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Poppins';
+  src: url('Poppins-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Poppins';
+  src: url('Poppins-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
 :root {
   --bg: #ffffff;
   --ink: #111111;
@@ -10,8 +30,8 @@
   --accent: #111111;
   --accent-warm: #b5a48a;
 
-  --font-serif: 'Cormorant Garamond', Georgia, serif;
-  --font-mono: 'DM Mono', 'Courier New', monospace;
+  --font-sans: 'Poppins', sans-serif;
+  --font-mono: 'Poppins', sans-serif;
 
   --nav-h: 64px;
   --max-w: 1200px;
@@ -24,7 +44,7 @@ html { scroll-behavior: smooth; }
 body {
   background: var(--bg);
   color: var(--ink);
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: clamp(16px, 1.1vw, 18px);
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
@@ -34,7 +54,7 @@ ul { list-style: none; }
 img { display: block; max-width: 100%; }
 
 /* ── Utilities ── */
-.mono { font-family: var(--font-mono); font-weight: 300; }
+.mono { font-family: var(--font-sans); font-weight: 400; }
 .small { font-size: 0.72em; letter-spacing: 0.08em; text-transform: uppercase; }
 
 /* =============================================
