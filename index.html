@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Portfolio — CV</title>
+  <title>Portfolio</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -12,188 +12,221 @@
   <nav class="nav">
     <a class="nav__logo" href="index.html"></a>
     <ul class="nav__links">
-      <li><a href="index.html" class="nav__link active">CV</a></li>
+      <li><a href="#cover" class="nav__link">Home</a></li>
+      <li><a href="#cover-letter" class="nav__link">Cover Letter</a></li>
+      <li><a href="#cv" class="nav__link">CV</a></li>
       <li><a href="works.html" class="nav__link">Works</a></li>
-      <li><a href="contact.html" class="nav__link">Contact</a></li>
     </ul>
   </nav>
 
-  <!-- CV LAYOUT -->
-  <main class="cv-layout">
-
-    <!-- LEFT PANEL -->
-    <aside class="cv-left">
-      <div class="cv-identity">
-        <h1 class="cv-name">Geonu Jo</h1>
-        <p class="cv-meta">based in Seoul, South Korea</p>
-        <p class="cv-meta">25 years old</p>
-        <p class="cv-meta cv-meta--gap">geonuworks@gmail.com</p>
-        <p class="cv-meta"><a href="https://linkedin.com/in/geonuworks" target="_blank" rel="noopener">linkedin.com/in/geonuworks</a></p>
+  <main class="main-container">
+    <!-- Section 1: Cover -->
+    <section id="cover" class="full-section hero">
+      <div class="hero__content">
+        <h1 class="hero__name">Geonu Jo</h1>
+        <p class="hero__role">Mobility Designer</p>
       </div>
+    </section>
 
-      <div class="cv-qr-row">
-        <div class="cv-qr-item">
-          <img src="source/icons/qr_linkedin.svg" alt="LinkedIn QR" class="cv-qr-img" />
-          <span class="cv-qr-label">linkedin</span>
-        </div>
-        <div class="cv-qr-item">
-          <img src="source/icons/qr_instagram.svg" alt="Instagram QR" class="cv-qr-img" />
-          <span class="cv-qr-label">instagram</span>
+    <!-- Section 2: Cover Letter -->
+    <section id="cover-letter" class="full-section">
+      <div class="cover-letter-content">
+        <h2 class="section-title">Cover Letter</h2>
+        <div class="letter-body">
+          <p>여기에 커버레터 내용을 입력하세요.</p>
         </div>
       </div>
+    </section>
 
-      <div class="cv-section-left">
-        <span class="cv-left-label">SKILLS</span>
-        <div class="cv-left-content">
-          <p>Creative Thinking</p>
-          <p>Team Leadership</p>
-          <p>XR Sketch</p>
+    <!-- Section 3: CV -->
+    <section id="cv" class="full-section">
+      <!-- CV LAYOUT -->
+      <div class="cv-layout">
+
+        <!-- LEFT PANEL -->
+        <aside class="cv-left">
+          <div class="cv-identity">
+            <h1 class="cv-name">Geonu Jo</h1>
+            <p class="cv-meta">based in Seoul, South Korea</p>
+            <p class="cv-meta">25 years old</p>
+            <p class="cv-meta cv-meta--gap">geonuworks@gmail.com</p>
+            <p class="cv-meta"><a href="https://linkedin.com/in/geonuworks" target="_blank" rel="noopener">linkedin.com/in/geonuworks</a></p>
+          </div>
+
+          <div class="cv-qr-row">
+            <div class="cv-qr-item">
+              <img src="source/icons/qr_linkedin.svg" alt="LinkedIn QR" class="cv-qr-img" />
+              <span class="cv-qr-label">linkedin</span>
+            </div>
+            <div class="cv-qr-item">
+              <img src="source/icons/qr_instagram.svg" alt="Instagram QR" class="cv-qr-img" />
+              <span class="cv-qr-label">instagram</span>
+            </div>
+          </div>
+
+          <div class="cv-section-left">
+            <span class="cv-left-label">SKILLS</span>
+            <div class="cv-left-content">
+              <p>Creative Thinking</p>
+              <p>Team Leadership</p>
+              <p>XR Sketch</p>
+            </div>
+          </div>
+
+          <div class="cv-section-left">
+            <span class="cv-left-label">LANGUAGE</span>
+            <div class="cv-left-content">
+              <div class="cv-lang-row"><span>Korean</span><span class="cv-lang-level">native</span></div>
+              <div class="cv-lang-row"><span>English</span><span class="cv-lang-level">intermediate</span></div>
+            </div>
+          </div>
+
+          <div class="cv-section-left">
+            <span class="cv-left-label">TOOLS</span>
+            <div class="cv-tools-grid">
+              <div class="cv-tool-row">
+                <span class="cv-tool-cat">2D</span>
+                <div class="cv-tool-icons">
+                  <img src="source/icons/icon_photoshop.png" alt="Photoshop" />
+                  <img src="source/icons/icon_figma.png" alt="Figma" />
+                </div>
+              </div>
+              <div class="cv-tool-row">
+                <span class="cv-tool-cat">3D</span>
+                <div class="cv-tool-icons">
+                  <img src="source/icons/icon_blender3d.png" alt="Blender" />
+                  <img src="source/icons/icon_unrealengine.png" alt="Unreal" />
+                </div>
+              </div>
+              <div class="cv-tool-row">
+                <span class="cv-tool-cat">AI</span>
+                <div class="cv-tool-icons">
+                  <img src="source/icons/icon_udinbvoptic.png" alt="AI Tool" />
+                  <img src="source/icons/icon_vizcom.png" alt="Vizcom" />
+                  <img src="source/icons/icon_kling.png" alt="AI Tool 2" />
+                </div>
+              </div>
+              <div class="cv-tool-row">
+                <span class="cv-tool-cat">XR</span>
+                <div class="cv-tool-icons">
+                  <img src="source/icons/icon_gravitysketch.png" alt="XR Tool" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </aside>
+
+        <!-- RIGHT PANEL -->
+        <div class="cv-right">
+
+          <!-- EDUCATION -->
+          <section class="cv-section">
+            <div class="cv-row">
+              <span class="cv-row-label">EDUCATION</span>
+              <div class="cv-row-body">
+                <div class="cv-entry">
+                  <span class="cv-entry-name">Korea National University of Arts</span>
+                  <span class="cv-entry-detail">BA, Transportation Design</span>
+                  <span class="cv-entry-date">Feb. 2020. – Aug. 2027. (estimated)</span>
+                </div>
+                <div class="cv-entry">
+                  <span class="cv-entry-name">Ansan Technical Highschool</span>
+                  <span class="cv-entry-detail">highschool diploma, Industrial Design</span>
+                  <span class="cv-entry-date">Feb. 2016. – Feb. 2019.</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- HONOR & AWARD -->
+          <section class="cv-section">
+            <div class="cv-row">
+              <span class="cv-row-label">HONOR &amp; AWARD</span>
+              <div class="cv-row-body">
+                <div class="cv-entry">
+                  <span class="cv-entry-name">Volvo Design Competition 2026</span>
+                  <span class="cv-entry-detail">Shortlisted (winner selection in progress)</span>
+                  <span class="cv-entry-date">Apr. 2026.</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- EXPERIENCE -->
+          <section class="cv-section">
+            <div class="cv-row cv-row--top">
+              <span class="cv-row-label">EXPERIENCE</span>
+              <div class="cv-row-body">
+
+                <div class="cv-experience">
+                  <div class="cv-exp-header">
+                    <span class="cv-exp-company">HYUNDAI Design Exterior</span>
+                    <span class="cv-exp-project">&lt;AI-driven Design Process Development Research&gt;</span>
+                    <span class="cv-entry-date">Mar. 2025. – Dec. 2025.</span>
+                  </div>
+                  <div class="cv-exp-role">
+                    <span class="cv-exp-title">industry-academic cooperation</span>
+                    <span class="cv-exp-type">Project Manager</span>
+                  </div>
+                  <ul class="cv-exp-bullets">
+                    <li>Built and implemented an AI-driven design framework to unify workflows across multiple projects.</li>
+                    <li>Led team operations by defining strategy and delegating tasks.</li>
+                    <li>Completed an individual project within the framework, contributing to the successful delivery of 8 projects for HYUNDAI.</li>
+                  </ul>
+                </div>
+
+                <div class="cv-experience">
+                  <div class="cv-exp-header">
+                    <span class="cv-exp-company">KIA Next Design Interior</span>
+                    <span class="cv-exp-project">&lt;2030 eMPV Interior Advanced Design Research&gt;</span>
+                    <span class="cv-entry-date">Mar. 2024. – Jun. 2024.</span>
+                  </div>
+                  <div class="cv-exp-role">
+                    <span class="cv-exp-title">industry-academic cooperation</span>
+                    <span class="cv-exp-type">Project Manager</span>
+                  </div>
+                  <ul class="cv-exp-bullets">
+                    <li>Led the project team in developing a future-oriented interior vision for a 2030 eMPV concept.</li>
+                    <li>Explored forward-looking meta trends research to define the cultural and technological context.</li>
+                  </ul>
+                </div>
+
+              </div>
+            </div>
+          </section>
+
+          <!-- EXHIBITION -->
+          <section class="cv-section">
+            <div class="cv-row cv-row--top">
+              <span class="cv-row-label">EXHIBITION</span>
+              <div class="cv-row-body">
+                <div class="cv-experience">
+                  <div class="cv-exp-header">
+                    <span class="cv-exp-company">LG Electronics ✕ K-Arts</span>
+                    <span class="cv-exp-project">&lt;Objects with Nunchi: When Home Appliances Develop Emotional Intelligence&gt;, Gyeongdong Market, Seoul, 2025</span>
+                    <span class="cv-entry-date">Dec. 2025. – Apr. 2026.</span>
+                  </div>
+                  <ul class="cv-exp-bullets">
+                    <li>Contributed to the 3D visualization of Furon(LG's Affectionate Intelligence).</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+
         </div>
       </div>
+    </section>
 
-      <div class="cv-section-left">
-        <span class="cv-left-label">LANGUAGE</span>
-        <div class="cv-left-content">
-          <div class="cv-lang-row"><span>Korean</span><span class="cv-lang-level">native</span></div>
-          <div class="cv-lang-row"><span>English</span><span class="cv-lang-level">intermediate</span></div>
-        </div>
+    <!-- Section 4: Works Shortcut -->
+    <section id="works-shortcut" class="full-section works-cta">
+      <div class="cta-wrap">
+        <h2 class="section-title">Selected Works</h2>
+        <p class="cta-desc">Click below to see the full collection of mobility and transportation design projects.</p>
+        <a href="works.html" class="cta-button">View All Works</a>
       </div>
-
-      <div class="cv-section-left">
-        <span class="cv-left-label">TOOLS</span>
-        <div class="cv-tools-grid">
-          <div class="cv-tool-row">
-            <span class="cv-tool-cat">2D</span>
-            <div class="cv-tool-icons">
-              <img src="source/icons/icon_photoshop.png" alt="Photoshop" />
-              <img src="source/icons/icon_figma.png" alt="Figma" />
-            </div>
-          </div>
-          <div class="cv-tool-row">
-            <span class="cv-tool-cat">3D</span>
-            <div class="cv-tool-icons">
-              <img src="source/icons/icon_blender3d.png" alt="Blender" />
-              <img src="source/icons/icon_unrealengine.png" alt="Unreal" />
-            </div>
-          </div>
-          <div class="cv-tool-row">
-            <span class="cv-tool-cat">AI</span>
-            <div class="cv-tool-icons">
-              <img src="source/icons/icon_udinbvoptic.png" alt="AI Tool" />
-              <img src="source/icons/icon_vizcom.png" alt="Vizcom" />
-              <img src="source/icons/icon_kling.png" alt="AI Tool 2" />
-            </div>
-          </div>
-          <div class="cv-tool-row">
-            <span class="cv-tool-cat">XR</span>
-            <div class="cv-tool-icons">
-              <img src="source/icons/icon_gravitysketch.png" alt="XR Tool" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </aside>
-
-    <!-- RIGHT PANEL -->
-    <div class="cv-right">
-
-      <!-- EDUCATION -->
-      <section class="cv-section">
-        <div class="cv-row">
-          <span class="cv-row-label">EDUCATION</span>
-          <div class="cv-row-body">
-            <div class="cv-entry">
-              <span class="cv-entry-name">Korea National University of Arts</span>
-              <span class="cv-entry-detail">BA, Transportation Design</span>
-              <span class="cv-entry-date">Feb. 2020. – Aug. 2027. (estimated)</span>
-            </div>
-            <div class="cv-entry">
-              <span class="cv-entry-name">Ansan Technical Highschool</span>
-              <span class="cv-entry-detail">highschool diploma, Industrial Design</span>
-              <span class="cv-entry-date">Feb. 2016. – Feb. 2019.</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- HONOR & AWARD -->
-      <section class="cv-section">
-        <div class="cv-row">
-          <span class="cv-row-label">HONOR &amp; AWARD</span>
-          <div class="cv-row-body">
-            <div class="cv-entry">
-              <span class="cv-entry-name">Volvo Design Competition 2026</span>
-              <span class="cv-entry-detail">Shortlisted (winner selection in progress)</span>
-              <span class="cv-entry-date">Apr. 2026.</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- EXPERIENCE -->
-      <section class="cv-section">
-        <div class="cv-row cv-row--top">
-          <span class="cv-row-label">EXPERIENCE</span>
-          <div class="cv-row-body">
-
-            <div class="cv-experience">
-              <div class="cv-exp-header">
-                <span class="cv-exp-company">HYUNDAI Design Exterior</span>
-                <span class="cv-exp-project">&lt;AI-driven Design Process Development Research&gt;</span>
-                <span class="cv-entry-date">Mar. 2025. – Dec. 2025.</span>
-              </div>
-              <div class="cv-exp-role">
-                <span class="cv-exp-title">industry-academic cooperation</span>
-                <span class="cv-exp-type">Project Manager</span>
-              </div>
-              <ul class="cv-exp-bullets">
-                <li>Built and implemented an AI-driven design framework to unify workflows across multiple projects.</li>
-                <li>Led team operations by defining strategy and delegating tasks.</li>
-                <li>Completed an individual project within the framework, contributing to the successful delivery of 8 projects for HYUNDAI.</li>
-              </ul>
-            </div>
-
-            <div class="cv-experience">
-              <div class="cv-exp-header">
-                <span class="cv-exp-company">KIA Next Design Interior</span>
-                <span class="cv-exp-project">&lt;2030 eMPV Interior Advanced Design Research&gt;</span>
-                <span class="cv-entry-date">Mar. 2024. – Jun. 2024.</span>
-              </div>
-              <div class="cv-exp-role">
-                <span class="cv-exp-title">industry-academic cooperation</span>
-                <span class="cv-exp-type">Project Manager</span>
-              </div>
-              <ul class="cv-exp-bullets">
-                <li>Led the project team in developing a future-oriented interior vision for a 2030 eMPV concept.</li>
-                <li>Explored forward-looking meta trends research to define the cultural and technological context.</li>
-              </ul>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      <!-- EXHIBITION -->
-      <section class="cv-section">
-        <div class="cv-row cv-row--top">
-          <span class="cv-row-label">EXHIBITION</span>
-          <div class="cv-row-body">
-            <div class="cv-experience">
-              <div class="cv-exp-header">
-                <span class="cv-exp-company">LG Electronics ✕ K-Arts</span>
-                <span class="cv-exp-project">&lt;Objects with Nunchi: When Home Appliances Develop Emotional Intelligence&gt;, Gyeongdong Market, Seoul, 2025</span>
-                <span class="cv-entry-date">Dec. 2025. – Apr. 2026.</span>
-              </div>
-              <ul class="cv-exp-bullets">
-                <li>Contributed to the 3D visualization of Furon(LG's Affectionate Intelligence).</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-    </div>
+    </section>
   </main>
 
   <footer class="footer">
