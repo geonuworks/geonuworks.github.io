@@ -218,7 +218,7 @@ img { display: block; max-width: 100%; }
    ============================================= */
 .cv-layout {
   display: grid;
-  grid-template-columns: 640px 1fr;
+  grid-template-columns: 31% 55%;
   height: 100vh;
   background: #fff;
   font-size: 0.82em;
@@ -226,14 +226,32 @@ img { display: block; max-width: 100%; }
 
 /* ── LEFT PANEL ── */
 .cv-left {
-  padding: 80px 36px 52px 48px;
-  border-right: none; 
+  padding: 52px 24px 52px 48px;
   display: flex;
   flex-direction: column;
-  gap: 36px;
   background: #fff;
-  height: 100%; /* 화면 높이 가득 채우기[cite: 5] */
-  overflow-y: auto; /* 내용이 많을 경우 패널 내 스크롤[cite: 5] */
+  height: 100%;
+  overflow-y: auto;
+}
+
+.cv-left-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 40px;
+  align-items: center;
+  height: 100%;
+}
+
+.cv-left-col-a {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cv-left-col-b {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .cv-name {
@@ -256,23 +274,27 @@ img { display: block; max-width: 100%; }
 .cv-meta--gap { margin-top: 12px; }
 
 /* QR codes */
-.cv-qr-row { display: flex; gap: 16px; }
-.cv-qr-item { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.cv-qr-row { display: flex; gap: 20px; }
+.cv-qr-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
 .cv-qr-img {
-  width: 76px;
-  height: 76px;
+  width: 130px;
+  height: 130px;
   object-fit: contain;
   image-rendering: pixelated;
-  border: 1px solid var(--ink-faint);
-  padding: 4px;
 }
 .cv-qr-label { color: var(--ink-muted); font-weight: 400; }
 
 /* Left sections */
-.cv-section-left { display: flex; flex-direction: column; gap: 10px; }
+.cv-section-left {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 0 16px;
+  align-items: start;
+}
 .cv-left-label {
   font-weight: 700;
   color: var(--ink);
+  text-align: right;
 }
 .cv-left-content { display: flex; flex-direction: column; gap: 3px; color: var(--ink); }
 
@@ -289,7 +311,7 @@ img { display: block; max-width: 100%; }
 
 /* ── RIGHT PANEL ── */
 .cv-right {
-  padding: 80px 60px 52px 64px;
+  padding: 80px 60px 52px 0px;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
