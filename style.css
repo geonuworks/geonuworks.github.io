@@ -218,9 +218,10 @@ img { display: block; max-width: 100%; }
    ============================================= */
 .cv-layout {
   display: grid;
-  grid-template-columns: 640px 1fr; /* 원래의 640px 너비로 복구[cite: 5] */
+  grid-template-columns: 640px 1fr;
   height: 100vh;
   background: #fff;
+  font-size: 0.82em;
 }
 
 /* ── LEFT PANEL ── */
