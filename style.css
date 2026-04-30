@@ -139,6 +139,7 @@ img { display: block; max-width: 100%; }
   justify-content: center;
   position: relative;
   overflow: hidden;
+  padding-top: var(--nav-h);
 }
 
 /* =============================================
@@ -148,6 +149,21 @@ img { display: block; max-width: 100%; }
   padding-left: var(--pad);
   padding-right: var(--pad);
   background: #f9f9f9;
+}
+
+.hero__content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  width: 100%;
+  max-width: var(--max-w);
+  margin: 0 auto;
+}
+
+.hero__left {
+  display: flex;
+  flex-direction: column;
 }
 
 .hero__name {
@@ -163,19 +179,17 @@ img { display: block; max-width: 100%; }
   font-size: 1.2em;
 }
 
-/* =============================================
-   COVER LETTER SECTION
-   ============================================= */
-.cover-letter-content {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 var(--pad);
+.hero__right {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-left: 80px;
 }
 
-.section-title {
+.cover-letter-title {
   font-size: 2.5em;
-  margin-bottom: 40px;
   font-weight: 700;
+  margin-bottom: 16px;
 }
 
 .letter-body {
@@ -232,7 +246,6 @@ img { display: block; max-width: 100%; }
 }
 
 .cv-meta {
-  font-size: 0.8em;
   color: var(--ink);
   line-height: 2;
   font-weight: 400;
@@ -252,17 +265,15 @@ img { display: block; max-width: 100%; }
   border: 1px solid var(--ink-faint);
   padding: 4px;
 }
-.cv-qr-label { font-size: 0.68em; color: var(--ink-muted); font-weight: 400; }
+.cv-qr-label { color: var(--ink-muted); font-weight: 400; }
 
 /* Left sections */
 .cv-section-left { display: flex; flex-direction: column; gap: 10px; }
 .cv-left-label {
-  font-size: 0.68em;
   font-weight: 700;
-  letter-spacing: 0.09em;
   color: var(--ink);
 }
-.cv-left-content { display: flex; flex-direction: column; gap: 3px; font-size: 0.8em; color: var(--ink); }
+.cv-left-content { display: flex; flex-direction: column; gap: 3px; color: var(--ink); }
 
 /* Language */
 .cv-lang-row { display: flex; gap: 14px; }
@@ -271,7 +282,7 @@ img { display: block; max-width: 100%; }
 /* Tools */
 .cv-tools-grid { display: flex; flex-direction: column; gap: 8px; }
 .cv-tool-row { display: flex; align-items: center; gap: 10px; }
-.cv-tool-cat { font-size: 0.72em; font-weight: 500; width: 18px; color: var(--ink-muted); }
+.cv-tool-cat { font-weight: 500; width: 18px; color: var(--ink-muted); }
 .cv-tool-icons { display: flex; align-items: center; gap: 7px; }
 .cv-tool-icons img { width: 24px; height: 24px; object-fit: contain; }
 
@@ -280,34 +291,31 @@ img { display: block; max-width: 100%; }
   padding: 80px 60px 52px 64px;
   display: flex;
   flex-direction: column;
-  overflow-y: auto; /* 본문 스크롤[cite: 5] */
+  overflow-y: auto;
   background: #fff;
 }
 
 .cv-section {
-  border-top: none; 
   padding: 28px 0;
 }
-.cv-section:last-child { border-bottom: none; }
+.cv-section:last-child { }
 
 .cv-row {
   display: grid;
-  grid-template-columns: 180px 1fr; 
+  grid-template-columns: 180px 1fr;
   gap: 0 28px;
   align-items: start;
 }
 
 .cv-row-label {
-  font-size: 0.68em;
   font-weight: 700;
-  letter-spacing: 0.09em;
   padding-top: 2px;
   color: var(--ink);
+  text-align: right;
 }
 
 .cv-row-body { display: flex; flex-direction: column; gap: 12px; }
 
-/* Entries 3단 정렬: 랩탑에서도 잘리지 않도록 너비 소폭 조정[cite: 5] */
 .cv-entry, .cv-exp-header, .cv-exp-role {
   display: flex;
   flex-direction: row;
@@ -317,17 +325,15 @@ img { display: block; max-width: 100%; }
 }
 
 .cv-entry-name, .cv-exp-company, .cv-exp-title {
-  width: 280px; /* 기존 320px에서 280px로 축소하여 공간 확보[cite: 5] */
+  width: 280px;
   flex-shrink: 0;
-  font-size: 0.82em;
   font-weight: 700;
   color: var(--ink);
 }
 
 .cv-entry-detail, .cv-exp-project, .cv-exp-type {
-  width: 350px; /* 기존 380px에서 350px로 축소[cite: 5] */
+  width: 350px;
   flex-shrink: 0;
-  font-size: 0.8em;
   font-weight: 400;
   color: var(--ink);
 }
@@ -335,7 +341,6 @@ img { display: block; max-width: 100%; }
 .cv-entry-date {
   flex-grow: 1;
   text-align: left;
-  font-size: 0.74em;
   color: var(--ink-muted);
   white-space: nowrap;
 }
@@ -345,13 +350,19 @@ img { display: block; max-width: 100%; }
 
 .cv-exp-bullets {
   margin-top: 10px;
-  padding-left: 300px; /* 이름 너비(280px) + gap(20px)에 맞춰 정렬[cite: 5] */
+  padding-left: 300px;
   list-style: disc;
   display: flex;
   flex-direction: column;
   gap: 3px;
+  max-width: 900px;
 }
-.cv-exp-bullets li { font-size: 0.78em; color: var(--ink); line-height: 1.6; }
+.cv-exp-bullets li {
+  color: var(--ink);
+  line-height: 1.6;
+  white-space: normal;
+  word-break: break-word;
+}
 
 /* =============================================
    WORKS SHORTCUT SECTION
@@ -387,10 +398,11 @@ img { display: block; max-width: 100%; }
   transform: translateY(-5px);
 }
 
-/* Responsive (900px 이하 모바일 대응)[cite: 5] */
 @media (max-width: 900px) {
   .main-container { overflow-y: auto; scroll-snap-type: none; }
   .full-section { height: auto; min-height: 100vh; padding: 100px var(--pad); }
+  .hero__content { grid-template-columns: 1fr; gap: 40px; }
+  .hero__right { border-left: none; padding-left: 0; border-top: 1px solid var(--ink-faint); padding-top: 40px; }
   .cv-layout { grid-template-columns: 1fr; height: auto; }
   .cv-left { padding: 40px 24px; border-bottom: 1px solid var(--ink-faint); height: auto; }
   .cv-right { padding: 40px 24px; overflow: visible; }
