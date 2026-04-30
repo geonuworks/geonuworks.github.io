@@ -167,7 +167,7 @@ img { display: block; max-width: 100%; }
 }
 
 .hero__name {
-  font-size: clamp(48px, 9vw, 130px);
+  font-size: clamp(48px, 9vw, 96px);
   font-weight: 300;
   line-height: 0.9;
   letter-spacing: -0.02em;
