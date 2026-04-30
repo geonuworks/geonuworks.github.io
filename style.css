@@ -218,7 +218,7 @@ img { display: block; max-width: 100%; }
    ============================================= */
 .cv-layout {
   display: grid;
-  grid-template-columns: 45% 55%;
+  grid-template-columns: 35% 65%;
   height: 100vh;
   background: #fff;
   font-size: 0.82em;
