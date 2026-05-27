@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Geonu Jo — Archive</title>
+  <style>
+    @font-face {
+      font-family: 'Poppins';
+      src: url('source/fonts/Poppins-Regular.ttf') format('truetype');
+      font-weight: 400;
+    }
+    @font-face {
+      font-family: 'Poppins';
+      src: url('source/fonts/Poppins-Medium.ttf') format('truetype');
+      font-weight: 500;
+    }
+    @font-face {
+      font-family: 'Poppins';
+      src: url('source/fonts/Poppins-Bold.ttf') format('truetype');
+      font-weight: 700;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 400;
+    }
+
+    /* ── Two full-height pages stacked vertically ── */
+    #scroll-container {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #pages-wrapper {
+      width: 100%;
+      height: 200%; /* two pages */
+      transition: transform 0.9s cubic-bezier(0.77, 0, 0.175, 1);
+      will-change: transform;
+    }
+
+    .page {
+      width: 100%;
+      height: 50%; /* each page = 100vh */
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ── DOT GRID BACKGROUND ── */
+    #archive-page {
+      background-color: #b8b8b8;
+      background-image: radial-gradient(circle, #999 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    #about-page {
+      background: #ffffff;
+    }
+
+    /* ── TOP NAV (shared style) ── */
+    .topnav {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: baseline;
+      padding: 28px 48px 0;
+    }
+    .topnav-name  { font-size: 0.95rem; font-weight: 400; min-width: 160px; }
+    .topnav-title { font-size: 0.95rem; font-weight: 400; min-width: 220px; }
+    .topnav-year  { font-size: 0.95rem; font-weight: 400; flex: 1; }
+    .topnav-links { display: flex; gap: 40px; }
+    .topnav-links a {
+      font-size: 0.95rem;
+      font-weight: 400;
+      color: #111;
+      text-decoration: none;
+    }
+    .topnav-links a.active {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .topnav-links a:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    /* Archive page nav text color (on grey bg) */
+    #archive-page .topnav,
+    #archive-page .topnav-links a {
+      color: #e8e8e8;
+    }
+    #archive-page .topnav-links a.active {
+      color: #e8e8e8;
+    }
+
+    /* ── BOARD (draggable canvas inside archive page) ── */
+    #board {
+      position: absolute;
+      inset: 0;
+      cursor: default;
+      user-select: none;
+    }
+
+    /* ── SKETCH IMAGES ── */
+    .sketch {
+      position: absolute;
+      background: #fff;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+      cursor: grab;
+      will-change: transform;
+      /* smooth settle after drag */
+      transition: box-shadow 0.25s ease;
+    }
+    .sketch:active { cursor: grabbing; }
+    .sketch.dragging {
+      box-shadow: 0 12px 40px rgba(0,0,0,0.32);
+      transition: box-shadow 0.15s ease;
+    }
+    .sketch img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    /* ── ABOUT PAGE (iframe embed) ── */
+    #about-iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+<div id="scroll-container">
+  <div id="pages-wrapper">
+
+    <!-- ── PAGE 1: ARCHIVE ── -->
+    <div class="page" id="archive-page">
+
+      <nav class="topnav">
+        <span class="topnav-name">Geonu Jo</span>
+        <span class="topnav-title">Mobility Design Portfolio</span>
+        <span class="topnav-year">2026</span>
+        <div class="topnav-links">
+          <a href="#" class="active">Archive</a>
+          <a href="#" id="nav-about">About</a>
+        </div>
+      </nav>
+
+      <div id="board"></div>
+    </div>
+
+    <!-- ── PAGE 2: ABOUT (loaded in iframe) ── -->
+    <div class="page" id="about-page">
+      <iframe id="about-iframe" src="index.html" title="About"></iframe>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  /* ────────────────────────────────────────────────
+     1.  PAGE SCROLL  (wheel → snap between pages)
+  ──────────────────────────────────────────────── */
+  const wrapper   = document.getElementById('pages-wrapper');
+  const navAbout  = document.getElementById('nav-about');
+  let   currentPage = 0; // 0 = archive, 1 = about
+  let   scrollLocked = false;
+
+  function goToPage(n) {
+    if (n === currentPage) return;
+    currentPage = n;
+    wrapper.style.transform = `translateY(${n === 0 ? '0' : '-50%'})`;
+    scrollLocked = true;
+    setTimeout(() => { scrollLocked = false; }, 1000);
+  }
+
+  window.addEventListener('wheel', (e) => {
+    if (scrollLocked) return;
+    if (e.deltaY > 20 && currentPage === 0)  goToPage(1);
+    if (e.deltaY < -20 && currentPage === 1) goToPage(0);
+  }, { passive: true });
+
+  /* touch swipe */
+  let touchStartY = 0;
+  window.addEventListener('touchstart', (e) => { touchStartY = e.touches[0].clientY; });
+  window.addEventListener('touchend', (e) => {
+    if (scrollLocked) return;
+    const dy = touchStartY - e.changedTouches[0].clientY;
+    if (dy > 40 && currentPage === 0)  goToPage(1);
+    if (dy < -40 && currentPage === 1) goToPage(0);
+  });
+
+  /* About nav link */
+  navAbout.addEventListener('click', (e) => {
+    e.preventDefault();
+    goToPage(1);
+  });
+
+  /* Also allow clicking Archive link from About to come back */
+  document.querySelector('.topnav .active').addEventListener('click', (e) => {
+    e.preventDefault();
+    goToPage(0);
+  });
+
+  /* ────────────────────────────────────────────────
+     2.  SKETCH IMAGES — load from source/sketch/
+         Falls back gracefully if files aren't there yet.
+  ──────────────────────────────────────────────── */
+
+  /*
+    Image filenames in source/sketch/ — adjust this list to match
+    whatever files you place in that folder.
+    Common extensions supported: jpg, jpeg, png, webp, gif
+  */
+  const SKETCH_FILES = [
+    'source/sketches/01.jpg',
+    'source/sketches/02.jpg',
+    'source/sketches/03.jpg',
+    'source/sketches/04.jpg',
+    'source/sketches/05.jpg',
+    'source/sketches/06.jpg',
+    'source/sketches/07.jpg',
+    'source/sketches/08.jpg',
+    'source/sketches/09.jpg',
+    'source/sketches/10.jpg',
+  ];
+
+  /* Width range */
+  const MIN_W = 260, MAX_W = 500;
+
+  const board      = document.getElementById('board');
+  const boardRect  = () => board.getBoundingClientRect();
+  let   zCounter   = 10;
+
+  function rand(min, max) { return Math.random() * (max - min) + min; }
+
+  function placeSketch(src, index) {
+    /* Load image first to get natural dimensions */
+    const img = new Image();
+    img.src = src;
+
+    const onReady = () => {
+      const br     = boardRect();
+      const w      = rand(MIN_W, MAX_W);
+      /* Use actual image aspect ratio */
+      const aspect = img.naturalWidth / img.naturalHeight;
+      const h      = w / aspect;
+
+      const cx      = br.width  * 0.5;
+      const cy      = br.height * 0.52;
+      const spreadX = br.width  * 0.30;
+      const spreadY = br.height * 0.28;
+
+      const x = cx + rand(-spreadX, spreadX) - w / 2;
+      const y = cy + rand(-spreadY, spreadY) - h / 2;
+
+      const el = document.createElement('div');
+      el.className = 'sketch';
+      el.style.cssText = `
+        width: ${w}px;
+        height: ${h}px;
+        left: ${x}px;
+        top: ${y}px;
+        z-index: ${index + 1};
+      `;
+
+      img.alt      = '';
+      img.draggable = false;
+      img.style.cssText = 'display:block;width:100%;height:100%;object-fit:fill;pointer-events:none;user-select:none;-webkit-user-drag:none;';
+
+      el.appendChild(img);
+      board.appendChild(el);
+      makeDraggable(el);
+    };
+
+    if (img.complete && img.naturalWidth) {
+      onReady();
+    } else {
+      img.onload = onReady;
+      img.onerror = () => {
+        /* placeholder for missing files */
+        const br = boardRect();
+        const w  = rand(MIN_W, MAX_W);
+        const h  = w / 1.6;
+        const x  = rand(br.width  * 0.1, br.width  * 0.75);
+        const y  = rand(br.height * 0.15, br.height * 0.65);
+        const el = document.createElement('div');
+        el.className = 'sketch';
+        el.style.cssText = `width:${w}px;height:${h}px;left:${x}px;top:${y}px;z-index:${index+1};background:#e8e8e8;display:flex;align-items:center;justify-content:center;`;
+        const label = document.createElement('span');
+        label.style.cssText = 'font-size:0.7rem;color:#aaa;font-family:Poppins,sans-serif;';
+        label.textContent = src.split('/').pop();
+        el.appendChild(label);
+        board.appendChild(el);
+        makeDraggable(el);
+      };
+    }
+  }
+
+  /* Stagger placement for a cinematic entrance */
+  SKETCH_FILES.forEach((src, i) => {
+    setTimeout(() => placeSketch(src, i), i * 60);
+  });
+
+  /* ────────────────────────────────────────────────
+     3.  DRAGGABLE  (mouse + touch, ease-out settle)
+  ──────────────────────────────────────────────── */
+  function makeDraggable(el) {
+    let isDragging  = false;
+    let startX, startY;       /* pointer start */
+    let origLeft, origTop;    /* element origin */
+    let currentRot = 0;
+
+    /* extract current rotation from inline style */
+    const getRotation = () => {
+      const m = el.style.transform.match(/rotate\(([-\d.]+)deg\)/);
+      return m ? parseFloat(m[1]) : 0;
+    };
+
+    const bringToFront = () => {
+      el.style.zIndex = ++zCounter;
+    };
+
+    /* ── pointer events ── */
+    el.addEventListener('pointerdown', (e) => {
+      /* only left button or touch */
+      if (e.button !== undefined && e.button !== 0) return;
+      e.preventDefault();
+      el.setPointerCapture(e.pointerId);
+
+      bringToFront();
+
+      isDragging = true;
+      startX  = e.clientX;
+      startY  = e.clientY;
+      origLeft = parseFloat(el.style.left);
+      origTop  = parseFloat(el.style.top);
+      currentRot = getRotation();
+
+      el.classList.add('dragging');
+      /* disable transition during drag for immediate response */
+      el.style.transition = 'box-shadow 0.15s ease';
+    });
+
+    el.addEventListener('pointermove', (e) => {
+      if (!isDragging) return;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+
+      el.style.left = (origLeft + dx) + 'px';
+      el.style.top  = (origTop  + dy) + 'px';
+    });
+
+    const endDrag = (e) => {
+      if (!isDragging) return;
+      isDragging = false;
+      el.classList.remove('dragging');
+
+      /* smooth ease-out settle — restore shadow transition */
+      el.style.transition = 'box-shadow 0.25s ease';
+    };
+
+    el.addEventListener('pointerup',     endDrag);
+    el.addEventListener('pointercancel', endDrag);
+  }
+</script>
+</body>
+</html>
