@@ -1,51 +1,524 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Portfolio - Template R547 Clone</title>
-    <link rel="stylesheet" href="cargo-static.css">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Geonu Jo — Mobility Design Portfolio</title>
+  <style>
+    /* ── Fonts ─────────────────────────────────────────────── */
+    @font-face {
+      font-family: 'Poppins';
+      src: url('source/fonts/Poppins-Regular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Poppins';
+      src: url('source/fonts/Poppins-Medium.ttf') format('truetype');
+      font-weight: 500;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Poppins';
+      src: url('source/fonts/Poppins-Bold.ttf') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+    }
+
+    /* ── Reset / Base ───────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #1a1a1a;
+      --sidebar-bg:  #111111;
+      --accent:      #c8f542;   /* lime green — the one pop of colour */
+      --text:        #e8e8e8;
+      --muted:       #888888;
+      --divider:     #2e2e2e;
+      --tag-bg:      #252525;
+      --page-w:      960px;
+    }
+
+    html { font-size: 14px; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 400;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 48px 16px;
+    }
+
+    /* ── Page shell ─────────────────────────────────────────── */
+    .page {
+      width: 100%;
+      max-width: var(--page-w);
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      grid-template-rows: auto 1fr;
+      border: 1px solid var(--divider);
+    }
+
+    /* ── Header (full width) ────────────────────────────────── */
+    .header {
+      grid-column: 1 / -1;
+      padding: 40px 44px 36px;
+      border-bottom: 1px solid var(--divider);
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .header-left {}
+
+    .header-name {
+      font-size: 2.6rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      color: #fff;
+    }
+
+    .header-title {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .header-bio {
+      max-width: 420px;
+      font-size: 0.78rem;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .header-bio p + p { margin-top: 8px; }
+
+    /* ── Nav links (Archive / About) ────────────────────────── */
+    .header-nav {
+      display: flex;
+      gap: 20px;
+      padding-bottom: 4px;
+    }
+    .header-nav a {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .header-nav a:hover { color: var(--accent); }
+
+    /* ── Sidebar ────────────────────────────────────────────── */
+    .sidebar {
+      background: var(--sidebar-bg);
+      padding: 36px 28px;
+      border-right: 1px solid var(--divider);
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+
+    /* ── Main content ───────────────────────────────────────── */
+    .main {
+      padding: 36px 44px;
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+
+    /* ── Section label ──────────────────────────────────────── */
+    .section-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    /* ── Language ───────────────────────────────────────────── */
+    .lang-list { display: flex; flex-direction: column; gap: 10px; }
+    .lang-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .lang-name { font-size: 0.82rem; font-weight: 500; color: var(--text); }
+    .lang-level {
+      font-size: 0.72rem;
+      color: var(--muted);
+      background: var(--tag-bg);
+      padding: 2px 8px;
+      border-radius: 2px;
+    }
+
+    /* ── Skills / Tools ─────────────────────────────────────── */
+    .tag-list { display: flex; flex-direction: column; gap: 8px; }
+    .tag-group {
+      font-size: 0.75rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .tag-group strong {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    /* ── Contact ────────────────────────────────────────────── */
+    .contact-list { display: flex; flex-direction: column; gap: 6px; }
+    .contact-item {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    .contact-item a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .contact-item a:hover { color: var(--accent); }
+
+    /* ── Year badge ─────────────────────────────────────────── */
+    .year-badge {
+      margin-top: auto;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--divider);
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+
+    /* ── Main sections ──────────────────────────────────────── */
+    .main-section {}
+
+    /* ── Entry (Education / Experience / Exhibition) ────────── */
+    .entry {
+      display: grid;
+      grid-template-columns: 1fr 140px;
+      gap: 8px 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--divider);
+    }
+    .entry:first-child { padding-top: 0; }
+    .entry:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .entry-body {}
+
+    .entry-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.3;
+    }
+    .entry-subtitle {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--accent);
+      margin-top: 2px;
+    }
+    .entry-tag {
+      font-size: 0.68rem;
+      color: var(--muted);
+      background: var(--tag-bg);
+      display: inline-block;
+      padding: 1px 7px;
+      border-radius: 2px;
+      margin-top: 4px;
+    }
+    .entry-desc {
+      margin-top: 8px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    .entry-desc li {
+      list-style: none;
+      padding-left: 12px;
+      position: relative;
+    }
+    .entry-desc li::before {
+      content: '–';
+      position: absolute;
+      left: 0;
+      color: var(--divider);
+    }
+
+    .entry-meta {
+      text-align: right;
+    }
+    .entry-date {
+      font-size: 0.7rem;
+      color: var(--muted);
+      line-height: 1.6;
+      white-space: pre-line;
+    }
+    .entry-org {
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-top: 2px;
+    }
+
+    /* ── Award entry (single line style) ───────────────────── */
+    .award-entry {
+      padding: 14px 0;
+      border-bottom: 1px solid var(--divider);
+      display: grid;
+      grid-template-columns: 1fr 140px;
+      gap: 4px 16px;
+    }
+    .award-entry:last-child { border-bottom: none; padding-bottom: 0; }
+    .award-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .award-result {
+      font-size: 0.75rem;
+      color: var(--accent);
+      margin-top: 2px;
+    }
+    .award-date {
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-align: right;
+      padding-top: 2px;
+    }
+
+    /* ── Divider line ───────────────────────────────────────── */
+    hr.section-hr {
+      border: none;
+      border-top: 1px solid var(--divider);
+      margin: 0;
+    }
+
+    /* ── Responsive ─────────────────────────────────────────── */
+    @media (max-width: 700px) {
+      body { padding: 0; }
+      .page {
+        grid-template-columns: 1fr;
+        border: none;
+      }
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 28px 20px 24px;
+      }
+      .sidebar {
+        border-right: none;
+        border-bottom: 1px solid var(--divider);
+        padding: 24px 20px;
+      }
+      .main { padding: 24px 20px; }
+      .entry, .award-entry {
+        grid-template-columns: 1fr;
+      }
+      .entry-meta, .award-date { text-align: left; margin-top: 4px; }
+    }
+  </style>
 </head>
-<body class="dark">
-    <div id="app">
-        <header class="navbar">
-            <div class="nav-left">
-                <a href="#home" class="nav-item">Template R547</a>
-            </div>
-            <div class="nav-right">
-                <a href="#project-001" class="nav-item">PROJECT 001</a>
-                <a href="#project-002" class="nav-item">PROJECT 002</a>
-                <a href="#project-003" class="nav-item">PROJECT 003</a>
-                <a href="#profile" class="nav-item">PROFILE</a>
-            </div>
-        </header>
+<body>
+  <div class="page">
 
-        <main class="content-container">
-            <section id="profile" class="page-section">
-                <div class="bodycopy">
-                    <h1>Untitled (Profile)</h1>
-                    <p>이곳은 템플릿의 프로필 영역입니다. 제공해주신 데이터 파일에 기반하여 구조를 복원했습니다.</p>
-                </div>
-            </section>
+    <!-- ── HEADER ── -->
+    <header class="header">
+      <div class="header-left">
+        <div class="header-name">Geonu Jo</div>
+        <div class="header-title">Mobility Design Portfolio</div>
+      </div>
 
-            <section id="projects" class="project-grid">
-                <div class="column-set">
-                    <div class="project-card">
-                        <h2><a href="#project-001">PROJECT 001</a></h2>
-                        <div class="placeholder-img">Image Placeholder</div>
-                    </div>
-                    <div class="project-card">
-                        <h2><a href="#project-002">PROJECT 002</a></h2>
-                        <div class="placeholder-img">Image Placeholder</div>
-                    </div>
-                    <div class="project-card">
-                        <h2><a href="#project-003">PROJECT 003</a></h2>
-                        <div class="placeholder-img">Image Placeholder</div>
-                    </div>
-                </div>
-            </section>
-        </main>
-    </div>
+      <div class="header-bio">
+        <p>Buckminster Fuller, an American architect, once said, "The best way to predict the future is to design it." As a design student, my role is not only to adapt to new technologies but to use them as tools to reshape the future.</p>
+        <p>Through speculative mobility projects, I've developed a mindset that constantly asks, "What's next?" I aim to design transportations that actively shape the upcoming future.</p>
+      </div>
+
+      <nav class="header-nav">
+        <a href="#">Archive</a>
+        <a href="#">About</a>
+      </nav>
+    </header>
+
+    <!-- ── SIDEBAR ── -->
+    <aside class="sidebar">
+
+      <!-- Language -->
+      <div>
+        <div class="section-label">Language</div>
+        <div class="lang-list">
+          <div class="lang-item">
+            <span class="lang-name">English</span>
+            <span class="lang-level">advanced</span>
+          </div>
+          <div class="lang-item">
+            <span class="lang-name">Korean</span>
+            <span class="lang-level">native</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Skills -->
+      <div>
+        <div class="section-label">Skills</div>
+        <div class="tag-list">
+          <div class="tag-group">Creative Thinking</div>
+          <div class="tag-group">Team Leadership</div>
+          <div class="tag-group">XR Sketch</div>
+        </div>
+      </div>
+
+      <!-- Tools -->
+      <div>
+        <div class="section-label">Tools</div>
+        <div class="tag-list">
+          <div class="tag-group">
+            <strong>2D</strong>
+            Adobe Suite / Figma
+          </div>
+          <div class="tag-group">
+            <strong>3D</strong>
+            Blender 3D / Maya
+          </div>
+          <div class="tag-group">
+            <strong>AI</strong>
+            Vizcom / Udin BV Optic
+          </div>
+          <div class="tag-group">
+            <strong>XR</strong>
+            Gravity Sketch
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact -->
+      <div>
+        <div class="section-label">Contact</div>
+        <div class="contact-list">
+          <div class="contact-item">
+            <a href="mailto:geonuworks@gmail.com">geonuworks@gmail.com</a>
+          </div>
+          <div class="contact-item">+82 10 2811 4285</div>
+          <div class="contact-item">
+            <a href="#">linkedin</a> &nbsp;
+            <a href="#">instagram</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Year -->
+      <div class="year-badge">2026</div>
+
+    </aside>
+
+    <!-- ── MAIN ── -->
+    <main class="main">
+
+      <!-- Education -->
+      <section class="main-section">
+        <div class="section-label">Education</div>
+
+        <div class="entry">
+          <div class="entry-body">
+            <div class="entry-title">Korea National University of Arts</div>
+            <div class="entry-subtitle">BA, Transportation Design</div>
+          </div>
+          <div class="entry-meta">
+            <div class="entry-date">Feb. 2020 – Aug. 2026&#10;(estimated)</div>
+          </div>
+        </div>
+
+        <div class="entry">
+          <div class="entry-body">
+            <div class="entry-title">Ansan Technical Highschool</div>
+            <div class="entry-subtitle">Highschool diploma, Industrial Design</div>
+          </div>
+          <div class="entry-meta">
+            <div class="entry-date">Feb. 2016 – Feb. 2019</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Honor & Award -->
+      <section class="main-section">
+        <div class="section-label">Honor &amp; Award</div>
+
+        <div class="award-entry">
+          <div>
+            <div class="award-name">Volvo Design Competition 2026</div>
+            <div class="award-result">Shortlisted (Phase 1)</div>
+          </div>
+          <div class="award-date">Mar. 2026</div>
+        </div>
+      </section>
+
+      <!-- Experience -->
+      <section class="main-section">
+        <div class="section-label">Experience</div>
+
+        <div class="entry">
+          <div class="entry-body">
+            <div class="entry-title">Project Manager</div>
+            <div class="entry-subtitle">&lt;AI-driven Design Process Development Research&gt;</div>
+            <span class="entry-tag">HYUNDAI Exterior — industry-academic cooperation</span>
+            <ul class="entry-desc">
+              <li>Built and implemented an AI-driven design framework to unify workflows across multiple projects.</li>
+              <li>Led team operations by defining strategy and delegating tasks.</li>
+              <li>Completed an individual project within the framework, contributing to the successful delivery of 8 projects for HYUNDAI.</li>
+            </ul>
+          </div>
+          <div class="entry-meta">
+            <div class="entry-date">Mar. 2025 – Dec. 2025</div>
+          </div>
+        </div>
+
+        <div class="entry">
+          <div class="entry-body">
+            <div class="entry-title">Project Manager</div>
+            <div class="entry-subtitle">&lt;2030 eMPV Advanced Interior Design Research&gt;</div>
+            <span class="entry-tag">KIA Next Design Interior — industry-academic cooperation</span>
+            <ul class="entry-desc">
+              <li>Led the project team in developing a future-oriented interior vision for a 2030 eMPV concept.</li>
+              <li>Explored forward-looking meta trends research to define the cultural and technological context.</li>
+            </ul>
+          </div>
+          <div class="entry-meta">
+            <div class="entry-date">Mar. 2024 – Jun. 2024</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Exhibition -->
+      <section class="main-section">
+        <div class="section-label">Exhibition</div>
+
+        <div class="entry">
+          <div class="entry-body">
+            <div class="entry-title">LG Electronics × K-Arts</div>
+            <div class="entry-subtitle">&lt;Objects with Nunchi: When Home Appliances Develop Emotional Intelligence&gt;</div>
+            <div class="entry-desc" style="margin-top:6px; list-style:none; padding-left:0;">
+              Gyeongdong Market, Seoul, 2025<br>
+              Contributed to the 3D visualization of Furon (LG's Affectionate Intelligence).
+            </div>
+          </div>
+          <div class="entry-meta">
+            <div class="entry-date">Dec. 2025 – Apr. 2026</div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
 </body>
 </html>
