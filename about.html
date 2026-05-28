@@ -111,7 +111,7 @@
     .exp-entry,
     .exhibit-entry {
       display:grid;
-      grid-template-columns: 2.2rem 1fr 1fr 10rem;
+      grid-template-columns: 2.2rem 1fr 1fr minmax(10rem, max-content);
       gap:0 10px;
       align-items:start;
     }
@@ -205,6 +205,7 @@
       </div>
 
       <div class="contact-section">
+        <div class="left-section-label">CONTACTS</div>
         <p><a href="mailto:geonuworks@gmail.com">geonuworks@gmail.com</a></p>
         <p>+82 10 2811 4285</p>
       </div>
