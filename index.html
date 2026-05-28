@@ -3,625 +3,404 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Geonu Jo — Mobility Design Portfolio</title>
+  <title>Geonu Jo — Archive</title>
   <style>
-    @font-face {
-      font-family: 'Poppins';
-      src: url('source/fonts/Poppins-Regular.ttf') format('truetype');
-      font-weight: 400;
+    @font-face { font-family:'Poppins'; src:url('source/fonts/Poppins-Regular.ttf') format('truetype'); font-weight:400; }
+    @font-face { font-family:'Poppins'; src:url('source/fonts/Poppins-Medium.ttf') format('truetype'); font-weight:500; }
+    @font-face { font-family:'Poppins'; src:url('source/fonts/Poppins-Bold.ttf') format('truetype'); font-weight:700; }
+
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    html, body { width:100%; height:100%; overflow:hidden; font-family:'Poppins',sans-serif; font-weight:400; }
+
+    /* ── FIXED HEADER (always on top, above everything) ── */
+    #global-nav {
+      position:fixed; top:0; left:0; right:0;
+      z-index:500;
+      display:flex; align-items:baseline;
+      padding:28px 48px 0;
+      pointer-events:none; /* let clicks pass through to pages below */
     }
-    @font-face {
-      font-family: 'Poppins';
-      src: url('source/fonts/Poppins-Medium.ttf') format('truetype');
-      font-weight: 500;
+    #global-nav * { pointer-events:auto; }
+    .nav-name  { font-size:0.95rem; font-weight:400; min-width:160px; color:#111; }
+    .nav-title { font-size:0.95rem; font-weight:400; min-width:220px; color:#111; }
+    .nav-year  { font-size:0.95rem; font-weight:400; flex:1; color:#111; }
+    .nav-links { display:flex; gap:40px; }
+    .nav-links a {
+      font-size:0.95rem; font-weight:400; color:#111;
+      text-decoration:none;
     }
-    @font-face {
-      font-family: 'Poppins';
-      src: url('source/fonts/Poppins-Bold.ttf') format('truetype');
-      font-weight: 700;
+    .nav-links a.active { text-decoration:underline; text-underline-offset:3px; }
+    .nav-links a:hover  { text-decoration:underline; text-underline-offset:3px; }
+
+    /* Nav text turns light on sketch page */
+    #global-nav.on-sketches .nav-name,
+    #global-nav.on-sketches .nav-title,
+    #global-nav.on-sketches .nav-year,
+    #global-nav.on-sketches .nav-links a { color:#e8e8e8; }
+
+    /* ── PAGES CONTAINER ── */
+    #scroll-container { position:fixed; inset:0; overflow:hidden; }
+
+    #pages-wrapper {
+      width:100%;
+      transition: transform 0.85s cubic-bezier(0.76,0,0.24,1);
+      will-change: transform;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    .page { width:100%; height:100vh; position:relative; }
 
-    html { font-size: 13px; }
-    body {
-      font-family: 'Poppins', sans-serif;
-      font-weight: 400;
-      background: #ffffff;
-      color: #111111;
-    }
-
-    /* ── TOP NAV ── */
-    .topnav {
-      display: flex;
-      align-items: baseline;
-      gap: 0;
-      padding: 28px 48px 0;
-      border-bottom: none;
-    }
-    .topnav-name {
-      font-size: 0.95rem;
-      font-weight: 400;
-      min-width: 160px;
-    }
-    .topnav-title {
-      font-size: 0.95rem;
-      font-weight: 400;
-      min-width: 220px;
-    }
-    .topnav-year {
-      font-size: 0.95rem;
-      font-weight: 400;
-      flex: 1;
-    }
-    .topnav-links {
-      display: flex;
-      gap: 40px;
-    }
-    .topnav-links a {
-      font-size: 0.95rem;
-      font-weight: 400;
-      color: #111;
-      text-decoration: none;
-    }
-    .topnav-links a.active {
-      text-decoration: underline;
-      text-underline-offset: 3px;
-    }
-    .topnav-links a:hover { text-decoration: underline; text-underline-offset: 3px; }
-
-    /* ── BODY LAYOUT ── */
-    .body-layout {
-      display: grid;
-      grid-template-columns: 300px 1fr;
-      padding: 60px 48px 80px;
-      gap: 0 0;
+    /* ── PAGE 1: PROJECTS ── */
+    #page-projects {
+      background:#fff;
+      overflow-y:auto;
+      overflow-x:hidden;
     }
 
-    /* ── LEFT COLUMN ── */
-    .left-col {
-      padding-right: 40px;
+    /* ── PAGE 2: SKETCHES ── */
+    #page-sketches {
+      background-color:#b8b8b8;
+      background-image:radial-gradient(circle, #999 1px, transparent 1px);
+      background-size:28px 28px;
+      overflow:hidden;
     }
 
-    .bio {
-      font-size: 0.82rem;
-      line-height: 1.75;
-      color: #111;
-      margin-bottom: 48px;
-    }
-    .bio strong {
-      font-weight: 700;
-    }
-    .bio em {
-      font-style: normal;
-      font-weight: 700;
+    /* ── PAGE 3: ABOUT ── */
+    #page-about { background:#fff; }
+    #about-iframe { position:absolute; inset:0; width:100%; height:100%; border:none; }
+
+    /* ── PROJECT LIST ── */
+    .project-list {
+      padding:80px 48px 80px; /* top pad accounts for fixed nav */
+      display:flex;
+      flex-direction:column;
+      gap:80px;
     }
 
-    /* Skills + Language side by side */
-    .skills-lang {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0 16px;
-      margin-bottom: 32px;
+    .project-cover {
+      width:100%;
+      aspect-ratio:16/7;
+      overflow:hidden;
+      cursor:pointer;
     }
+    .project-cover img {
+      width:100%; height:100%;
+      object-fit:cover; display:block;
+      transition:opacity 0.3s ease;
+    }
+    .project-cover:hover img { opacity:0.9; }
 
-    .left-section-label {
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      color: #111;
-      margin-bottom: 10px;
+    .project-meta {
+      display:grid;
+      grid-template-columns: 80px 1fr 1fr 1fr 1fr;
+      padding-top:14px;
+      align-items:start;
     }
+    .project-num   { font-size:0.82rem; color:#111; }
+    .project-title { font-size:0.82rem; color:#111; }
+    .project-title strong { font-weight:700; }
+    .project-context { font-size:0.82rem; color:#111; }
+    .project-tags {
+      font-size:0.82rem; color:#111;
+      display:flex; flex-direction:column; gap:2px;
+    }
+    .project-date { font-size:0.82rem; color:#111; text-align:right; }
 
-    .skill-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
+    /* ── LIGHTBOX ── */
+    #lightbox {
+      position:fixed; inset:0; z-index:1000;
+      background:rgba(0,0,0,0);
+      display:none;
+      overflow-y:auto;
+      transition:background 0.4s ease;
     }
-    .skill-list li {
-      font-size: 0.78rem;
-      color: #111;
-      line-height: 1.5;
+    #lightbox.visible { background:rgba(0,0,0,0.88); }
+    #lightbox-inner {
+      max-width:900px; margin:0 auto;
+      padding:80px 24px 120px;
+      display:flex; flex-direction:column; gap:8px;
+      opacity:0; transform:translateY(20px);
+      transition:opacity 0.4s ease, transform 0.4s ease;
     }
+    #lightbox.visible #lightbox-inner { opacity:1; transform:translateY(0); }
+    #lightbox-inner img { width:100%; display:block; }
+    #lightbox-close {
+      position:fixed; top:28px; right:48px;
+      font-size:0.85rem; color:#fff; cursor:pointer;
+      font-family:'Poppins',sans-serif; z-index:1001;
+      opacity:0; transition:opacity 0.4s ease;
+    }
+    #lightbox.visible #lightbox-close { opacity:1; }
+    #lightbox-close:hover { text-decoration:underline; }
 
-    .lang-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
+    /* ── SKETCH BOARD ── */
+    #board { position:absolute; inset:0; user-select:none; }
+    .sketch {
+      position:absolute; background:#fff;
+      box-shadow:0 4px 24px rgba(0,0,0,0.18);
+      cursor:grab; will-change:left,top;
+      transition:box-shadow 0.25s ease;
     }
-    .lang-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      font-size: 0.78rem;
+    .sketch.dragging {
+      cursor:grabbing;
+      box-shadow:0 12px 40px rgba(0,0,0,0.32);
     }
-    .lang-row span:last-child {
-      color: #666;
-    }
-
-    /* Tools */
-    .tools-section {
-      margin-bottom: 36px;
-    }
-    .tools-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .tools-row {
-      display: grid;
-      grid-template-columns: 28px 1fr;
-      font-size: 0.78rem;
-      line-height: 1.6;
-    }
-    .tools-row .tool-key {
-      color: #aaa;
-      font-weight: 400;
-    }
-
-    /* Contact */
-    .contact-section {
-      margin-bottom: 28px;
-    }
-    .contact-section p {
-      font-size: 0.78rem;
-      color: #111;
-      line-height: 1.7;
-    }
-    .contact-section a {
-      color: #111;
-      text-decoration: none;
-    }
-
-    /* QR codes */
-    .qr-section {
-      display: flex;
-      gap: 24px;
-      margin-top: 8px;
-    }
-    .qr-item {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 6px;
-    }
-    .qr-item span {
-      font-size: 0.75rem;
-      color: #111;
-    }
-    .qr-placeholder {
-      width: 64px;
-      height: 64px;
-      border: 1px solid #ccc;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.6rem;
-      color: #aaa;
-      /* QR pattern visual */
-      background-image:
-        linear-gradient(#333 1px, transparent 1px),
-        linear-gradient(90deg, #333 1px, transparent 1px);
-      background-size: 8px 8px;
-      background-color: #fff;
-      image-rendering: pixelated;
-    }
-
-    /* ── RIGHT COLUMN ── */
-    .right-col {
-      border-left: none;
-      padding-left: 40px;
-    }
-
-    /* Each section row: label | content */
-    .cv-section {
-      display: grid;
-      grid-template-columns: 120px 1fr;
-      gap: 0 0;
-      padding: 28px 0;
-      border-top: 1px solid #e0e0e0;
-    }
-    .cv-section:first-child {
-      padding-top: 0;
-      border-top: none;
-    }
-
-    .cv-section-label {
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      color: #111;
-      text-transform: uppercase;
-      padding-top: 2px;
-    }
-
-    .cv-section-body {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    /* Entry row inside a section */
-    .cv-entry {
-      display: grid;
-      grid-template-columns: 32px 1fr 1fr 160px;
-      gap: 0 10px;
-      align-items: start;
-    }
-    /* empty first cell to align with exp-entry logo column */
-    .cv-entry::before {
-      content: '';
-      display: block;
-    }
-
-    .cv-entry-institution {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: #111;
-      line-height: 1.4;
-    }
-    .cv-entry-institution .sub {
-      font-weight: 400;
-      font-size: 0.78rem;
-      color: #333;
-      display: block;
-    }
-
-    .cv-entry-role {
-      font-size: 0.82rem;
-      font-weight: 400;
-      color: #111;
-    }
-
-    .cv-entry-date {
-      font-size: 0.75rem;
-      color: #666;
-      text-align: right;
-      white-space: nowrap;
-    }
-
-    /* Experience entries with logos + bullets */
-    .exp-entry {
-      display: grid;
-      grid-template-columns: 32px 1fr 1fr 160px;
-      gap: 0 10px;
-      align-items: start;
-    }
-    .exp-logo {
-      width: 28px;
-      height: 28px;
-      object-fit: contain;
-      margin-top: 2px;
-    }
-    .exp-logo-placeholder {
-      width: 28px;
-      height: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-top: 2px;
-    }
-    /* Hyundai logo SVG inline */
-    .exp-org {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: #111;
-      line-height: 1.4;
-    }
-    .exp-org .sub {
-      font-weight: 400;
-      font-size: 0.75rem;
-      color: #555;
-      display: block;
-    }
-    .exp-org .project {
-      font-size: 0.75rem;
-      color: #111;
-      display: block;
-      margin-top: 6px;
-    }
-    .exp-bullets {
-      margin-top: 4px;
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    .exp-bullets li {
-      font-size: 0.72rem;
-      color: #444;
-      line-height: 1.55;
-      padding-left: 10px;
-      position: relative;
-    }
-    .exp-bullets li::before {
-      content: '·';
-      position: absolute;
-      left: 2px;
-      color: #aaa;
-    }
-
-    /* Exhibition */
-    .exhibit-entry {
-      display: grid;
-      grid-template-columns: 32px 1fr 1fr 160px;
-      gap: 0 10px;
-      align-items: start;
-    }
-    .exhibit-entry .exhibit-body {
-      grid-column: 2 / 4;
-    }
-
-    .exhibit-body .title {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: #111;
-    }
-    .exhibit-body .subtitle {
-      font-size: 0.75rem;
-      color: #333;
-      margin-top: 2px;
-    }
-    .exhibit-body .bullet {
-      font-size: 0.72rem;
-      color: #444;
-      margin-top: 6px;
-      padding-left: 10px;
-      position: relative;
-      line-height: 1.55;
-    }
-    .exhibit-body .bullet::before {
-      content: '·';
-      position: absolute;
-      left: 2px;
-      color: #aaa;
+    .sketch img {
+      display:block; width:100%; height:100%;
+      object-fit:fill; pointer-events:none;
+      user-select:none; -webkit-user-drag:none;
     }
   </style>
 </head>
 <body>
 
-  <!-- TOP NAV -->
-  <nav class="topnav">
-    <span class="topnav-name">Geonu Jo</span>
-    <span class="topnav-title">Mobility Design Portfolio</span>
-    <span class="topnav-year">2026</span>
-    <div class="topnav-links">
-      <a href="archive.html">Archive</a>
-      <a href="index.html" class="active">About</a>
-    </div>
-  </nav>
-
-  <!-- MAIN BODY -->
-  <div class="body-layout">
-
-    <!-- LEFT COLUMN -->
-    <aside class="left-col">
-
-      <div class="bio">
-        <p>I'm <strong>Geonu Jo</strong>, a 4th-year mobility design student who is interested in future-oriented designs.</p>
-        <br>
-        <p>Buckminster Fuller, an American architect, once said, <em>"The best way to predict the future is to design it."</em> As a design student, my role is not only to adapt to new technologies but to use them as tools to reshape the future.</p>
-        <br>
-        <p>Through speculative mobility projects, I've developed a mindset that constantly asks, <em>"What's next?"</em> I aim to design transportations actively shape the upcoming future.</p>
-      </div>
-
-      <!-- Skills + Language -->
-      <div class="skills-lang">
-        <div>
-          <div class="left-section-label">SKILLS</div>
-          <ul class="skill-list">
-            <li>Creative Thinking</li>
-            <li>Team Leadership</li>
-            <li>XR Sketch</li>
-          </ul>
-        </div>
-        <div>
-          <div class="left-section-label">LANGUAGE</div>
-          <ul class="lang-list">
-            <li class="lang-row"><span>English</span><span>advanced</span></li>
-            <li class="lang-row"><span>Korean</span><span>native</span></li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Tools -->
-      <div class="tools-section">
-        <div class="left-section-label">TOOLS</div>
-        <div class="tools-grid">
-          <div class="tools-row"><span class="tool-key">2D</span><span>Adobe Suite / Figma</span></div>
-          <div class="tools-row"><span class="tool-key">3D</span><span>Blender 3D / Maya</span></div>
-          <div class="tools-row"><span class="tool-key">AI</span><span>Vizcom / Udin BV Optic</span></div>
-          <div class="tools-row"><span class="tool-key">XR</span><span>Gravity Sketch</span></div>
-        </div>
-      </div>
-
-      <!-- Contact -->
-      <div class="contact-section">
-        <p><a href="mailto:geonuworks@gmail.com">geonuworks@gmail.com</a></p>
-        <p>+82 10 2811 4285</p>
-      </div>
-
-      <!-- QR codes -->
-      <div class="qr-section">
-        <div class="qr-item">
-          <svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-            <!-- QR code pattern for linkedin placeholder -->
-            <rect width="64" height="64" fill="white"/>
-            <!-- finder pattern TL -->
-            <rect x="4" y="4" width="18" height="18" fill="none" stroke="#222" stroke-width="2"/>
-            <rect x="8" y="8" width="10" height="10" fill="#222"/>
-            <!-- finder pattern TR -->
-            <rect x="42" y="4" width="18" height="18" fill="none" stroke="#222" stroke-width="2"/>
-            <rect x="46" y="8" width="10" height="10" fill="#222"/>
-            <!-- finder pattern BL -->
-            <rect x="4" y="42" width="18" height="18" fill="none" stroke="#222" stroke-width="2"/>
-            <rect x="8" y="46" width="10" height="10" fill="#222"/>
-            <!-- data modules -->
-            <rect x="26" y="4" width="4" height="4" fill="#222"/><rect x="32" y="4" width="4" height="4" fill="#222"/>
-            <rect x="26" y="10" width="4" height="4" fill="#222"/><rect x="36" y="10" width="4" height="4" fill="#222"/>
-            <rect x="26" y="16" width="4" height="4" fill="#222"/><rect x="30" y="16" width="4" height="4" fill="#222"/>
-            <rect x="26" y="26" width="4" height="4" fill="#222"/><rect x="32" y="26" width="4" height="4" fill="#222"/><rect x="40" y="26" width="4" height="4" fill="#222"/>
-            <rect x="26" y="32" width="4" height="4" fill="#222"/><rect x="36" y="32" width="4" height="4" fill="#222"/><rect x="44" y="32" width="4" height="4" fill="#222"/>
-            <rect x="4" y="26" width="4" height="4" fill="#222"/><rect x="10" y="26" width="4" height="4" fill="#222"/><rect x="18" y="26" width="4" height="4" fill="#222"/>
-            <rect x="4" y="32" width="4" height="4" fill="#222"/><rect x="14" y="32" width="4" height="4" fill="#222"/><rect x="20" y="32" width="4" height="4" fill="#222"/>
-            <rect x="4" y="38" width="4" height="4" fill="#222"/><rect x="12" y="38" width="4" height="4" fill="#222"/>
-            <rect x="26" y="38" width="4" height="4" fill="#222"/><rect x="34" y="38" width="4" height="4" fill="#222"/><rect x="42" y="38" width="4" height="4" fill="#222"/>
-            <rect x="26" y="44" width="4" height="4" fill="#222"/><rect x="30" y="44" width="4" height="4" fill="#222"/><rect x="38" y="44" width="4" height="4" fill="#222"/><rect x="46" y="44" width="4" height="4" fill="#222"/>
-            <rect x="26" y="50" width="4" height="4" fill="#222"/><rect x="36" y="50" width="4" height="4" fill="#222"/><rect x="44" y="50" width="4" height="4" fill="#222"/>
-            <rect x="26" y="56" width="4" height="4" fill="#222"/><rect x="32" y="56" width="4" height="4" fill="#222"/><rect x="40" y="56" width="4" height="4" fill="#222"/>
-            <rect x="50" y="26" width="4" height="4" fill="#222"/><rect x="56" y="26" width="4" height="4" fill="#222"/>
-            <rect x="52" y="32" width="4" height="4" fill="#222"/><rect x="50" y="38" width="4" height="4" fill="#222"/><rect x="56" y="38" width="4" height="4" fill="#222"/>
-            <rect x="52" y="44" width="4" height="4" fill="#222"/><rect x="50" y="50" width="4" height="4" fill="#222"/><rect x="56" y="50" width="4" height="4" fill="#222"/>
-            <rect x="52" y="56" width="4" height="4" fill="#222"/>
-          </svg>
-          <span>linkedin</span>
-        </div>
-        <div class="qr-item">
-          <svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-            <rect width="64" height="64" fill="white"/>
-            <rect x="4" y="4" width="18" height="18" fill="none" stroke="#222" stroke-width="2"/>
-            <rect x="8" y="8" width="10" height="10" fill="#222"/>
-            <rect x="42" y="4" width="18" height="18" fill="none" stroke="#222" stroke-width="2"/>
-            <rect x="46" y="8" width="10" height="10" fill="#222"/>
-            <rect x="4" y="42" width="18" height="18" fill="none" stroke="#222" stroke-width="2"/>
-            <rect x="8" y="46" width="10" height="10" fill="#222"/>
-            <rect x="28" y="4" width="4" height="4" fill="#222"/><rect x="34" y="4" width="4" height="4" fill="#222"/>
-            <rect x="26" y="10" width="4" height="4" fill="#222"/><rect x="38" y="10" width="4" height="4" fill="#222"/>
-            <rect x="28" y="16" width="4" height="4" fill="#222"/><rect x="32" y="16" width="4" height="4" fill="#222"/>
-            <rect x="26" y="26" width="4" height="4" fill="#222"/><rect x="34" y="26" width="4" height="4" fill="#222"/><rect x="42" y="26" width="4" height="4" fill="#222"/>
-            <rect x="28" y="32" width="4" height="4" fill="#222"/><rect x="38" y="32" width="4" height="4" fill="#222"/><rect x="46" y="32" width="4" height="4" fill="#222"/>
-            <rect x="6" y="26" width="4" height="4" fill="#222"/><rect x="12" y="26" width="4" height="4" fill="#222"/><rect x="20" y="26" width="4" height="4" fill="#222"/>
-            <rect x="6" y="32" width="4" height="4" fill="#222"/><rect x="16" y="32" width="4" height="4" fill="#222"/>
-            <rect x="6" y="38" width="4" height="4" fill="#222"/><rect x="14" y="38" width="4" height="4" fill="#222"/>
-            <rect x="28" y="38" width="4" height="4" fill="#222"/><rect x="36" y="38" width="4" height="4" fill="#222"/><rect x="44" y="38" width="4" height="4" fill="#222"/>
-            <rect x="28" y="44" width="4" height="4" fill="#222"/><rect x="32" y="44" width="4" height="4" fill="#222"/><rect x="40" y="44" width="4" height="4" fill="#222"/>
-            <rect x="28" y="50" width="4" height="4" fill="#222"/><rect x="38" y="50" width="4" height="4" fill="#222"/><rect x="46" y="50" width="4" height="4" fill="#222"/>
-            <rect x="28" y="56" width="4" height="4" fill="#222"/><rect x="34" y="56" width="4" height="4" fill="#222"/><rect x="42" y="56" width="4" height="4" fill="#222"/>
-            <rect x="52" y="26" width="4" height="4" fill="#222"/><rect x="58" y="26" width="4" height="4" fill="#222"/>
-            <rect x="54" y="32" width="4" height="4" fill="#222"/><rect x="52" y="38" width="4" height="4" fill="#222"/><rect x="58" y="38" width="4" height="4" fill="#222"/>
-            <rect x="54" y="44" width="4" height="4" fill="#222"/><rect x="52" y="50" width="4" height="4" fill="#222"/>
-            <rect x="54" y="56" width="4" height="4" fill="#222"/><rect x="58" y="56" width="4" height="4" fill="#222"/>
-          </svg>
-          <span>instagram</span>
-        </div>
-      </div>
-
-    </aside>
-
-    <!-- RIGHT COLUMN -->
-    <main class="right-col">
-
-      <!-- EDUCATION -->
-      <div class="cv-section">
-        <div class="cv-section-label">EDUCATION</div>
-        <div class="cv-section-body">
-          <div class="cv-entry">
-            <div class="cv-entry-institution">Korea National University of Arts</div>
-            <div class="cv-entry-role">BA, Transportation Design</div>
-            <div class="cv-entry-date">Feb. 2020. – Aug. 2027. (estimated)</div>
-          </div>
-          <div class="cv-entry">
-            <div class="cv-entry-institution">Ansan Technical Highschool</div>
-            <div class="cv-entry-role">highschool diploma, Industrial Design</div>
-            <div class="cv-entry-date">Feb. 2016. – Feb. 2019.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- HONOR & AWARD -->
-      <div class="cv-section">
-        <div class="cv-section-label">HONOR &amp; AWARD</div>
-        <div class="cv-section-body">
-          <div class="cv-entry">
-            <div class="cv-entry-institution">Volvo Design Competition 2026</div>
-            <div class="cv-entry-role">Shortlisted (Phase 1)</div>
-            <div class="cv-entry-date">Mar. 2026.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- EXPERIENCE -->
-      <div class="cv-section">
-        <div class="cv-section-label">EXPERIENCE</div>
-        <div class="cv-section-body">
-
-          <!-- HYUNDAI -->
-          <div class="exp-entry">
-            <div class="exp-logo-placeholder">
-              <!-- Hyundai H logo -->
-              <svg width="28" height="20" viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg" fill="#003087">
-                <path d="M139.7 60.4c-39.5 0-77.2 10.4-101.3 27.9-4.8 3.5-6.7 7.1-5.2 10 1.5 2.9 6.2 4.2 12.9 3.3 20.7-2.8 51.7-4.5 83.3-4.5h20.5c31.6 0 62.7 1.7 83.3 4.5 6.7.9 11.4-.4 12.9-3.3 1.5-2.9-.4-6.5-5.2-10C216.9 70.8 179.2 60.4 139.7 60.4zM43.4 118.4c-6.7-.9-11.4.4-12.9 3.3-1.5 2.9.4 6.5 5.2 10 24.1 17.5 61.8 27.9 101.3 27.9s77.2-10.4 101.3-27.9c4.8-3.5 6.7-7.1 5.2-10-1.5-2.9-6.2-4.2-12.9-3.3-20.7 2.8-51.7 4.5-83.3 4.5h-20.5c-31.6-.1-62.7-1.7-83.4-4.5z"/>
-              </svg>
-            </div>
-            <div>
-              <div class="exp-org">
-                HYUNDAI Exterior
-                <span class="sub">industry-academic cooperation</span>
-                <span class="project">〈AI-driven Design Process Development Research〉</span>
-              </div>
-              <ul class="exp-bullets">
-                <li>Built and implemented an AI-driven design framework to unify workflows across multiple projects.</li>
-                <li>Led team operations by defining strategy and delegating tasks.</li>
-                <li>Completed an individual project within the framework, contributing to the successful delivery of 8 projects for HYUNDAI.</li>
-              </ul>
-            </div>
-            <div class="cv-entry-role">Project Manager</div>
-            <div class="cv-entry-date">Mar. 2025. – Dec. 2025.</div>
-          </div>
-
-          <!-- KIA -->
-          <div class="exp-entry">
-            <div class="exp-logo-placeholder">
-              <!-- KIA logo -->
-              <svg width="28" height="14" viewBox="0 0 560 280" xmlns="http://www.w3.org/2000/svg" fill="#05141F">
-                <path d="M0 140 L60 40 L110 40 L110 240 L60 240 L60 120 L30 170 L0 140z M120 40 L170 40 L170 240 L120 240z M180 40 L360 40 L360 90 L230 90 L230 140 L330 140 L330 190 L230 190 L230 240 L360 240 L360 280 L180 280z"/>
-                <text x="0" y="220" font-size="200" font-family="Arial" font-weight="900" fill="#05141F">KIA</text>
-              </svg>
-            </div>
-            <div>
-              <div class="exp-org">
-                KIA Next Design Interior
-                <span class="sub">industry-academic cooperation</span>
-                <span class="project">〈2030 eMPV Advanced Interior Design Research〉</span>
-              </div>
-              <ul class="exp-bullets">
-                <li>Led the project team in developing a future-oriented interior vision for a 2030 eMPV concept.</li>
-                <li>Explored forward-looking meta trends research to define the cultural and technological context.</li>
-              </ul>
-            </div>
-            <div class="cv-entry-role">Project Manager</div>
-            <div class="cv-entry-date">Mar. 2024. – Jun. 2024.</div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- EXHIBITION -->
-      <div class="cv-section">
-        <div class="cv-section-label">EXHIBITION</div>
-        <div class="cv-section-body">
-          <div class="exhibit-entry">
-            <div class="exp-logo-placeholder">
-              <!-- LG logo -->
-              <svg width="28" height="28" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="50" cy="50" r="48" fill="none" stroke="#a50034" stroke-width="4"/>
-                <text x="14" y="66" font-size="44" font-family="Arial" font-weight="900" fill="#a50034">LG</text>
-              </svg>
-            </div>
-            <div class="exhibit-body">
-              <div class="title">LG Electronics × K-Arts</div>
-              <div class="subtitle">〈Objects with Nunchi: When Home Appliances Develop Emotional Intelligence〉,<br>Gyeongdong Market, Seoul, 2025</div>
-              <div class="bullet">Contributed to the 3D visualization of Furon(LG's Affectionate Intelligence).</div>
-            </div>
-            <div class="cv-entry-date">Dec. 2025. – Apr. 2026.</div>
-          </div>
-        </div>
-      </div>
-
-    </main>
+<!-- FIXED NAV -->
+<nav id="global-nav">
+  <span class="nav-name">Geonu Jo</span>
+  <span class="nav-title">Mobility Design Portfolio</span>
+  <span class="nav-year">2026</span>
+  <div class="nav-links">
+    <a href="#" id="nav-archive" class="active">Archive</a>
+    <a href="#" id="nav-about">About</a>
   </div>
+</nav>
 
+<!-- PAGES -->
+<div id="scroll-container">
+  <div id="pages-wrapper">
+
+    <!-- PAGE 1: PROJECTS -->
+    <div class="page" id="page-projects">
+      <div class="project-list">
+        <div class="project-item">
+          <div class="project-cover" data-project="volvo-bloom">
+            <img src="source/projects/volvo-bloom/images/00.jpg" alt="Volvo BLOOM*" />
+          </div>
+          <div class="project-meta">
+            <span class="project-num">01</span>
+            <span class="project-title">Volvo <strong>BLOOM*</strong></span>
+            <span class="project-context">Volvo Design Competition 2026</span>
+            <span class="project-tags">
+              <span>Exterior Design</span>
+              <span>Interior Design</span>
+              <span>3D Modeling</span>
+            </span>
+            <span class="project-date">Mar.2026. (1 month)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 2: SKETCHES -->
+    <div class="page" id="page-sketches">
+      <div id="board"></div>
+    </div>
+
+    <!-- PAGE 3: ABOUT -->
+    <div class="page" id="page-about">
+      <iframe id="about-iframe" src="about.html" title="About"></iframe>
+    </div>
+
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox">
+  <span id="lightbox-close">✕ close</span>
+  <div id="lightbox-inner"></div>
+</div>
+
+<script>
+/* ═══════════════════════════════════
+   PAGE SNAPPING
+═══════════════════════════════════ */
+const pagesWrapper  = document.getElementById('pages-wrapper');
+const projectPage   = document.getElementById('page-projects');
+const globalNav     = document.getElementById('global-nav');
+
+let currentPage  = 0;
+let isAnimating  = false;
+
+const PAGE_COUNT = 3;
+const ANIM_MS    = 900; // must match CSS transition duration
+
+function goToPage(n, force) {
+  n = Math.max(0, Math.min(PAGE_COUNT - 1, n));
+  if (!force && (n === currentPage || isAnimating)) return;
+  currentPage = n;
+  isAnimating = true;
+
+  const pct = n === 0 ? 0 : n === 1 ? -100 : -200;
+  pagesWrapper.style.transform = `translateY(${pct}vh)`;
+
+  // Update nav active state
+  document.getElementById('nav-archive').classList.toggle('active', n < 2);
+  document.getElementById('nav-about').classList.toggle('active', n === 2);
+
+  // Toggle nav colour for sketch page
+  globalNav.classList.toggle('on-sketches', n === 1);
+
+  setTimeout(() => { isAnimating = false; }, ANIM_MS);
+}
+
+// Nav clicks
+document.getElementById('nav-archive').addEventListener('click', e => { e.preventDefault(); goToPage(0); });
+document.getElementById('nav-about').addEventListener('click',   e => { e.preventDefault(); goToPage(2); });
+
+/* ── Wheel handling ──
+   Strategy: accumulate deltaY with debounce.
+   Only fire once per distinct scroll gesture. */
+let wheelAccum  = 0;
+let wheelTimer  = null;
+const WHEEL_THRESHOLD = 50;
+
+window.addEventListener('wheel', (e) => {
+  // Lightbox intercepts scroll
+  if (document.getElementById('lightbox').classList.contains('visible')) return;
+
+  // On project page: let internal scroll happen first
+  if (currentPage === 0) {
+    const atBottom = projectPage.scrollTop + projectPage.clientHeight >= projectPage.scrollHeight - 4;
+    const atTop    = projectPage.scrollTop <= 0;
+    if (e.deltaY > 0 && !atBottom) return; // still scrolling inside
+    if (e.deltaY < 0 && !atTop)    return;
+    if (e.deltaY < 0 && atTop)     return; // already page 0, nowhere to go up
+  }
+
+  // On about page (iframe): detect edge via flag sent by iframe postMessage
+  // For now rely on accumulation debounce
+
+  wheelAccum += e.deltaY;
+  clearTimeout(wheelTimer);
+  wheelTimer = setTimeout(() => { wheelAccum = 0; }, 200);
+
+  if (Math.abs(wheelAccum) < WHEEL_THRESHOLD) return;
+
+  const dir = wheelAccum > 0 ? 1 : -1;
+  wheelAccum = 0;
+  clearTimeout(wheelTimer);
+
+  if (!isAnimating) goToPage(currentPage + dir);
+}, { passive: true });
+
+/* ── Receive messages from about.html iframe ── */
+window.addEventListener('message', (e) => {
+  if (e.data === 'scroll-up-edge'   && !isAnimating) goToPage(currentPage - 1);
+  if (e.data === 'scroll-down-edge' && !isAnimating) goToPage(currentPage + 1);
+});
+
+/* ── Touch swipe ── */
+let touchY0 = null;
+window.addEventListener('touchstart', e => { touchY0 = e.touches[0].clientY; }, {passive:true});
+window.addEventListener('touchend', e => {
+  if (touchY0 === null || isAnimating) return;
+  const dy = touchY0 - e.changedTouches[0].clientY;
+  touchY0 = null;
+  if (Math.abs(dy) < 40) return;
+  goToPage(currentPage + (dy > 0 ? 1 : -1));
+}, {passive:true});
+
+/* ═══════════════════════════════════
+   LIGHTBOX
+═══════════════════════════════════ */
+const PROJECTS = {
+  'volvo-bloom': {
+    path:   'source/projects/volvo-bloom/images/',
+    images: Array.from({length:16}, (_,i) => String(i+1).padStart(2,'0') + '.jpg')
+  }
+};
+
+function openLightbox(key) {
+  const proj = PROJECTS[key]; if (!proj) return;
+  const lb    = document.getElementById('lightbox');
+  const inner = document.getElementById('lightbox-inner');
+  inner.innerHTML = '';
+  proj.images.forEach(f => {
+    const img = document.createElement('img');
+    img.src = proj.path + f; img.alt = f;
+    inner.appendChild(img);
+  });
+  lb.style.display = 'block';
+  lb.scrollTop = 0;
+  requestAnimationFrame(() => lb.classList.add('visible'));
+}
+
+function closeLightbox() {
+  const lb = document.getElementById('lightbox');
+  lb.classList.remove('visible');
+  setTimeout(() => {
+    lb.style.display = 'none';
+    document.getElementById('lightbox-inner').innerHTML = '';
+  }, 420);
+}
+
+document.querySelectorAll('.project-cover').forEach(el =>
+  el.addEventListener('click', () => openLightbox(el.dataset.project))
+);
+document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+document.getElementById('lightbox').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeLightbox();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+/* ═══════════════════════════════════
+   SKETCH BOARD
+═══════════════════════════════════ */
+const SKETCH_FILES = [
+  'source/sketches/01.jpg','source/sketches/02.jpg','source/sketches/03.jpg',
+  'source/sketches/04.jpg','source/sketches/05.jpg','source/sketches/06.jpg',
+  'source/sketches/07.jpg','source/sketches/08.jpg','source/sketches/09.jpg',
+  'source/sketches/10.jpg',
+];
+const MIN_W = 260, MAX_W = 500;
+const board = document.getElementById('board');
+let zTop = 10;
+const rand = (a,b) => Math.random()*(b-a)+a;
+
+function placeSketch(src, idx) {
+  const img = new Image();
+  img.src = src;
+  const place = () => {
+    const br = document.getElementById('page-sketches').getBoundingClientRect();
+    const w  = rand(MIN_W, MAX_W);
+    const h  = w / (img.naturalWidth / img.naturalHeight);
+    const x  = rand(br.width*0.05,  br.width*0.75)  - w/2 + br.width*0.12;
+    const y  = rand(br.height*0.08, br.height*0.72) - h/2 + br.height*0.1;
+
+    const el = document.createElement('div');
+    el.className = 'sketch';
+    el.style.cssText = `width:${w}px;height:${h}px;left:${x}px;top:${y}px;z-index:${idx+1};`;
+    img.alt=''; img.draggable=false;
+    img.style.cssText='display:block;width:100%;height:100%;object-fit:fill;pointer-events:none;user-select:none;-webkit-user-drag:none;';
+    el.appendChild(img);
+    board.appendChild(el);
+    makeDraggable(el);
+  };
+  if (img.complete && img.naturalWidth) place();
+  else { img.onload = place; img.onerror = place; }
+}
+
+SKETCH_FILES.forEach((s,i) => setTimeout(() => placeSketch(s,i), i*60));
+
+function makeDraggable(el) {
+  let active=false, sx,sy,ox,oy;
+  el.addEventListener('pointerdown', e => {
+    if (e.button !== 0) return;
+    e.preventDefault(); e.stopPropagation();
+    el.setPointerCapture(e.pointerId);
+    el.style.zIndex = ++zTop;
+    active=true; sx=e.clientX; sy=e.clientY;
+    ox=parseFloat(el.style.left); oy=parseFloat(el.style.top);
+    el.classList.add('dragging');
+  });
+  el.addEventListener('pointermove', e => {
+    if (!active) return;
+    el.style.left = (ox + e.clientX - sx) + 'px';
+    el.style.top  = (oy + e.clientY - sy) + 'px';
+  });
+  const end = () => { active=false; el.classList.remove('dragging'); };
+  el.addEventListener('pointerup',     end);
+  el.addEventListener('pointercancel', end);
+}
+</script>
 </body>
 </html>
