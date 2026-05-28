@@ -351,7 +351,7 @@ const SKETCH_FILES = [
   'source/sketches/07.jpg','source/sketches/08.jpg','source/sketches/09.jpg',
   'source/sketches/10.jpg',
 ];
-const MIN_W = 260, MAX_W = 500;
+const SKETCH_W = 380; // fixed width for all sketches
 const board = document.getElementById('board');
 let zTop = 10;
 const rand = (a,b) => Math.random()*(b-a)+a;
@@ -361,7 +361,7 @@ function placeSketch(src, idx) {
   img.src = src;
   const place = () => {
     const br = document.getElementById('page-sketches').getBoundingClientRect();
-    const w  = rand(MIN_W, MAX_W);
+    const w  = SKETCH_W;
     const h  = w / (img.naturalWidth / img.naturalHeight);
     const x  = rand(br.width*0.05,  br.width*0.75)  - w/2 + br.width*0.12;
     const y  = rand(br.height*0.08, br.height*0.72) - h/2 + br.height*0.1;
