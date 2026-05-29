@@ -89,13 +89,17 @@
 
     .cv-section {
       display:grid;
-      grid-template-columns:120px 1fr;
+      grid-template-columns: 120px 2.4rem 1fr 1fr minmax(11rem, max-content);
+      column-gap:10px;
       padding:28px 0;
       border-top:1px solid #e0e0e0;
+      align-items:start;
     }
     .cv-section:first-child { padding-top:0; border-top:none; }
 
     .cv-section-label {
+      grid-column:1;
+      grid-row:1;
       font-size:0.68rem;
       font-weight:700;
       letter-spacing:0.08em;
@@ -104,44 +108,47 @@
       padding-top:2px;
     }
 
-    .cv-section-body { display:flex; flex-direction:column; gap:16px; }
+    /* section body: display:contents so children join cv-section grid directly */
+    .cv-section-body {
+      display: contents;
+    }
 
-    /* All entry rows share the same 4-col grid: logo | institution | role | date */
+    /* ── Entry rows: span cols 2-5 of parent cv-section, use subgrid ── */
     .cv-entry,
     .exp-entry,
     .exhibit-entry {
-      display:grid;
-      grid-template-columns: 2.2rem 1fr 1fr minmax(10rem, max-content);
-      gap:0 10px;
-      align-items:start;
+      grid-column: 2 / 6;
+      display: grid;
+      grid-template-columns: subgrid;
+      align-items: start;
+      row-gap: 0;
+      margin-bottom: 16px;
     }
-    /* Education/Award: empty first cell (no logo) */
-    .cv-entry::before { content:''; display:block; }
+    .cv-entry:last-child,
+    .exp-entry:last-child,
+    .exhibit-entry:last-child { margin-bottom: 0; }
 
-    .cv-entry-institution { font-size:0.82rem; font-weight:700; color:#0D0D11; line-height:1.4; }
-    .cv-entry-role        { font-size:0.82rem; font-weight:400; color:#0D0D11; }
-    .cv-entry-date        { font-size:0.75rem; color:#878788; text-align:right; white-space:nowrap; }
+    /* spacer (col 2 of cv-section = col 1 of subgrid) */
+    .cv-entry-spacer      { grid-column:1; }
+    .cv-entry-institution { grid-column:2; font-size:0.82rem; font-weight:700; color:#0D0D11; line-height:1.4; }
+    .cv-entry-role        { grid-column:3; font-size:0.82rem; font-weight:400; color:#0D0D11; }
+    .cv-entry-date        { grid-column:4; font-size:0.75rem; color:#878788; text-align:right; white-space:nowrap; }
 
-    /* Logo cell — responsive: scales with rem */
     .logo-cell {
-      width:2.2rem;
+      grid-column:1;
       display:flex;
+      justify-content:flex-end;
       align-items:flex-start;
-      padding-top:2px;
+      padding-top:3px;
     }
-    .logo-cell img {
-      display:block;
-      max-width:100%;
-      height:auto;
-    }
-    /* Per-logo height constraints */
-    .logo-hyundai { width:2rem;   height:auto; }
-    .logo-kia     { width:2.2rem; height:auto; }
-    .logo-lg      { width:1.6rem; height:auto; }
+    .logo-cell img { display:block; height:auto; }
+    .logo-hyundai { width:1.8rem; }
+    .logo-kia     { width:2.2rem; }
+    .logo-lg      { width:1.4rem; }
 
     .exp-org { font-size:0.82rem; font-weight:700; color:#0D0D11; line-height:1.4; }
     .exp-org .sub     { font-weight:400; font-size:0.75rem; color:#878788; display:block; }
-    .exp-org .project { font-size:0.75rem; color:#0D0D11; display:block; margin-top:6px; }
+    .exp-org .project { font-size:0.75rem; font-weight:400; color:#0D0D11; display:block; margin-top:6px; }
 
     .exp-bullets { margin-top:4px; list-style:none; display:flex; flex-direction:column; gap:2px; }
     .exp-bullets li {
@@ -231,11 +238,13 @@
         <div class="cv-section-label">EDUCATION</div>
         <div class="cv-section-body">
           <div class="cv-entry">
+            <div class="cv-entry-spacer"></div>
             <div class="cv-entry-institution">Korea National University of Arts</div>
             <div class="cv-entry-role">BA, Transportation Design</div>
             <div class="cv-entry-date">Feb. 2020. – Aug. 2027. (estimated)</div>
           </div>
           <div class="cv-entry">
+            <div class="cv-entry-spacer"></div>
             <div class="cv-entry-institution">Ansan Technical Highschool</div>
             <div class="cv-entry-role">highschool diploma, Industrial Design</div>
             <div class="cv-entry-date">Feb. 2016. – Feb. 2019.</div>
@@ -248,6 +257,7 @@
         <div class="cv-section-label">HONOR &amp; AWARD</div>
         <div class="cv-section-body">
           <div class="cv-entry">
+            <div class="cv-entry-spacer"></div>
             <div class="cv-entry-institution">Volvo Design Competition 2026</div>
             <div class="cv-entry-role">Shortlisted (Phase 1)</div>
             <div class="cv-entry-date">Mar. 2026.</div>

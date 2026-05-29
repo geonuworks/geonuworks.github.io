@@ -10,106 +10,111 @@
     @font-face { font-family:'Poppins'; src:url('source/fonts/Poppins-Bold.ttf') format('truetype'); font-weight:700; }
 
     *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
-    html, body { width:100%; height:100%; overflow:hidden; font-family:'Poppins',sans-serif; font-weight:400; }
+    html, body { width:100%; height:100%; overflow:hidden; font-family:'Poppins',sans-serif; font-weight:400; color:#0D0D11; }
 
-    /* ── FIXED HEADER (always on top, above everything) ── */
+    /* ── FIXED GLOBAL NAV ── */
     #global-nav {
-      position:fixed; top:0; left:0; right:0;
-      z-index:500;
+      position:fixed; top:0; left:0; right:0; z-index:500;
       display:flex; align-items:baseline;
       padding:28px 48px 0;
-      pointer-events:none; /* let clicks pass through to pages below */
+      pointer-events:none;
     }
     #global-nav * { pointer-events:auto; }
-    .nav-name  { font-size:0.95rem; font-weight:400; min-width:160px; color:#111; }
-    .nav-title { font-size:0.95rem; font-weight:400; min-width:220px; color:#111; }
-    .nav-year  { font-size:0.95rem; font-weight:400; flex:1; color:#111; }
+    .nav-name  { font-size:0.95rem; font-weight:400; width:220px; flex-shrink:0; color:#0D0D11; }
+    .nav-title { font-size:0.95rem; font-weight:400; color:#0D0D11; }
+    .nav-year  { font-size:0.95rem; font-weight:400; flex:1; padding-left:40px; color:#0D0D11; }
     .nav-links { display:flex; gap:40px; }
-    .nav-links a {
-      font-size:0.95rem; font-weight:400; color:#111;
-      text-decoration:none;
-    }
+    .nav-links a { font-size:0.95rem; font-weight:400; color:#0D0D11; text-decoration:none; }
     .nav-links a.active { text-decoration:underline; text-underline-offset:3px; }
     .nav-links a:hover  { text-decoration:underline; text-underline-offset:3px; }
+    #global-nav.on-sketchbook .nav-name,
+    #global-nav.on-sketchbook .nav-title,
+    #global-nav.on-sketchbook .nav-year,
+    #global-nav.on-sketchbook .nav-links a { color:#e8e8e8; }
 
-    /* Nav text turns light on sketch page */
-    #global-nav.on-sketches .nav-name,
-    #global-nav.on-sketches .nav-title,
-    #global-nav.on-sketches .nav-year,
-    #global-nav.on-sketches .nav-links a { color:#e8e8e8; }
-
-    /* ── PAGES CONTAINER ── */
+    /* ── PAGE SCROLL ── */
     #scroll-container { position:fixed; inset:0; overflow:hidden; }
-
     #pages-wrapper {
-      width:100%;
+      width:100%; 
       transition: transform 0.85s cubic-bezier(0.76,0,0.24,1);
       will-change: transform;
     }
-
     .page { width:100%; height:100vh; position:relative; }
 
-    /* ── PAGE 1: PROJECTS ── */
-    #page-projects {
-      background:#fff;
-      overflow-y:auto;
-      overflow-x:hidden;
-    }
+    /* ── PAGE 1: ARCHIVE ── */
+    #page-archive { background:#fff; display:flex; }
 
-    /* ── PAGE 2: SKETCHES ── */
-    #page-sketches {
-      background-color:#b8b8b8;
-      background-image:radial-gradient(circle, #999 1px, transparent 1px);
-      background-size:28px 28px;
+    /* Left sidebar */
+    .archive-sidebar {
+      width:220px;
+      flex-shrink:0;
+      padding:110px 0 48px 48px;
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .project-nav-item {
+      font-size:0.88rem;
+      font-weight:400;
+      color:#878788;
+      cursor:pointer;
+      line-height:1.5;
+      transition:color 0.2s;
+      white-space:nowrap;
+    }
+    .project-nav-item strong { font-weight:700; }
+    .project-nav-item.active { color:#0D0D11; text-decoration:underline; text-underline-offset:3px; }
+    .project-nav-item:hover { color:#0D0D11; }
+
+    /* Right content area */
+    .archive-content {
+      flex:1;
+      padding:96px 48px 48px;
+      display:flex;
+      flex-direction:column;
       overflow:hidden;
     }
+
+    /* Cover image — fixed aspect ratio so all projects show same size */
+    .project-cover-wrap {
+      width:100%;
+      aspect-ratio:16/7;
+      overflow:hidden;
+      flex-shrink:0;
+      position:relative;
+    }
+    .project-cover-img {
+      width:100%; height:100%;
+      object-fit:cover;
+      display:block;
+      cursor:pointer;
+      transition:opacity 0.3s ease;
+    }
+    .project-cover-img:hover { opacity:0.92; }
+
+    /* Meta row */
+    .project-meta {
+      display:grid;
+      grid-template-columns: 80px 1fr 1fr 1fr;
+      padding-top:14px;
+      flex-shrink:0;
+    }
+    .meta-num     { font-size:0.82rem; color:#0D0D11; }
+    .meta-context { font-size:0.82rem; color:#0D0D11; }
+    .meta-tags    { font-size:0.82rem; color:#0D0D11; display:flex; flex-direction:column; gap:2px; }
+    .meta-date    { font-size:0.82rem; color:#0D0D11; text-align:right; }
+
+    /* ── PAGE 2: SKETCHBOOK (iframe) ── */
+    #page-sketchbook { background:#b8b8b8; }
 
     /* ── PAGE 3: ABOUT ── */
     #page-about { background:#fff; }
     #about-iframe { position:absolute; inset:0; width:100%; height:100%; border:none; }
 
-    /* ── PROJECT LIST ── */
-    .project-list {
-      padding:80px 48px 80px; /* top pad accounts for fixed nav */
-      display:flex;
-      flex-direction:column;
-      gap:80px;
-    }
-
-    .project-cover {
-      width:100%;
-      aspect-ratio:16/7;
-      overflow:hidden;
-      cursor:pointer;
-    }
-    .project-cover img {
-      width:100%; height:100%;
-      object-fit:cover; display:block;
-      transition:opacity 0.3s ease;
-    }
-    .project-cover:hover img { opacity:0.9; }
-
-    .project-meta {
-      display:grid;
-      grid-template-columns: 80px 1fr 1fr 1fr 1fr;
-      padding-top:14px;
-      align-items:start;
-    }
-    .project-num   { font-size:0.82rem; color:#111; }
-    .project-title { font-size:0.82rem; color:#111; }
-    .project-title strong { font-weight:700; }
-    .project-context { font-size:0.82rem; color:#111; }
-    .project-tags {
-      font-size:0.82rem; color:#111;
-      display:flex; flex-direction:column; gap:2px;
-    }
-    .project-date { font-size:0.82rem; color:#111; text-align:right; }
-
     /* ── LIGHTBOX ── */
     #lightbox {
       position:fixed; inset:0; z-index:1000;
-      background:rgba(0,0,0,0);
-      display:none;
+      background:rgba(0,0,0,0); display:none;
       overflow-y:auto;
       transition:background 0.4s ease;
     }
@@ -131,24 +136,6 @@
     }
     #lightbox.visible #lightbox-close { opacity:1; }
     #lightbox-close:hover { text-decoration:underline; }
-
-    /* ── SKETCH BOARD ── */
-    #board { position:absolute; inset:0; user-select:none; }
-    .sketch {
-      position:absolute; background:#fff;
-      box-shadow:0 4px 24px rgba(0,0,0,0.18);
-      cursor:grab; will-change:left,top;
-      transition:box-shadow 0.25s ease;
-    }
-    .sketch.dragging {
-      cursor:grabbing;
-      box-shadow:0 12px 40px rgba(0,0,0,0.32);
-    }
-    .sketch img {
-      display:block; width:100%; height:100%;
-      object-fit:fill; pointer-events:none;
-      user-select:none; -webkit-user-drag:none;
-    }
   </style>
 </head>
 <body>
@@ -156,43 +143,54 @@
 <!-- FIXED NAV -->
 <nav id="global-nav">
   <span class="nav-name">Geonu Jo</span>
-  <span class="nav-title">Mobility Design Portfolio</span>
+  <span class="nav-title">Motions in Preferable Future</span>
   <span class="nav-year">2026</span>
   <div class="nav-links">
     <a href="#" id="nav-archive" class="active">Archive</a>
+    <a href="#" id="nav-sketchbook">Sketchbook</a>
     <a href="#" id="nav-about">About</a>
   </div>
 </nav>
 
-<!-- PAGES -->
 <div id="scroll-container">
   <div id="pages-wrapper">
 
-    <!-- PAGE 1: PROJECTS -->
-    <div class="page" id="page-projects">
-      <div class="project-list">
-        <div class="project-item">
-          <div class="project-cover" data-project="volvo-bloom">
-            <img src="source/projects/volvo-bloom/images/00.jpg" alt="Volvo BLOOM*" />
-          </div>
-          <div class="project-meta">
-            <span class="project-num">01</span>
-            <span class="project-title">Volvo <strong>BLOOM*</strong></span>
-            <span class="project-context">Volvo Design Competition 2026</span>
-            <span class="project-tags">
-              <span>Exterior Design</span>
-              <span>Interior Design</span>
-              <span>3D Modeling</span>
-            </span>
-            <span class="project-date">Mar.2026. (1 month)</span>
-          </div>
+    <!-- PAGE 1: ARCHIVE -->
+    <div class="page" id="page-archive">
+      <aside class="archive-sidebar">
+        <div class="project-nav-item active" data-key="volvo-bloom">
+          Volvo <strong>BLOOM*</strong>
+        </div>
+        <div class="project-nav-item" data-key="hyundai-stormgazer">
+          HYUNDAI <strong>STORMGAZER</strong>
+        </div>
+        <div class="project-nav-item" data-key="polestar-play">
+          Polestar <strong>PLAY!</strong>
+        </div>
+        <div class="project-nav-item" data-key="kia-gaia">
+          KIA <strong>GAIA</strong>
+        </div>
+        <div class="project-nav-item" data-key="side-projects">
+          Side Projects
+        </div>
+      </aside>
+
+      <div class="archive-content">
+        <div class="project-cover-wrap">
+          <img class="project-cover-img" id="cover-img" src="" alt="" />
+        </div>
+        <div class="project-meta">
+          <span class="meta-num" id="meta-num"></span>
+          <span class="meta-context" id="meta-context"></span>
+          <span class="meta-tags" id="meta-tags"></span>
+          <span class="meta-date" id="meta-date"></span>
         </div>
       </div>
     </div>
 
-    <!-- PAGE 2: SKETCHES -->
-    <div class="page" id="page-sketches">
-      <div id="board"></div>
+    <!-- PAGE 2: SKETCHBOOK -->
+    <div class="page" id="page-sketchbook">
+      <iframe src="sketchbook.html" style="position:absolute;inset:0;width:100%;height:100%;border:none;" title="Sketchbook"></iframe>
     </div>
 
     <!-- PAGE 3: ABOUT -->
@@ -210,85 +208,142 @@
 </div>
 
 <script>
-/* ═══════════════════════════════════
+/* ═══════════════════════════════
+   PROJECT DATA
+═══════════════════════════════ */
+const PROJECTS = {
+  'volvo-bloom': {
+    num:'01', context:'Volvo Design Competition 2026',
+    tags:['Exterior Design','Interior Design','3D Modeling'],
+    date:'Mar. 2026. (1 month)',
+    cover:'source/projects/volvo-bloom/00.jpg',
+    path:'source/projects/volvo-bloom/',
+    images: Array.from({length:13}, (_,i) => String(i+1).padStart(2,'0')+'.jpg')
+  },
+  'hyundai-stormgazer': {
+    num:'02', context:'HYUNDAI industry-academic cooperation',
+    tags:['Exterior Design','3D Modeling'],
+    date:'Jul. 2025. - Nov. 2025. (4 months)',
+    cover:'source/projects/hyundai-stormgazer/00.jpg',
+    path:'source/projects/hyundai-stormgazer/',
+    images: Array.from({length:13}, (_,i) => String(i+1).padStart(2,'0')+'.jpg')
+  },
+  'polestar-play': {
+    num:'03', context:'Polestar Design Contest 2024',
+    tags:['Exterior Design','Interior Design', '3D Modeling'],
+    date:'Apr. 2024. - May. 2024. (2 months)',
+    cover:'source/projects/polestar-play/00.jpg',
+    path:'source/projects/polestar-play/',
+    images: Array.from({length:12}, (_,i) => String(i+1).padStart(2,'0')+'.jpg')
+  },
+  'kia-gaia': {
+    num:'04', context:'BA Thesis Project (wip)',
+    tags:['Exterior Design', 'Interior Design', '3D Modeling'],
+    date:'Apr. 2026. - Dec. 2026. (9 months)',
+    cover:'source/projects/kia-gaia/00.jpg',
+    path:'source/projects/kia-gaia/',
+    images: Array.from({length:8}, (_,i) => String(i+1).padStart(2,'0')+'.jpg')
+  },
+  'side-projects': {
+    num:'05', context:'Various',
+    tags:['Sketching','Modeling'],
+    date:'2024. –',
+    cover:'source/projects/side-projects/00.jpg',
+    path:'source/projects/side-projects/',
+    images: ['01.jpg']
+  }
+};
+
+let activeKey = 'volvo-bloom';
+
+function selectProject(key) {
+  const p = PROJECTS[key];
+  if (!p) return;
+  activeKey = key;
+
+  // update sidebar
+  document.querySelectorAll('.project-nav-item').forEach(el => {
+    const isActive = el.dataset.key === key;
+    el.classList.toggle('active', isActive);
+  });
+
+  // update cover
+  const img = document.getElementById('cover-img');
+  img.style.opacity = '0';
+  img.src = p.cover;
+  img.onload = () => { img.style.transition='opacity 0.35s ease'; img.style.opacity='1'; };
+  img.onerror = () => { img.style.opacity='1'; };
+
+  // update meta
+  document.getElementById('meta-num').textContent     = p.num;
+  document.getElementById('meta-context').textContent = p.context;
+  document.getElementById('meta-date').textContent    = p.date;
+  const tagsEl = document.getElementById('meta-tags');
+  tagsEl.innerHTML = p.tags.map(t => `<span>${t}</span>`).join('');
+}
+
+// Sidebar clicks
+document.querySelectorAll('.project-nav-item').forEach(el => {
+  el.addEventListener('click', () => selectProject(el.dataset.key));
+});
+
+// Init
+selectProject('volvo-bloom');
+
+// Cover click → lightbox
+document.getElementById('cover-img').addEventListener('click', () => {
+  const p = PROJECTS[activeKey];
+  openLightbox(p.path, p.images);
+});
+
+/* ═══════════════════════════════
    PAGE SNAPPING
-═══════════════════════════════════ */
-const pagesWrapper  = document.getElementById('pages-wrapper');
-const projectPage   = document.getElementById('page-projects');
-const globalNav     = document.getElementById('global-nav');
+═══════════════════════════════ */
+const pagesWrapper = document.getElementById('pages-wrapper');
+const globalNav    = document.getElementById('global-nav');
+const archivePage  = document.getElementById('page-archive');
+let currentPage = 0;
+let isAnimating = false;
+const ANIM_MS   = 900;
 
-let currentPage  = 0;
-let isAnimating  = false;
-
-const PAGE_COUNT = 3;
-const ANIM_MS    = 900; // must match CSS transition duration
-
-function goToPage(n, force) {
-  n = Math.max(0, Math.min(PAGE_COUNT - 1, n));
-  if (!force && (n === currentPage || isAnimating)) return;
+function goToPage(n) {
+  n = Math.max(0, Math.min(2, n));
+  if (n === currentPage || isAnimating) return;
   currentPage = n;
   isAnimating = true;
-
-  const pct = n === 0 ? 0 : n === 1 ? -100 : -200;
-  pagesWrapper.style.transform = `translateY(${pct}vh)`;
-
-  // Update nav active state
-  document.getElementById('nav-archive').classList.toggle('active', n < 2);
-  document.getElementById('nav-about').classList.toggle('active', n === 2);
-
-  // Toggle nav colour for sketch page
-  globalNav.classList.toggle('on-sketches', n === 1);
-
+  pagesWrapper.style.transform = `translateY(${n * -100}vh)`;
+  document.getElementById('nav-archive').classList.toggle('active',    n === 0);
+  document.getElementById('nav-sketchbook').classList.toggle('active', n === 1);
+  document.getElementById('nav-about').classList.toggle('active',      n === 2);
+  globalNav.classList.toggle('on-sketchbook', n === 1);
   setTimeout(() => { isAnimating = false; }, ANIM_MS);
 }
 
-// Nav clicks
-document.getElementById('nav-archive').addEventListener('click', e => { e.preventDefault(); goToPage(0); });
-document.getElementById('nav-about').addEventListener('click',   e => { e.preventDefault(); goToPage(2); });
+document.getElementById('nav-archive').addEventListener('click',    e => { e.preventDefault(); goToPage(0); });
+document.getElementById('nav-sketchbook').addEventListener('click', e => { e.preventDefault(); goToPage(1); });
+document.getElementById('nav-about').addEventListener('click',      e => { e.preventDefault(); goToPage(2); });
 
-/* ── Wheel handling ──
-   Strategy: accumulate deltaY with debounce.
-   Only fire once per distinct scroll gesture. */
-let wheelAccum  = 0;
-let wheelTimer  = null;
+let wheelAccum = 0, wheelTimer = null;
 const WHEEL_THRESHOLD = 50;
 
 window.addEventListener('wheel', (e) => {
-  // Lightbox intercepts scroll
   if (document.getElementById('lightbox').classList.contains('visible')) return;
-
-  // On project page: let internal scroll happen first
   if (currentPage === 0) {
-    const atBottom = projectPage.scrollTop + projectPage.clientHeight >= projectPage.scrollHeight - 4;
-    const atTop    = projectPage.scrollTop <= 0;
-    if (e.deltaY > 0 && !atBottom) return; // still scrolling inside
+    const atBottom = archivePage.scrollTop + archivePage.clientHeight >= archivePage.scrollHeight - 4;
+    const atTop    = archivePage.scrollTop <= 0;
+    if (e.deltaY > 0 && !atBottom) return;
     if (e.deltaY < 0 && !atTop)    return;
-    if (e.deltaY < 0 && atTop)     return; // already page 0, nowhere to go up
+    if (e.deltaY < 0 && atTop)     return;
   }
-
-  // On about page (iframe): detect edge via flag sent by iframe postMessage
-  // For now rely on accumulation debounce
-
   wheelAccum += e.deltaY;
   clearTimeout(wheelTimer);
   wheelTimer = setTimeout(() => { wheelAccum = 0; }, 200);
-
   if (Math.abs(wheelAccum) < WHEEL_THRESHOLD) return;
-
   const dir = wheelAccum > 0 ? 1 : -1;
   wheelAccum = 0;
-  clearTimeout(wheelTimer);
-
   if (!isAnimating) goToPage(currentPage + dir);
-}, { passive: true });
+}, { passive:true });
 
-/* ── Receive messages from about.html iframe ── */
-window.addEventListener('message', (e) => {
-  if (e.data === 'scroll-up-edge'   && !isAnimating) goToPage(currentPage - 1);
-  if (e.data === 'scroll-down-edge' && !isAnimating) goToPage(currentPage + 1);
-});
-
-/* ── Touch swipe ── */
 let touchY0 = null;
 window.addEventListener('touchstart', e => { touchY0 = e.touches[0].clientY; }, {passive:true});
 window.addEventListener('touchend', e => {
@@ -299,24 +354,21 @@ window.addEventListener('touchend', e => {
   goToPage(currentPage + (dy > 0 ? 1 : -1));
 }, {passive:true});
 
-/* ═══════════════════════════════════
-   LIGHTBOX
-═══════════════════════════════════ */
-const PROJECTS = {
-  'volvo-bloom': {
-    path:   'source/projects/volvo-bloom/images/',
-    images: Array.from({length:16}, (_,i) => String(i+1).padStart(2,'0') + '.jpg')
-  }
-};
+window.addEventListener('message', (e) => {
+  if (e.data === 'scroll-up-edge'   && !isAnimating) goToPage(currentPage - 1);
+  if (e.data === 'scroll-down-edge' && !isAnimating) goToPage(currentPage + 1);
+});
 
-function openLightbox(key) {
-  const proj = PROJECTS[key]; if (!proj) return;
+/* ═══════════════════════════════
+   LIGHTBOX
+═══════════════════════════════ */
+function openLightbox(path, images) {
   const lb    = document.getElementById('lightbox');
   const inner = document.getElementById('lightbox-inner');
   inner.innerHTML = '';
-  proj.images.forEach(f => {
+  images.forEach(f => {
     const img = document.createElement('img');
-    img.src = proj.path + f; img.alt = f;
+    img.src = path + f; img.alt = f;
     inner.appendChild(img);
   });
   lb.style.display = 'block';
@@ -327,80 +379,14 @@ function openLightbox(key) {
 function closeLightbox() {
   const lb = document.getElementById('lightbox');
   lb.classList.remove('visible');
-  setTimeout(() => {
-    lb.style.display = 'none';
-    document.getElementById('lightbox-inner').innerHTML = '';
-  }, 420);
+  setTimeout(() => { lb.style.display='none'; document.getElementById('lightbox-inner').innerHTML=''; }, 420);
 }
 
-document.querySelectorAll('.project-cover').forEach(el =>
-  el.addEventListener('click', () => openLightbox(el.dataset.project))
-);
 document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
-document.getElementById('lightbox').addEventListener('click', e => {
-  if (e.target === e.currentTarget) closeLightbox();
-});
+document.getElementById('lightbox').addEventListener('click', e => { if (e.target === e.currentTarget) closeLightbox(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 
-/* ═══════════════════════════════════
-   SKETCH BOARD
-═══════════════════════════════════ */
-const SKETCH_FILES = [
-  'source/sketches/01.jpg','source/sketches/02.jpg','source/sketches/03.jpg',
-  'source/sketches/04.jpg','source/sketches/05.jpg','source/sketches/06.jpg',
-  'source/sketches/07.jpg','source/sketches/08.jpg','source/sketches/09.jpg',
-  'source/sketches/10.jpg',
-];
-const SKETCH_W = 380; // fixed width for all sketches
-const board = document.getElementById('board');
-let zTop = 10;
-const rand = (a,b) => Math.random()*(b-a)+a;
 
-function placeSketch(src, idx) {
-  const img = new Image();
-  img.src = src;
-  const place = () => {
-    const br = document.getElementById('page-sketches').getBoundingClientRect();
-    const w  = SKETCH_W;
-    const h  = w / (img.naturalWidth / img.naturalHeight);
-    const x  = rand(br.width*0.05,  br.width*0.75)  - w/2 + br.width*0.12;
-    const y  = rand(br.height*0.08, br.height*0.72) - h/2 + br.height*0.1;
-
-    const el = document.createElement('div');
-    el.className = 'sketch';
-    el.style.cssText = `width:${w}px;height:${h}px;left:${x}px;top:${y}px;z-index:${idx+1};`;
-    img.alt=''; img.draggable=false;
-    img.style.cssText='display:block;width:100%;height:100%;object-fit:fill;pointer-events:none;user-select:none;-webkit-user-drag:none;';
-    el.appendChild(img);
-    board.appendChild(el);
-    makeDraggable(el);
-  };
-  if (img.complete && img.naturalWidth) place();
-  else { img.onload = place; img.onerror = place; }
-}
-
-SKETCH_FILES.forEach((s,i) => setTimeout(() => placeSketch(s,i), i*60));
-
-function makeDraggable(el) {
-  let active=false, sx,sy,ox,oy;
-  el.addEventListener('pointerdown', e => {
-    if (e.button !== 0) return;
-    e.preventDefault(); e.stopPropagation();
-    el.setPointerCapture(e.pointerId);
-    el.style.zIndex = ++zTop;
-    active=true; sx=e.clientX; sy=e.clientY;
-    ox=parseFloat(el.style.left); oy=parseFloat(el.style.top);
-    el.classList.add('dragging');
-  });
-  el.addEventListener('pointermove', e => {
-    if (!active) return;
-    el.style.left = (ox + e.clientX - sx) + 'px';
-    el.style.top  = (oy + e.clientY - sy) + 'px';
-  });
-  const end = () => { active=false; el.classList.remove('dragging'); };
-  el.addEventListener('pointerup',     end);
-  el.addEventListener('pointercancel', end);
-}
 </script>
 </body>
 </html>

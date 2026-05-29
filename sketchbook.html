@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Geonu Jo — Sketchbook</title>
+  <style>
+    @font-face { font-family:'Poppins'; src:url('source/fonts/Poppins-Regular.ttf') format('truetype'); font-weight:400; }
+    @font-face { font-family:'Poppins'; src:url('source/fonts/Poppins-Medium.ttf') format('truetype'); font-weight:500; }
+    @font-face { font-family:'Poppins'; src:url('source/fonts/Poppins-Bold.ttf') format('truetype'); font-weight:700; }
+
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    html, body { width:100%; height:100%; overflow:hidden; font-family:'Poppins',sans-serif; }
+
+    body {
+      background-color:#b8b8b8;
+      background-image:radial-gradient(circle, #999 1px, transparent 1px);
+      background-size:28px 28px;
+    }
+
+    #board { position:absolute; inset:0; user-select:none; }
+
+    .sketch {
+      position:absolute; background:#fff;
+      box-shadow:0 4px 24px rgba(0,0,0,0.18);
+      cursor:grab; will-change:left,top;
+      transition:box-shadow 0.25s ease;
+    }
+    .sketch.dragging { cursor:grabbing; box-shadow:0 12px 40px rgba(0,0,0,0.32); }
+    .sketch img {
+      display:block; width:100%; height:100%;
+      object-fit:fill; pointer-events:none;
+      user-select:none; -webkit-user-drag:none;
+    }
+  </style>
+</head>
+<body>
+<div id="board"></div>
+
+<script>
+const SKETCH_FILES = [
+  'source/sketches/01.jpg','source/sketches/02.jpg','source/sketches/03.jpg',
+  'source/sketches/04.jpg','source/sketches/05.jpg','source/sketches/06.jpg',
+  'source/sketches/07.jpg','source/sketches/08.jpg','source/sketches/09.jpg',
+  'source/sketches/10.jpg',
+];
+const SKETCH_W = 380;
+const board = document.getElementById('board');
+let zTop = 10;
+const rand = (a,b) => Math.random()*(b-a)+a;
+
+function placeSketch(src, idx) {
+  const img = new Image(); img.src = src;
+  const place = () => {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const w  = SKETCH_W;
+    const h  = img.naturalWidth ? w/(img.naturalWidth/img.naturalHeight) : w/1.6;
+
+    /* Random position centered on screen, spread across full viewport */
+    /* clamp so sketch stays fully inside */
+    const x = Math.max(0, Math.min(vw - w, rand(0, vw - w)));
+    const y = Math.max(0, Math.min(vh - h, rand(0, vh - h)));
+
+    const el = document.createElement('div');
+    el.className = 'sketch';
+    el.style.cssText = `width:${w}px;height:${h}px;left:${x}px;top:${y}px;z-index:${idx+1};`;
+    img.alt=''; img.draggable=false;
+    img.style.cssText='display:block;width:100%;height:100%;object-fit:fill;pointer-events:none;user-select:none;-webkit-user-drag:none;';
+    el.appendChild(img); board.appendChild(el); makeDraggable(el);
+  };
+  if (img.complete && img.naturalWidth) place();
+  else { img.onload=place; img.onerror=place; }
+}
+SKETCH_FILES.forEach((s,i) => setTimeout(()=>placeSketch(s,i), i*60));
+
+function makeDraggable(el) {
+  let active=false, sx,sy,ox,oy;
+  el.addEventListener('pointerdown', e => {
+    if (e.button!==0) return;
+    e.preventDefault(); e.stopPropagation();
+    el.setPointerCapture(e.pointerId);
+    el.style.zIndex = ++zTop;
+    active=true; sx=e.clientX; sy=e.clientY;
+    ox=parseFloat(el.style.left); oy=parseFloat(el.style.top);
+    el.classList.add('dragging');
+  });
+  el.addEventListener('pointermove', e => {
+    if (!active) return;
+    el.style.left=(ox+e.clientX-sx)+'px';
+    el.style.top =(oy+e.clientY-sy)+'px';
+  });
+  const end=()=>{ active=false; el.classList.remove('dragging'); };
+  el.addEventListener('pointerup', end);
+  el.addEventListener('pointercancel', end);
+}
+
+/* notify parent for page scroll */
+let wheelAccum=0, wheelTimer=null;
+window.addEventListener('wheel', e => {
+  wheelAccum += e.deltaY;
+  clearTimeout(wheelTimer);
+  wheelTimer = setTimeout(()=>{ wheelAccum=0; }, 200);
+  if (Math.abs(wheelAccum) < 50) return;
+  const dir = wheelAccum > 0 ? 1 : -1;
+  wheelAccum = 0;
+  if (dir < 0) window.parent.postMessage('scroll-up-edge',   '*');
+  if (dir > 0) window.parent.postMessage('scroll-down-edge', '*');
+}, {passive:true});
+</script>
+</body>
+</html>
