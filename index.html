@@ -20,13 +20,20 @@
       pointer-events:none;
     }
     #global-nav * { pointer-events:auto; }
-    .nav-name  { font-size:0.95rem; font-weight:400; width:220px; flex-shrink:0; color:#0D0D11; }
-    .nav-title { font-size:0.95rem; font-weight:400; color:#0D0D11; }
-    .nav-year  { font-size:0.95rem; font-weight:400; flex:1; padding-left:40px; color:#0D0D11; }
+    
+    /* 아래 각 요소에 transition을 추가하여 
+       검은색(#0D0D11) ↔ 흰색 계열(#e8e8e8) 전환이 부드럽게 일어나도록 합니다.
+    */
+    .nav-name  { font-size:0.95rem; font-weight:400; width:220px; flex-shrink:0; color:#0D0D11; transition: color 0.5s ease; }
+    .nav-title { font-size:0.95rem; font-weight:400; color:#0D0D11; transition: color 0.5s ease; }
+    .nav-year  { font-size:0.95rem; font-weight:400; flex:1; padding-left:40px; color:#0D0D11; transition: color 0.5s ease; }
+    
     .nav-links { display:flex; gap:40px; }
-    .nav-links a { font-size:0.95rem; font-weight:400; color:#0D0D11; text-decoration:none; }
+    .nav-links a { font-size:0.95rem; font-weight:400; color:#0D0D11; text-decoration:none; transition: color 0.5s ease; } /* 여기도 추가 */
+    
     .nav-links a.active { text-decoration:underline; text-underline-offset:3px; }
     .nav-links a:hover  { text-decoration:underline; text-underline-offset:3px; }
+    
     #global-nav.on-sketchbook .nav-name,
     #global-nav.on-sketchbook .nav-title,
     #global-nav.on-sketchbook .nav-year,
@@ -75,22 +82,45 @@
       overflow:hidden;
     }
 
-    /* Cover image — fixed aspect ratio so all projects show same size */
-    .project-cover-wrap {
-      width:100%;
-      aspect-ratio:16/7;
-      overflow:hidden;
-      flex-shrink:0;
-      position:relative;
+    /* [수정] 여러 레이어의 커버 이미지가 배치될 컨테이너 크기 스타일 지정 */
+    #archive-cover {
+      position: relative;
+      width: 100%;          /* 55%에서 100%로 변경하여 화면에 꽉 차게 만듭니다 */
+      aspect-ratio: 16/7;   /* 원본 레이아웃의 황금 비율을 그대로 유지합니다 */
+      box-shadow: 0 12px 64px rgba(0,0,0,0.12);
+      background: transparent;
+      flex-shrink: 0;
+      cursor: pointer;
     }
-    .project-cover-img {
-      width:100%; height:100%;
-      object-fit:cover;
-      display:block;
-      cursor:pointer;
-      transition:opacity 0.3s ease;
+
+    /* [추가] 적층 레이어 개별 스타일 선언 */
+    .cover-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0; /* 기본값은 숨김 */
+      z-index: 1;
+      transition: opacity 0.6s ease-in-out; /* 페이드 아웃/인 속도 */
     }
-    .project-cover-img:hover { opacity:0.92; }
+
+    .cover-layer img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: opacity 0.3s ease;
+    }
+
+    /* [추가] 최상단 레이어로 활성화될 때의 상태 설정 */
+    .cover-layer.active {
+      opacity: 1;
+      z-index: 3; /* 대기 중인 레이어보다 무조건 위에 위치 */
+    }
+
+    .cover-layer img:hover { 
+      opacity: 0.88; /* 호버 시 원본 디자인의 투명도 효과 상속 */
+    }
 
     /* Meta row */
     .project-meta {
@@ -175,12 +205,8 @@
       </aside>
 
       <div class="archive-content">
-        <div class="project-cover-wrap">
-          <picture id="cover-picture">
-            <source id="cover-source" srcset="" type="image/webp">
-            <img class="project-cover-img" id="cover-img" src="" alt="" />
-          </picture>
-        </div>
+        <div id="archive-cover"></div>
+        
         <div class="project-meta">
           <span class="meta-num" id="meta-num"></span>
           <span class="meta-context" id="meta-context"></span>
@@ -249,11 +275,34 @@ const PROJECTS = {
   }
 };
 
-let activeKey = 'volvo-bloom';
+let activeKey = ''; // 초기 상태 빈 값 설정으로 첫 로드 분기 확보
+let lastActiveKey = null; // 직전 프로젝트 추적용 변수
 
+// [추가] PROJECTS 배열 기반으로 모든 썸네일 레이어를 초기에 겹쳐 그리는 함수
+function initCoverLayers() {
+  const container = document.getElementById('archive-cover');
+  container.innerHTML = '';
+
+  Object.keys(PROJECTS).forEach(key => {
+    const p = PROJECTS[key];
+    const picture = document.createElement('picture');
+    picture.className = 'cover-layer';
+    picture.dataset.coverKey = key;
+
+    picture.innerHTML = `
+      <source srcset="${p.path}webp/00.webp" type="image/webp">
+      <img src="${p.path}jpg/00.jpg" alt="${p.num} Cover">
+    `;
+    container.appendChild(picture);
+  });
+}
+
+// [수정] 다중 레이어 적층 교체형으로 로직 완전히 최적화
 function selectProject(key) {
   const p = PROJECTS[key];
-  if (!p) return;
+  if (!p || activeKey === key) return;
+  
+  lastActiveKey = activeKey;
   activeKey = key;
 
   // update sidebar
@@ -262,18 +311,36 @@ function selectProject(key) {
     el.classList.toggle('active', isActive);
   });
 
-  // ── 오직 커버 이미지(썸네일) 경로만 변경 폴더 구조에 맞게 분기 수정 ──
-  const source = document.getElementById('cover-source');
-  const img = document.getElementById('cover-img');
-  
-  img.style.opacity = '0';
-  
-  // 변경된 새 폴더 분기 경로 지정 (`00.jpg` 및 `00.webp`)
-  source.srcset = p.path + 'webp/00.webp';
-  img.src = p.path + 'jpg/00.jpg';
-  
-  img.onload = () => { img.style.transition='opacity 0.35s ease'; img.style.opacity='1'; };
-  img.onerror = () => { img.style.opacity='1'; };
+  // 레이어 스위칭 핵심 로직
+  const allLayers = document.querySelectorAll('.cover-layer');
+  const nextLayer = document.querySelector(`.cover-layer[data-cover-key="${key}"]`);
+  const prevLayer = lastActiveKey ? document.querySelector(`.cover-layer[data-cover-key="${lastActiveKey}"]`) : null;
+
+  if (nextLayer) {
+    // 1. 혼선 방지를 위해 타 레이어들의 z-index 초기화 (이전 레이어 제외)
+    allLayers.forEach(layer => {
+      if (layer !== prevLayer) layer.style.zIndex = '1';
+    });
+
+    // 2. 이전 활성 레이어는 새 레이어가 페이드인 될 때까지 바로 밑(z-index: 2)에서 대기 유지
+    if (prevLayer) {
+      prevLayer.style.zIndex = '2';
+    }
+
+    // 3. 새 레이어를 맨 위(z-index: 3)로 올리고 active 부여해 투명도 0 -> 1 페이드인 시작
+    nextLayer.style.zIndex = '3';
+    nextLayer.classList.add('active');
+
+    // 4. 애니메이션 완료(600ms) 후 밑에 깔려 있던 예전 레이어를 안전하게 숨김(0%)
+    if (prevLayer && prevLayer !== nextLayer) {
+      setTimeout(() => {
+        if (activeKey === key) { 
+          prevLayer.classList.remove('active');
+          prevLayer.style.zIndex = '1';
+        }
+      }, 600); // CSS transition 타임과 동일하게 세팅
+    }
+  }
 
   // update meta
   document.getElementById('meta-num').textContent     = p.num;
@@ -288,14 +355,15 @@ document.querySelectorAll('.project-nav-item').forEach(el => {
   el.addEventListener('click', () => selectProject(el.dataset.key));
 });
 
-// Init
+// [수정] 뼈대를 먼저 그린 후 첫 번째 프로젝트를 로드하도록 실행 순서 고정
+initCoverLayers();
 selectProject('volvo-bloom');
 
-// Cover click → lightbox
-document.getElementById('cover-img').addEventListener('click', () => {
+// [수정] 단일 요소 id 감지 대신 컨테이너 클릭 및 위임 처리로 유연한 라이트박스 오픈 구현
+document.getElementById('archive-cover').addEventListener('click', () => {
   if (activeKey === 'kia-gaia') return;
   const p = PROJECTS[activeKey];
-  openLightbox(p.path, p.images, p.vimeo || null);
+  if (p) openLightbox(p.path, p.images, p.vimeo || null);
 });
 
 /* ═══════════════════════════════
@@ -378,6 +446,23 @@ window.addEventListener('message', (e) => {
     }
   }
 });
+
+function preloadProjectCovers() {
+  Object.keys(PROJECTS).forEach(key => {
+    const p = PROJECTS[key];
+    
+    // 1. WebP 커버 이미지 프리로드
+    const imgWebp = new Image();
+    imgWebp.src = p.path + 'webp/00.webp';
+    
+    // 2. JPG 커버 이미지 프리로드
+    const imgJpg = new Image();
+    imgJpg.src = p.path + 'jpg/00.jpg';
+  });
+}
+
+// Init 단계에서 프리로드 실행
+preloadProjectCovers();
 
 /* ═══════════════════════════════
    LIGHTBOX (WebP 우선 적용 버전)
