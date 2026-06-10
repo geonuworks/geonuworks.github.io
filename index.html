@@ -357,8 +357,26 @@ window.addEventListener('touchend', e => {
 }, {passive:true});
 
 window.addEventListener('message', (e) => {
+  // 1. 기존 스크롤 엣지 신호 처리
   if (e.data === 'scroll-up-edge'   && !isAnimating) goToPage(currentPage - 1);
   if (e.data === 'scroll-down-edge' && !isAnimating) goToPage(currentPage + 1);
+
+  // 2. [추가] Sketchbook으로부터 라이트박스 오픈 신호 수신 처리
+  if (e.data && e.data.type === 'open-project-lightbox') {
+    const targetKey = e.data.key;
+    const p = PROJECTS[targetKey];
+    
+    if (p) {
+      // 해당 프로젝트 선택 (커버 및 메타 정보 업데이트)
+      selectProject(targetKey);
+      
+      // 기아 GAIA(WIP)는 원본 코드 요구사항에 따라 클릭 제한이 걸려있으므로 예외 처리
+      if (targetKey === 'kia-gaia') return; 
+      
+      // 라이트박스 즉시 열기
+      openLightbox(p.path, p.images, p.vimeo || null);
+    }
+  }
 });
 
 /* ═══════════════════════════════
