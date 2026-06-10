@@ -96,12 +96,7 @@
 <div id="board"></div>
 
 <script>
-const SKETCH_FILES = [
-  'source/sketches/01.jpg','source/sketches/02.jpg','source/sketches/03.jpg',
-  'source/sketches/04.jpg','source/sketches/05.jpg','source/sketches/06.jpg',
-  'source/sketches/07.jpg','source/sketches/08.jpg','source/sketches/09.jpg',
-  'source/sketches/10.jpg',
-];
+const SKETCH_FILES = Array.from({ length: 16 }, (_, i) => `source/sketches/${String(i + 1).padStart(2, '0')}.jpg`);
 const SKETCH_W = window.innerWidth * 0.30;
 const board = document.getElementById('board');
 let zTop = 10;
@@ -158,17 +153,22 @@ function placeSketch(src, idx) {
         else if (normName.includes('side project')) projectKey = 'side-projects';
 
         if (projectKey) {
-          window.parent.postMessage({ type: 'open-project-lightbox', key: projectKey }, '*');
+          const targetPage = meta.page || 1;
+          window.parent.postMessage({ 
+            type: 'open-project-lightbox', 
+            key: projectKey,
+            page: targetPage 
+          }, '*');
         }
       });
     }
 
     board.appendChild(el);
     makeDraggable(el);
-  }; // <--- 이 부분의 닫는 중괄호가 빠져있던 것을 복구했습니다.
+  };
   
   if (img.complete && img.naturalWidth) place();
-  else { img.onload=place; img.onerror=place; }
+  else { img.onload = place; img.onerror = place; }
 }
 
 SKETCH_FILES.forEach((s,i) => setTimeout(()=>placeSketch(s,i), i*60));

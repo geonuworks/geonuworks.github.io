@@ -413,7 +413,10 @@ window.addEventListener('message', (e) => {
     if (p) {
       selectProject(targetKey);
       if (targetKey === 'kia-gaia') return; 
-      openLightbox(p.path, p.images, p.vimeo || null);
+      
+      // [수정] 넘겨받은 page 값을 openLightbox의 네 번째 인자로 전달
+      const startPage = e.data.page || 1;
+      openLightbox(p.path, p.images, p.vimeo || null, startPage);
     }
   }
 });
@@ -432,14 +435,16 @@ function preloadProjectCovers() {
 
 preloadProjectCovers();
 
-function openLightbox(path, images, vimeo) {
+function openLightbox(path, images, vimeo, startPage = 1) {
   const lb    = document.getElementById('lightbox');
   const inner = document.getElementById('lightbox-inner');
   inner.innerHTML = '';
 
+  // 1. Vimeo 동영상이 존재할 경우 상단에 삽입
   if (vimeo) {
     const wrap = document.createElement('div');
-    wrap.style.cssText = 'width:60%;margin:0 auto 8px;';
+    wrap.id = 'lightbox-vimeo-wrap'; // 추적용 ID 추가
+    wrap.style.cssText = 'width:60%; margin:0 auto 8px;';
     wrap.innerHTML = vimeo;
     inner.appendChild(wrap);
     if (!document.querySelector('script[src*="vimeo.com/api/player"]')) {
@@ -449,13 +454,14 @@ function openLightbox(path, images, vimeo) {
     }
   }
 
-  images.forEach(f => {
+  // 2. 이미지들을 순서대로 삽입하며 인덱스(1부터 시작) 부여
+  images.forEach((f, idx) => {
     const webpFileName = f.replace(/\.(jpg|jpeg)$/i, '.webp');
-
     const webpSrc = path + 'webp/' + webpFileName;
     const jpgSrc  = path + 'jpg/' + f;
 
     const picture = document.createElement('picture');
+    picture.dataset.pageIndex = idx + 1; // 페이지 번호 매핑
 
     const source = document.createElement('source');
     source.srcset = webpSrc;
@@ -471,8 +477,22 @@ function openLightbox(path, images, vimeo) {
   });
 
   lb.style.display = 'block';
-  lb.scrollTop = 0;
-  requestAnimationFrame(() => lb.classList.add('visible'));
+  lb.scrollTop = 0; // 초기화
+
+  requestAnimationFrame(() => {
+    lb.classList.add('visible');
+    
+    // 3. [핵심 수정] 영상 유무와 상관없이 지정된 스케치 번호의 위치를 찾아 스크롤 고정
+    if (images.length > 0) {
+      const targetPicture = inner.querySelector(`picture[data-page-index="${startPage}"]`);
+      if (targetPicture) {
+        setTimeout(() => {
+          // 최상단 동영상이 자리를 잡고 레이아웃 렌더링이 끝난 시점에 정확히 이미지 정렬
+          targetPicture.scrollIntoView({ behavior: 'auto', block: 'start' });
+        }, 80); // 동영상 로드 대기를 위해 지연 시간을 50ms -> 80ms로 살짝 늘려 안정성을 확보합니다.
+      }
+    }
+  });
 }
 
 function closeLightbox() {
