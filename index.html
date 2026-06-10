@@ -101,7 +101,8 @@
       height: 100%;
       opacity: 0; /* 기본값은 숨김 */
       z-index: 1;
-      transition: opacity 0.6s ease-in-out; /* 페이드 아웃/인 속도 */
+      transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+      will-change: opacity;
     }
 
     .cover-layer img {
@@ -109,7 +110,6 @@
       height: 100%;
       object-fit: cover;
       display: block;
-      transition: opacity 0.3s ease;
     }
 
     /* [추가] 최상단 레이어로 활성화될 때의 상태 설정 */
@@ -297,52 +297,52 @@ function initCoverLayers() {
   });
 }
 
-// [수정] 다중 레이어 적층 교체형으로 로직 완전히 최적화
+// [수정] 226번째 줄 부근의 중복 변수 선언을 제거하고, 연속 연타 매핑이 보완된 selectProject 함수로 대체합니다.
 function selectProject(key) {
   const p = PROJECTS[key];
-  if (!p || activeKey === key) return;
+  if (!p || activeKey === key) return; // 이미 활성화된 프로젝트면 중복 실행 방지
   
   lastActiveKey = activeKey;
   activeKey = key;
 
-  // update sidebar
+  // 1. 사이드바 내비게이션 클래스 업데이트
   document.querySelectorAll('.project-nav-item').forEach(el => {
-    const isActive = el.dataset.key === key;
-    el.classList.toggle('active', isActive);
+    el.classList.toggle('active', el.dataset.key === key);
   });
 
-  // 레이어 스위칭 핵심 로직
   const allLayers = document.querySelectorAll('.cover-layer');
   const nextLayer = document.querySelector(`.cover-layer[data-cover-key="${key}"]`);
   const prevLayer = lastActiveKey ? document.querySelector(`.cover-layer[data-cover-key="${lastActiveKey}"]`) : null;
 
   if (nextLayer) {
-    // 1. 혼선 방지를 위해 타 레이어들의 z-index 초기화 (이전 레이어 제외)
+    // 2. [핵심 변경] 연속 연타 시 이전에 미처 안 꺼지고 페이드인 중이던 레이어들이 툭 끊기지 않도록 처리합니다.
+    // 현재 살아있는(active 클래스를 가진) 모든 레이어는 화면에 부드럽게 유지되도록 z-index를 2등석으로 유지합니다.
     allLayers.forEach(layer => {
-      if (layer !== prevLayer) layer.style.zIndex = '1';
+      if (layer !== nextLayer && layer.classList.contains('active')) {
+        layer.style.zIndex = '2'; 
+      } else if (layer !== nextLayer) {
+        layer.style.zIndex = '1';
+      }
     });
 
-    // 2. 이전 활성 레이어는 새 레이어가 페이드인 될 때까지 바로 밑(z-index: 2)에서 대기 유지
-    if (prevLayer) {
-      prevLayer.style.zIndex = '2';
-    }
-
-    // 3. 새 레이어를 맨 위(z-index: 3)로 올리고 active 부여해 투명도 0 -> 1 페이드인 시작
+    // 3. 마지막으로 최종 선택된 레이어만 최상단 패스(z-index: 3)를 부여하고 투명도 100% 페이드인을 시작합니다.
     nextLayer.style.zIndex = '3';
     nextLayer.classList.add('active');
 
-    // 4. 애니메이션 완료(600ms) 후 밑에 깔려 있던 예전 레이어를 안전하게 숨김(0%)
+    // 4. 클로저 상수를 활용해 클릭 시점의 직전 레이어(prevLayer)를 타이머 내부에 완벽히 격리합니다.
     if (prevLayer && prevLayer !== nextLayer) {
+      const layerToHide = prevLayer; // 상수 격리로 연타 시 변수 덮어쓰기 현상 원천 차단
+      
       setTimeout(() => {
-        if (activeKey === key) { 
-          prevLayer.classList.remove('active');
-          prevLayer.style.zIndex = '1';
+        if (activeKey !== layerToHide.dataset.coverKey) { 
+          layerToHide.classList.remove('active');
+          layerToHide.style.zIndex = '1';
         }
-      }, 600); // CSS transition 타임과 동일하게 세팅
+      }, 500);
     }
   }
 
-  // update meta
+  // 5. 하단 메타 데이터 정보 업데이트 (기존 원본 로직 유지)
   document.getElementById('meta-num').textContent     = p.num;
   document.getElementById('meta-context').textContent = p.context;
   document.getElementById('meta-date').textContent    = p.date;
