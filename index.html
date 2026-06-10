@@ -141,7 +141,6 @@
 </head>
 <body>
 
-<!-- FIXED NAV -->
 <nav id="global-nav">
   <span class="nav-name">Geonu Jo</span>
   <span class="nav-title">Motions in Preferable Future</span>
@@ -156,7 +155,6 @@
 <div id="scroll-container">
   <div id="pages-wrapper">
 
-    <!-- PAGE 1: ARCHIVE -->
     <div class="page" id="page-archive">
       <aside class="archive-sidebar">
         <div class="project-nav-item active" data-key="volvo-bloom">
@@ -178,7 +176,10 @@
 
       <div class="archive-content">
         <div class="project-cover-wrap">
-          <img class="project-cover-img" id="cover-img" src="" alt="" />
+          <picture id="cover-picture">
+            <source id="cover-source" srcset="" type="image/webp">
+            <img class="project-cover-img" id="cover-img" src="" alt="" />
+          </picture>
         </div>
         <div class="project-meta">
           <span class="meta-num" id="meta-num"></span>
@@ -189,12 +190,10 @@
       </div>
     </div>
 
-    <!-- PAGE 2: SKETCHBOOK -->
     <div class="page" id="page-sketchbook">
       <iframe src="sketchbook.html" style="position:absolute;inset:0;width:100%;height:100%;border:none;" title="Sketchbook"></iframe>
     </div>
 
-    <!-- PAGE 3: ABOUT -->
     <div class="page" id="page-about">
       <iframe id="about-iframe" src="about.html" title="About"></iframe>
     </div>
@@ -202,7 +201,6 @@
   </div>
 </div>
 
-<!-- LIGHTBOX -->
 <div id="lightbox">
   <span id="lightbox-close">✕ close</span>
   <div id="lightbox-inner"></div>
@@ -210,14 +208,13 @@
 
 <script>
 /* ═══════════════════════════════
-   PROJECT DATA
+   PROJECT DATA (경로 구조에 맞춰 변수 정리)
 ═══════════════════════════════ */
 const PROJECTS = {
   'volvo-bloom': {
     num:'01', context:'Volvo Design Competition 2026',
     tags:['Exterior Design','Interior Design','3D Modeling'],
     date:'Mar. 2026. (1 month)',
-    cover:'source/projects/volvo-bloom/00.jpg',
     path:'source/projects/volvo-bloom/',
     images: Array.from({length:16}, (_,i) => String(i+1).padStart(2,'0')+'.jpg'),
     vimeo: '<div style="padding:68.52% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/1188949481?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&loop=1" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="BLOOM* (Volvo Design Competition 2026)"></iframe></div><script src="https://player.vimeo.com/api/player.js"><\/script>'
@@ -226,7 +223,6 @@ const PROJECTS = {
     num:'02', context:'HYUNDAI industry-academic cooperation',
     tags:['Exterior Design','3D Modeling'],
     date:'Jul. 2025. - Nov. 2025. (4 months)',
-    cover:'source/projects/hyundai-stormgazer/00.jpg',
     path:'source/projects/hyundai-stormgazer/',
     images: Array.from({length:13}, (_,i) => String(i+1).padStart(2,'0')+'.jpg')
   },
@@ -234,7 +230,6 @@ const PROJECTS = {
     num:'03', context:'Polestar Design Contest 2024',
     tags:['Exterior Design','Interior Design', '3D Modeling'],
     date:'Apr. 2024. - May. 2024. (2 months)',
-    cover:'source/projects/polestar-play/00.jpg',
     path:'source/projects/polestar-play/',
     images: Array.from({length:12}, (_,i) => String(i+1).padStart(2,'0')+'.jpg')
   },
@@ -242,7 +237,6 @@ const PROJECTS = {
     num:'04', context:'BA Thesis Project (wip)',
     tags:['Exterior Design', 'Interior Design', '3D Modeling'],
     date:'Apr. 2026. - Dec. 2026. (9 months)',
-    cover:'source/projects/kia-gaia/00.jpg',
     path:'source/projects/kia-gaia/',
     images: Array.from({length:8}, (_,i) => String(i+1).padStart(2,'0')+'.jpg')
   },
@@ -250,7 +244,6 @@ const PROJECTS = {
     num:'05', context:'Various',
     tags:['Sketching','Modeling'],
     date:'2024. –',
-    cover:'source/projects/side-projects/00.jpg',
     path:'source/projects/side-projects/',
     images: ['01.jpg']
   }
@@ -269,10 +262,16 @@ function selectProject(key) {
     el.classList.toggle('active', isActive);
   });
 
-  // update cover
+  // ── 오직 커버 이미지(썸네일) 경로만 변경 폴더 구조에 맞게 분기 수정 ──
+  const source = document.getElementById('cover-source');
   const img = document.getElementById('cover-img');
+  
   img.style.opacity = '0';
-  img.src = p.cover;
+  
+  // 변경된 새 폴더 분기 경로 지정 (`00.jpg` 및 `00.webp`)
+  source.srcset = p.path + 'webp/00.webp';
+  img.src = p.path + 'jpg/00.jpg';
+  
   img.onload = () => { img.style.transition='opacity 0.35s ease'; img.style.opacity='1'; };
   img.onerror = () => { img.style.opacity='1'; };
 
@@ -363,20 +362,19 @@ window.addEventListener('message', (e) => {
 });
 
 /* ═══════════════════════════════
-   LIGHTBOX
-═══════════════════════════════ */
+   LIGHTBOX (WebP 우선 적용 버전)
+   ═══════════════════════════════ */
 function openLightbox(path, images, vimeo) {
   const lb    = document.getElementById('lightbox');
   const inner = document.getElementById('lightbox-inner');
   inner.innerHTML = '';
 
-  /* Vimeo embed at top */
+  /* Vimeo 임베드 처리 (기존 로직 유지) */
   if (vimeo) {
     const wrap = document.createElement('div');
     wrap.style.cssText = 'width:60%;margin:0 auto 8px;';
     wrap.innerHTML = vimeo;
     inner.appendChild(wrap);
-    /* load vimeo player script once */
     if (!document.querySelector('script[src*="vimeo.com/api/player"]')) {
       const s = document.createElement('script');
       s.src = 'https://player.vimeo.com/api/player.js';
@@ -384,11 +382,28 @@ function openLightbox(path, images, vimeo) {
     }
   }
 
+  /* 이미지 로드 로직: <picture> 태그를 이용한 WebP/JPG 분기 */
   images.forEach(f => {
+    const webpFileName = f.replace(/\.(jpg|jpeg)$/i, '.webp');
+
+    const webpSrc = path + 'webp/' + webpFileName;
+    const jpgSrc  = path + 'jpg/' + f;
+
+    const picture = document.createElement('picture');
+
+    const source = document.createElement('source');
+    source.srcset = webpSrc;
+    source.type = 'image/webp';
+    picture.appendChild(source);
+
     const img = document.createElement('img');
-    img.src = path + f; img.alt = f;
-    inner.appendChild(img);
+    img.src = jpgSrc;
+    img.alt = f;
+    picture.appendChild(img);
+
+    inner.appendChild(picture);
   });
+
   lb.style.display = 'block';
   lb.scrollTop = 0;
   requestAnimationFrame(() => lb.classList.add('visible'));
@@ -401,9 +416,9 @@ function closeLightbox() {
 }
 
 document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
-document.getElementById('lightbox').addEventListener('click', e => { if (e.target === e.currentTarget) closeLightbox(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
-
+document.getElementById('lightbox').addEventListener('click', e => {
+  if(e.target.id === 'lightbox' || e.target.id === 'lightbox-inner') closeLightbox();
+});
 
 </script>
 </body>
