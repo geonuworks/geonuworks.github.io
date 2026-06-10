@@ -11,7 +11,7 @@
 
     *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
 
-    /* Responsive base font — matches index.html scaling */
+    /* Responsive base font ─ matches index.html scaling */
     html { font-size: clamp(12px, 0.9vw, 15px); }
 
     body {
@@ -31,8 +31,9 @@
     /* ── LEFT COLUMN ── */
     .left-col { padding-right:40px; }
 
+    /* 기준 크기(0.82rem)로 통일 */
     .bio {
-      font-size:0.82rem;
+      font-size:0.82rem; 
       line-height:1.75;
       color:#0D0D11;
       margin-bottom:28px;
@@ -47,49 +48,49 @@
       margin-bottom:24px;
     }
 
+    /* [좌측 카테고리] 기준 크기(0.82rem)로 통일 */
     .left-section-label {
-      font-size:0.7rem;
+      font-size:0.82rem;
       font-weight:700;
       letter-spacing:0.05em;
       color:#0D0D11;
       margin-bottom:10px;
     }
 
+    /* [좌측 항목들] 기준 크기(0.82rem)로 통일 */
     .skill-list { list-style:none; display:flex; flex-direction:column; gap:4px; }
-    .skill-list li { font-size:0.78rem; color:#0D0D11; line-height:1.5; }
+    .skill-list li { font-size:0.82rem; color:#0D0D11; line-height:1.5; }
 
     .lang-list { list-style:none; display:flex; flex-direction:column; gap:4px; }
-    .lang-row { display:flex; justify-content:space-between; align-items:baseline; font-size:0.78rem; }
+    .lang-row { display:flex; justify-content:space-between; align-items:baseline; font-size:0.82rem; }
     .lang-row span:first-child { color:#0D0D11; }
     .lang-row span:last-child  { color:#0D0D11; }
 
     .tools-section { margin-bottom:24px; }
     .tools-grid { display:flex; flex-direction:column; gap:4px; }
-    .tools-row { display:grid; grid-template-columns:28px 1fr; font-size:0.78rem; line-height:1.6; }
+    .tools-row { display:grid; grid-template-columns:28px 1fr; font-size:0.82rem; line-height:1.6; }
     .tools-row .tool-key { color:#878788; font-weight:400; }
     .tools-row span:last-child { color:#0D0D11; }
 
     .contact-section { margin-bottom:20px; }
-    .contact-section p { font-size:0.78rem; color:#0D0D11; line-height:1.7; }
+    .contact-section p { font-size:0.82rem; color:#0D0D11; line-height:1.7; }
     .contact-section a { color:#0D0D11; text-decoration:none; }
 
-    /* QR codes — responsive size via em so they scale with font */
+    /* QR codes ─ responsive size via em so they scale with font */
     .qr-section { display:flex; gap:24px; margin-top:8px; }
     .qr-item { display:flex; flex-direction:column; align-items:flex-start; gap:6px; }
     .qr-item span { font-size:0.75rem; color:#0D0D11; }
     .qr-item img {
-      /* 5rem ≈ 60px at 12px base, 75px at 15px base — scales with viewport */
       width: 5rem;
       height: 5rem;
       display:block;
     }
 
     /* ── RIGHT COLUMN ── */
-    /* right-col: 130px | 40px | 1fr | 1fr | 1fr */
     .right-col {
       padding-left:40px;
       display:grid;
-      grid-template-columns: 130px 40px 1fr 1fr 1fr;
+      grid-template-columns: 140px 40px 1fr 1fr 1fr; /* 카테고리 크기에 맞춰 140px로 조절 */
       column-gap:0;
       align-content:start;
     }
@@ -106,10 +107,10 @@
     }
     .cv-section:first-child { padding-top:0; border-top:none; }
 
-    /* col 1: category label (130px) */
+    /* [우측 카테고리] 기준 크기(0.82rem)로 통일 */
     .cv-section-label {
       grid-column:1;
-      font-size:0.68rem;
+      font-size:0.82rem;
       font-weight:700;
       letter-spacing:0.08em;
       color:#0D0D11;
@@ -156,20 +157,22 @@
     .cv-entry-body { grid-column:2; }
     .exp-body      { grid-column:2; }
     .exhibit-entry .exhibit-body { grid-column:2 / 4; }
+    
+    /* EDUCATION 및 AWARD 기관명 크기 기준(0.82rem) 통일 */
     .cv-entry-institution { font-size:0.82rem; font-weight:700; color:#0D0D11; line-height:1.4; }
 
     /* col 3 of body (=col 4 page): role/result */
     .cv-entry-col3 { grid-column:3; }
+    /* 전공 및 수상내역 역할 크기 기준(0.82rem) 통일 */
     .cv-entry-role { grid-column:3; font-size:0.82rem; font-weight:400; color:#0D0D11; }
 
-    /* col 4 of body (=col 5 page): date, right-aligned */
+    /* col 4 of body (=col 5 page): date, right-aligned ─ 기존 유지 */
     .cv-entry-date { grid-column:4; font-size:0.75rem; color:#878788; text-align:right; white-space:nowrap; }
-    .logo-cell img { display:block; height:auto; }
-    .logo-hyundai { width:1.8rem; }
-    .logo-kia     { width:2.2rem; }
-    .logo-lg      { width:1.4rem; }
 
+    /* HYUNDAI, KIA 타이틀 영역 크기 기존(0.82rem) 유지 */
     .exp-org { font-size:0.82rem; font-weight:400; color:#0D0D11; line-height:1.4; }
+    
+    /* ⚠️ 건드리지 말라고 명시하신 하단 프로젝트 상세 정보 및 불릿 크기 원본 그대로 고정 (0.75rem, 0.72rem) */
     .exp-org .sub     { font-weight:400; font-size:0.75rem; color:#0D0D11; display:block; }
     .exp-org .project { font-size:0.75rem; font-weight:400; color:#0D0D11; display:block; margin-top:6px; }
 
@@ -180,7 +183,7 @@
     }
     .exp-bullets li::before { content:'·'; position:absolute; left:2px; color:#878788; }
 
-    /* Exhibition: body spans cols 2–3 */
+    /* Exhibition: 타이틀 및 기존 불릿 크기 원본 그대로 고정 */
     .exhibit-entry .exhibit-body { grid-column:2/4; }
     .exhibit-body .title    { font-size:0.82rem; font-weight:700; color:#0D0D11; }
     .exhibit-body .subtitle { font-size:0.75rem; color:#0D0D11; margin-top:2px; }
@@ -195,7 +198,6 @@
 
   <div class="body-layout">
 
-    <!-- LEFT COLUMN -->
     <aside class="left-col">
 
       <div class="bio">
@@ -243,20 +245,18 @@
       <div class="qr-section">
         <div class="qr-item">
           <img src="source/icons/qr_linkedin.svg" alt="LinkedIn QR" />
-          <span>linkedin</span>
+          <span>Linkedin</span>
         </div>
         <div class="qr-item">
           <img src="source/icons/qr_instagram.svg" alt="Instagram QR" />
-          <span>instagram</span>
+          <span>Instagram</span>
         </div>
       </div>
 
     </aside>
 
-    <!-- RIGHT COLUMN -->
     <main class="right-col">
 
-      <!-- EDUCATION -->
       <div class="cv-section">
         <div class="cv-section-label">EDUCATION</div>
         <div class="cv-section-body">
@@ -279,7 +279,6 @@
         </div>
       </div>
 
-      <!-- HONOR & AWARD -->
       <div class="cv-section">
         <div class="cv-section-label">HONOR &amp; AWARD</div>
         <div class="cv-section-body">
@@ -294,12 +293,10 @@
         </div>
       </div>
 
-      <!-- EXPERIENCE -->
       <div class="cv-section">
         <div class="cv-section-label">EXPERIENCE</div>
         <div class="cv-section-body">
 
-          <!-- HYUNDAI -->
           <div class="exp-entry">
             <div class="logo-cell">
               <img class="logo-hyundai" src="source/icons/logo_hyundai.svg" alt="Hyundai" />
@@ -320,7 +317,6 @@
             <div class="cv-entry-date">Mar. 2025. – Dec. 2025.</div>
           </div>
 
-          <!-- KIA -->
           <div class="exp-entry">
             <div class="logo-cell">
               <img class="logo-kia" src="source/icons/logo_kia.svg" alt="KIA" />
@@ -343,7 +339,6 @@
         </div>
       </div>
 
-      <!-- EXHIBITION -->
       <div class="cv-section">
         <div class="cv-section-label">EXHIBITION</div>
         <div class="cv-section-body">
