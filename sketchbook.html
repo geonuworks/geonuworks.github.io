@@ -120,7 +120,7 @@ function placeSketch(src, idx) {
     
     const info = document.createElement('div');
     info.className = 'sketch-info';
-    info.innerHTML = `<span class="sketch-info-project">in <strong>${meta.project}</strong></span><span class="sketch-info-date">${meta.date}</span>`;
+    info.innerHTML = `<span class="sketch-info-project">from <strong>${meta.project}</strong></span><span class="sketch-info-date">${meta.date}</span>`;
     el.appendChild(info);
 
     board.appendChild(el);
