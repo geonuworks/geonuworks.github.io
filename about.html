@@ -85,21 +85,30 @@
     }
 
     /* ── RIGHT COLUMN ── */
-    .right-col { padding-left:40px; }
-
-    .cv-section {
+    /* right-col: 130px | 40px | 1fr | 1fr | 1fr */
+    .right-col {
+      padding-left:40px;
       display:grid;
-      grid-template-columns: 120px 2.4rem 1fr 1fr minmax(11rem, max-content);
-      column-gap:10px;
+      grid-template-columns: 130px 40px 1fr 1fr 1fr;
+      column-gap:0;
+      align-content:start;
+    }
+
+    /* each section spans all 5 cols */
+    .cv-section {
+      grid-column: 1 / 6;
+      display:grid;
+      grid-template-columns: subgrid;
       padding:28px 0;
       border-top:1px solid #e0e0e0;
       align-items:start;
+      column-gap:10px;
     }
     .cv-section:first-child { padding-top:0; border-top:none; }
 
+    /* col 1: category label (130px) */
     .cv-section-label {
       grid-column:1;
-      grid-row:1;
       font-size:0.68rem;
       font-weight:700;
       letter-spacing:0.08em;
@@ -108,40 +117,26 @@
       padding-top:2px;
     }
 
-    /* section body: display:contents so children join cv-section grid directly */
+    /* section body spans cols 2-5 */
     .cv-section-body {
-      display: contents;
+      grid-column: 2 / 6;
+      display:grid;
+      grid-template-columns: subgrid;
+      row-gap:16px;
+      align-items:start;
     }
 
-    /* ── Entry rows: span cols 2-5 of parent cv-section, use subgrid ── */
+    /* each entry spans all 4 cols of section-body (cols 2-5) */
     .cv-entry,
     .exp-entry,
     .exhibit-entry {
-      grid-column: 2 / 6;
-      display: grid;
+      grid-column: 1 / 5;
+      display:grid;
       grid-template-columns: subgrid;
-      align-items: start;
-      row-gap: 0;
-      margin-bottom: 16px;
+      align-items:start;
     }
-    .cv-entry:last-child,
-    .exp-entry:last-child,
-    .exhibit-entry:last-child { margin-bottom: 0; }
 
-    /* spacer (col 1 of subgrid) */
-    .cv-entry-spacer { grid-column:1; }
-
-    /* col 2: institution block (name + role stacked, matching exp-entry col-2 structure) */
-    .cv-entry-body { grid-column:2; }
-    .cv-entry-institution { font-size:0.82rem; font-weight:700; color:#0D0D11; line-height:1.4; }
-    .cv-entry-role        { font-size:0.82rem; font-weight:400; color:#0D0D11; margin-top:2px; }
-
-    /* col 3: empty for cv-entry (role is inside col-2 body) */
-    .cv-entry-col3 { grid-column:3; }
-
-    /* col 4: date */
-    .cv-entry-date { grid-column:4; font-size:0.75rem; color:#878788; text-align:right; white-space:nowrap; }
-
+    /* col 1 of body (=col 2 page): logo cell, right-aligned, 40px */
     .logo-cell {
       grid-column:1;
       display:flex;
@@ -149,6 +144,26 @@
       align-items:flex-start;
       padding-top:3px;
     }
+    .logo-cell img { display:block; height:auto; }
+    .logo-hyundai { width:1.8rem; }
+    .logo-kia     { width:2.2rem; }
+    .logo-lg      { width:1.4rem; }
+
+    /* education/award: no logo → empty spacer in col1 */
+    .cv-entry-spacer { grid-column:1; }
+
+    /* col 2 of body (=col 3 page): institution/name */
+    .cv-entry-body { grid-column:2; }
+    .exp-body      { grid-column:2; }
+    .exhibit-entry .exhibit-body { grid-column:2 / 4; }
+    .cv-entry-institution { font-size:0.82rem; font-weight:700; color:#0D0D11; line-height:1.4; }
+
+    /* col 3 of body (=col 4 page): role/result */
+    .cv-entry-col3 { grid-column:3; }
+    .cv-entry-role { grid-column:3; font-size:0.82rem; font-weight:400; color:#0D0D11; }
+
+    /* col 4 of body (=col 5 page): date, right-aligned */
+    .cv-entry-date { grid-column:4; font-size:0.75rem; color:#878788; text-align:right; white-space:nowrap; }
     .logo-cell img { display:block; height:auto; }
     .logo-hyundai { width:1.8rem; }
     .logo-kia     { width:2.2rem; }
@@ -289,7 +304,7 @@
             <div class="logo-cell">
               <img class="logo-hyundai" src="source/icons/logo_hyundai.svg" alt="Hyundai" />
             </div>
-            <div>
+            <div class="exp-body">
               <div class="exp-org">
                 <strong>HYUNDAI</strong> industry-academic cooperation
                 <span class="sub">Exterior Design</span>
@@ -310,7 +325,7 @@
             <div class="logo-cell">
               <img class="logo-kia" src="source/icons/logo_kia.svg" alt="KIA" />
             </div>
-            <div>
+            <div class="exp-body">
               <div class="exp-org">
                 <strong>KIA</strong> industry-academic cooperation
                 <span class="sub">Next Interior Design</span>

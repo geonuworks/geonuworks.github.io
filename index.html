@@ -169,7 +169,7 @@
           Polestar <strong>PLAY!</strong>
         </div>
         <div class="project-nav-item" data-key="kia-gaia">
-          KIA <strong>GAIA</strong>
+          KIA <strong>GAIA</strong> (WIP)
         </div>
         <div class="project-nav-item" data-key="side-projects">
           Side Projects
@@ -294,6 +294,7 @@ selectProject('volvo-bloom');
 
 // Cover click → lightbox
 document.getElementById('cover-img').addEventListener('click', () => {
+  if (activeKey === 'kia-gaia') return;
   const p = PROJECTS[activeKey];
   openLightbox(p.path, p.images, p.vimeo || null);
 });
