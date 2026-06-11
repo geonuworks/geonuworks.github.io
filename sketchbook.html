@@ -99,7 +99,7 @@
 const SKETCH_FILES = Array.from({ length: 16 }, (_, i) => `source/sketches/${String(i + 1).padStart(2, '0')}.jpg`);
 const SKETCH_W = window.innerWidth * 0.30;
 const board = document.getElementById('board');
-let zTop = 10;
+let zTop = 100;
 const rand = (a,b) => Math.random()*(b-a)+a;
 
 function placeSketch(src, idx) {
