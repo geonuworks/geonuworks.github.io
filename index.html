@@ -477,20 +477,34 @@ function openLightbox(path, images, vimeo, startPage = 1) {
   });
 
   lb.style.display = 'block';
-  lb.scrollTop = 0; // 초기화
+  lb.scrollTop = 0; // 팝업 시점 최상단(Vimeo 영상 위치) 강제 고정
 
   requestAnimationFrame(() => {
     lb.classList.add('visible');
     
-    // 3. [핵심 수정] 영상 유무와 상관없이 지정된 스케치 번호의 위치를 찾아 스크롤 고정
-    if (images.length > 0) {
+    // [핵심 보완] startPage가 1보다 크거나, 아예 스케치북 전용 페이지 번호가 지정된 경우에만 스크롤 이동을 실행합니다.
+    // 아카이브에서 일반 클릭으로 진입했거나(startPage = 1), Vimeo가 있는 첫 페이지일 때는 스크롤하지 않고 영상이 바로 보입니다.
+    if (images.length > 0 && startPage > 1) {
       const targetPicture = inner.querySelector(`picture[data-page-index="${startPage}"]`);
       if (targetPicture) {
-        setTimeout(() => {
-          // 최상단 동영상이 자리를 잡고 레이아웃 렌더링이 끝난 시점에 정확히 이미지 정렬
+        const targetImg = targetPicture.querySelector('img');
+
+        const scrollToTarget = () => {
           targetPicture.scrollIntoView({ behavior: 'auto', block: 'start' });
-        }, 80); // 동영상 로드 대기를 위해 지연 시간을 50ms -> 80ms로 살짝 늘려 안정성을 확보합니다.
+        };
+
+        if (targetImg.complete && targetImg.naturalWidth) {
+          setTimeout(scrollToTarget, 50);
+        } else {
+          targetImg.onload = () => {
+            setTimeout(scrollToTarget, 100);
+          };
+          targetImg.onerror = scrollToTarget; 
+        }
       }
+    } else {
+      // 아카이브 메뉴에서 진입 시: 다운로드 타이밍에 상관없이 무조건 스크롤을 맨 위(Vimeo 영상)로 유지
+      lb.scrollTop = 0;
     }
   });
 }
