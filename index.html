@@ -25,7 +25,7 @@
     .nav-year  { font-size:0.95rem; font-weight:400; flex:1; padding-left:40px; color:#0D0D11; transition: color 0.5s ease; }
     
     .nav-links { display:flex; gap:40px; }
-    .nav-links a { font-size:0.95rem; font-weight:400; color:#0D0D11; text-decoration:none; transition: color 0.5s ease; } /* 여기도 추가 */
+    .nav-links a { font-size:0.95rem; font-weight:400; color:#0D0D11; text-decoration:none; transition: color 0.5s ease; }
     
     .nav-links a.active { text-decoration:underline; text-underline-offset:3px; }
     .nav-links a:hover  { text-decoration:underline; text-underline-offset:3px; }
@@ -109,18 +109,16 @@
       position: absolute;
       inset: 0;
       background-color: #ffffff;
-      opacity: 0; /* 평소에는 불투명도 0% (완전 투명) */
-      pointer-events: none; /* 마우스 클릭이나 호버 이벤트를 방해하지 않음 */
-      transition: opacity 0.3s ease; /* 부드럽게 밝아지도록 애니메이션 제공 */
-      z-index: 2; /* 이미지 바로 위에 얹어지도록 설정 */
+      opacity: 0; 
+      pointer-events: none; 
+      transition: opacity 0.3s ease; 
+      z-index: 2; 
     }
 
-    /* 3. [추가] 커서가 호버링되는 순간 흰색 레이어의 불투명도를 10%로 변경합니다. */
     .cover-layer:hover::after {
-      opacity: 0.1; /* 호버 시 불투명도 10% */
+      opacity: 0.1; 
     }
 
-    /* 안전장치: 실제 이미지 엘리먼트는 가상 레이어보다 한 단계 뒤에 배치 */
     .cover-layer img {
       width: 100%;
       height: 100%;
@@ -158,7 +156,7 @@
       display: none;
       overflow-y: auto;
       transition: background 0.4s ease;
-      overscroll-behavior-y: contain; /* 휠 가속 밀림 방지 */
+      overscroll-behavior-y: contain; 
     }
     #lightbox.visible { background:rgba(0,0,0,0.88); }
     
@@ -175,7 +173,6 @@
     }
     #lightbox.visible #lightbox-inner { opacity: 1; transform: translateY(0); }
 
-    /* [정상화] 가상 적층 방식을 완전히 걷어내고, 부드러운 세로 연속 구조로 복원합니다. */
     #lightbox-inner picture {
       display: block;
       width: 100%;
@@ -187,10 +184,9 @@
       width: 100%;
       height: auto;
       display: block;
-      vertical-align: top; /* 이미지 사이의 미세한 1px 갭 완벽 제거 */
+      vertical-align: top; 
     }
 
-    /* Vimeo 동영상 레이어 스타일 정상화 */
     #lightbox-vimeo-wrap {
       width: 100%;
       margin-bottom: 8px;
@@ -204,6 +200,64 @@
     }
     #lightbox.visible #lightbox-close { opacity:1; }
     #lightbox-close:hover { text-decoration:underline; }
+
+    /* ═══════════════════════════════
+       MOBILE RESPONSIVE LAYOUT STYLES
+    ═══════════════════════════════ */
+    @media (max-width: 768px), (max-width: 915px) and (orientation: landscape) {
+      #global-nav {
+        padding: 16px 20px 0;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .nav-name { font-size: 0.9rem; width: auto; }
+      .nav-title, .nav-year { display: none; } 
+      .nav-links { width: 100%; justify-content: flex-start; gap: 24px; margin-top: 4px; }
+      .nav-links a { font-size: 0.9rem; }
+
+      #page-archive { flex-direction: column; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+      
+      /* ★ 수정: 헤더 영역 공간 확보를 위해 패딩 탑을 114px로 대폭 상향조정 */
+      .archive-sidebar {
+        width: 100%;
+        padding: 114px 20px 12px 20px;
+        flex-direction: row;
+        overflow-x: auto;
+        white-space: nowrap;
+        gap: 16px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .archive-sidebar::-webkit-scrollbar { display: none; } 
+      .project-nav-item { font-size: 0.85rem; display: inline-block; }
+
+      /* ★ 수정: 메뉴 탭 바와 컨텐츠 겹침 차단을 위해 탑 마진 및 여백 재구성 */
+      .archive-content {
+        padding: 8px 20px 40px 20px;
+        flex-shrink: 0;
+        overflow: visible;
+      }
+      #archive-cover { aspect-ratio: 4/3; }
+
+      @media (orientation: landscape) {
+        /* ★ 가로 모드 대응: 메뉴와 헤더가 안전하게 떨어지도록 높이 밸런스 패딩 설정 */
+        .archive-sidebar { padding: 94px 20px 8px 20px; }
+        #archive-cover { aspect-ratio: 16/6; max-height: 40vh; }
+      }
+
+      .project-meta {
+        grid-template-columns: 1fr 1fr;
+        row-gap: 10px;
+        column-gap: 10px;
+        padding-top: 14px;
+      }
+      .meta-num { grid-column: 1; }
+      .meta-date { grid-column: 2; text-align: right; }
+      .meta-context { grid-column: 1 / 3; font-weight: 500; }
+      .meta-tags { grid-column: 1 / 3; flex-direction: row; flex-wrap: wrap; gap: 4px 8px; }
+      
+      #lightbox-inner { width: calc(100% - 32px); padding: 60px 0 60px; }
+      #lightbox-close { top: 20px; right: 20px; }
+    }
   </style>
 </head>
 <body>
@@ -270,10 +324,6 @@
 </div>
 
 <script>
-
-/* ═══════════════════════════════
-   PROJECT DATA 
-═══════════════════════════════ */
 const PROJECTS = {
   'volvo-bloom': {
     num:'01', context:'Volvo Design Competition 2026',
@@ -315,9 +365,12 @@ const PROJECTS = {
 
 let activeKey = '';
 let lastActiveKey = null;
-let lightboxScrollTimer = null; // 타겟 포커싱 타이머용 변수
+let lightboxScrollTimer = null;
 
-// 모든 프로젝트 썸네일 레이어를 초기에 적층하는 함수
+function isMobileLayout() {
+  return window.innerWidth <= 768 || (window.innerWidth <= 915 && window.innerHeight < window.innerWidth);
+}
+
 function initCoverLayers() {
   const container = document.getElementById('archive-cover');
   container.innerHTML = '';
@@ -336,7 +389,6 @@ function initCoverLayers() {
   });
 }
 
-// 다중 레이어 적층 스위칭 로직
 function selectProject(key) {
   const p = PROJECTS[key];
   if (!p || activeKey === key) return;
@@ -383,9 +435,13 @@ function selectProject(key) {
   tagsEl.innerHTML = p.tags.map(t => `<span>${t}</span>`).join('');
 }
 
-// Sidebar clicks
 document.querySelectorAll('.project-nav-item').forEach(el => {
-  el.addEventListener('click', () => selectProject(el.dataset.key));
+  el.addEventListener('click', () => {
+    selectProject(el.dataset.key);
+    if(isMobileLayout()) {
+      el.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    }
+  });
 });
 
 initCoverLayers();
@@ -430,6 +486,7 @@ window.addEventListener('wheel', (e) => {
   if (lb && lb.style.display === 'block' && lb.classList.contains('visible')) return;
 
   if (currentPage === 0) {
+    if (isMobileLayout()) return; 
     const atBottom = archivePage.scrollTop + archivePage.clientHeight >= archivePage.scrollHeight - 4;
     const atTop    = archivePage.scrollTop <= 0;
     if (e.deltaY > 0 && !atBottom) return;
@@ -445,13 +502,30 @@ window.addEventListener('wheel', (e) => {
   if (!isAnimating) goToPage(currentPage + dir);
 }, { passive:true });
 
+/* 📱 터치 스크린 스와이프 */
 let touchY0 = null;
-window.addEventListener('touchstart', e => { touchY0 = e.touches[0].clientY; }, {passive:true});
+let touchX0 = null;
+window.addEventListener('touchstart', e => { 
+  touchY0 = e.touches[0].clientY; 
+  touchX0 = e.touches[0].clientX;
+}, {passive:true});
+
 window.addEventListener('touchend', e => {
   if (touchY0 === null || isAnimating) return;
+  if (document.getElementById('lightbox').style.display === 'block') return;
+  
+  if (currentPage === 1) {
+    const dx = touchX0 - e.changedTouches[0].clientX;
+    if (Math.abs(dx) > 40) return; 
+  }
+
+  if (isMobileLayout() && currentPage === 0) {
+    if (archivePage.scrollTop > 10) return;
+  }
+
   const dy = touchY0 - e.changedTouches[0].clientY;
   touchY0 = null;
-  if (Math.abs(dy) < 40) return;
+  if (Math.abs(dy) < 60) return;
   goToPage(currentPage + (dy > 0 ? 1 : -1));
 }, {passive:true});
 
@@ -484,18 +558,18 @@ function preloadProjectCovers() {
 }
 preloadProjectCovers();
 
-/* ── LIGHTBOX CONTROLLER (부드러운 스크롤 연속형 버전) ── */
+/* ── LIGHTBOX CONTROLLER ── */
 function openLightbox(path, images, vimeo, startPage = 1) {
   const lb    = document.getElementById('lightbox');
   const inner = document.getElementById('lightbox-inner');
   inner.innerHTML = '';
-  lb.onscroll = null; // 가상 고정식 흔적 완벽 초기화
+  lb.onscroll = null; 
 
-  // 1. Vimeo 생성
   if (vimeo) {
     const wrap = document.createElement('div');
     wrap.id = 'lightbox-vimeo-wrap';
     wrap.style.cssText = 'width:60%; margin:0 auto 8px;';
+    if(isMobileLayout()) wrap.style.width = '100%';
     wrap.innerHTML = vimeo;
     inner.appendChild(wrap);
     if (!document.querySelector('script[src*="vimeo.com/api/player"]')) {
@@ -505,7 +579,6 @@ function openLightbox(path, images, vimeo, startPage = 1) {
     }
   }
 
-  // 2. 이미지 구조 생성 (세로 순차 나열 구조 복구)
   images.forEach((f, idx) => {
     const webpFileName = f.replace(/\.(jpg|jpeg)$/i, '.webp');
     const webpSrc = path + 'webp/' + webpFileName;
@@ -513,7 +586,7 @@ function openLightbox(path, images, vimeo, startPage = 1) {
 
     const picture = document.createElement('picture');
     picture.dataset.pageIndex = idx + 1;
-    picture.style.cssText = 'display:block; width:100%; margin-bottom:0;'; // 고정 해제
+    picture.style.cssText = 'display:block; width:100%; margin-bottom:0;'; 
 
     const source = document.createElement('source');
     source.srcset = webpSrc;
@@ -542,14 +615,11 @@ function openLightbox(path, images, vimeo, startPage = 1) {
     
     if (targetPicture) {
       const targetImg = targetPicture.querySelector('img');
-
-      // 단 한 번만 실행하고 소멸될 일회성 스크롤 이동 함수
       const scrollToTarget = () => {
         targetPicture.scrollIntoView({ behavior: 'auto', block: 'start' });
         if (targetPageNum === 1 && vimeo) {
           lb.scrollTop = 0;
         }
-        // 스크롤 포커싱 종료 후 리스너 제거로 추후 스크롤링 간섭 완전 방지
         targetImg.onload = null;
         targetImg.onerror = null;
       };
@@ -557,12 +627,8 @@ function openLightbox(path, images, vimeo, startPage = 1) {
       if (targetImg.complete && targetImg.naturalWidth) {
         lightboxScrollTimer = setTimeout(scrollToTarget, 50);
       } else {
-        targetImg.onload = () => {
-          lightboxScrollTimer = setTimeout(scrollToTarget, 100);
-        };
-        targetImg.onerror = () => {
-          scrollToTarget();
-        }; 
+        targetImg.onload = () => { lightboxScrollTimer = setTimeout(scrollToTarget, 100); };
+        targetImg.onerror = () => { scrollToTarget(); }; 
       }
     } else {
       lb.scrollTop = 0;
@@ -570,13 +636,11 @@ function openLightbox(path, images, vimeo, startPage = 1) {
   });
 }
 
-// [완벽 복구] 라이트박스 닫기 기능 및 타이머 예외 안전 청소
 function closeLightbox() {
   if (lightboxScrollTimer) {
     clearTimeout(lightboxScrollTimer);
     lightboxScrollTimer = null;
   }
-
   const lb = document.getElementById('lightbox');
   lb.classList.remove('visible');
   setTimeout(() => { 
@@ -589,7 +653,6 @@ document.getElementById('lightbox-close').addEventListener('click', closeLightbo
 document.getElementById('lightbox').addEventListener('click', e => {
   if(e.target.id === 'lightbox' || e.target.id === 'lightbox-inner') closeLightbox();
 });
-
 </script>
 </body>
 </html>

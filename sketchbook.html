@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Geonu Jo — Sketchbook</title>
+  <title>Geonu Jo — About</title>
   
   <script src="sketch-data.js"></script>
 
@@ -35,7 +35,7 @@
     /* 원본 이미지 스타일 강제 적용 */
     .sketch img {
       display:block; width:100%; height:100%;
-      object-fit:fill; pointer-events:none;
+      object-fit:fill; pointer-events:none; /* 데스크톱 기본값 복원: 드래그 방해 금지 */
       user-select:none; -webkit-user-drag:none;
     }
 
@@ -69,7 +69,6 @@
     }
     .sketch-info-project strong { font-weight:700; }
 
-    /* 클릭 가능한 프로젝트 링크 스타일 및 강제 팅김 방지 */
     .sketch-info-project.clickable {
       pointer-events: auto !important;
     }
@@ -90,6 +89,63 @@
       white-space:nowrap;
       flex-shrink:0;
     }
+
+    /* ═══════════════════════════════
+       📱 모바일 전용 가로 슬라이더 스타일 (768px 이하 및 가로방향 최적화)
+    ═══════════════════════════════ */
+    @media (max-width: 768px), (max-width: 915px) and (orientation: landscape) {
+      #board {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+      }
+      #board::-webkit-scrollbar { display: none; } 
+
+      .sketch {
+        position: relative !important;
+        left: 0 !important; top: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        flex-shrink: 0;
+        background: transparent;
+        box-shadow: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        scroll-snap-align: start;
+        padding: 40px;
+        cursor: default;
+      }
+      
+      .sketch img {
+        width: auto;
+        height: auto;
+        max-width: 100%;
+        max-height: 70vh;
+        object-fit: contain;
+        background: #fff;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        pointer-events: auto !important; /* 모바일 모드에서만 이미지 터치 허용 */
+        cursor: pointer;
+      }
+
+      .sketch-info {
+        opacity: 1 !important;
+        bottom: 24px; left: 20px; right: 20px;
+        border-radius: 8px;
+        pointer-events: auto;
+      }
+    }
+    @media (max-width: 915px) and (orientation: landscape) {
+      .sketch { padding: 20px 40px; }
+      .sketch img { max-height: 55vh; }
+      .sketch-info { bottom: 6px; padding: 0.3em 0.8em; }
+    }
   </style>
 </head>
 <body>
@@ -101,6 +157,10 @@ const SKETCH_W = window.innerWidth * 0.30;
 const board = document.getElementById('board');
 let zTop = 100;
 const rand = (a,b) => Math.random()*(b-a)+a;
+
+function isMobileView() {
+  return window.innerWidth <= 768 || (window.innerWidth <= 915 && window.innerHeight < window.innerWidth);
+}
 
 function placeSketch(src, idx) {
   const img = new Image(); img.src = src;
@@ -115,10 +175,17 @@ function placeSketch(src, idx) {
 
     const el = document.createElement('div');
     el.className = 'sketch';
-    el.style.cssText = `width:${w}px;height:${h}px;left:${x}px;top:${y}px;z-index:${idx+1};`;
+    
+    // 모바일 뷰포트 여부에 따른 CSS 인라인 분기 명확화
+    const mobile = isMobileView();
+    if (!mobile) {
+      el.style.cssText = `width:${w}px;height:${h}px;left:${x}px;top:${y}px;z-index:${idx+1};`;
+    }
 
     img.alt=''; img.draggable=false;
-    img.style.cssText='display:block;width:100%;height:100%;object-fit:fill;pointer-events:none;user-select:none;-webkit-user-drag:none;';
+    if (!mobile) {
+      img.style.cssText='display:block;width:100%;height:100%;object-fit:fill;pointer-events:none;user-select:none;-webkit-user-drag:none;';
+    }
     el.appendChild(img);
 
     const key = String(idx+1).padStart(2,'0');
@@ -133,38 +200,54 @@ function placeSketch(src, idx) {
     info.innerHTML = `<span class="sketch-info-project ${clickableClass}">from <strong>${meta.project}</strong></span><span class="sketch-info-date">${meta.date}</span>`;
     el.appendChild(info);
 
+    // 라이트박스를 호출하는 핵심 트리거 logic
+    const triggerLightbox = (e) => {
+      if (!isClickable) return;
+      e.preventDefault();
+      e.stopPropagation();
+      
+      let projectKey = '';
+      const normName = meta.project.replace('*', '').toLowerCase();
+      
+      if (normName.includes('bloom')) projectKey = 'volvo-bloom';
+      else if (normName.includes('stormgazer')) projectKey = 'hyundai-stormgazer';
+      else if (normName.includes('play')) projectKey = 'polestar-play';
+      else if (normName.includes('side project')) projectKey = 'side-projects';
+
+      if (projectKey) {
+        const targetPage = meta.page || 1;
+        window.parent.postMessage({ 
+          type: 'open-project-lightbox', 
+          key: projectKey,
+          page: targetPage 
+        }, '*');
+      }
+    };
+
+    // 📱 모바일 버전(가로/세로 포함)에서만 이미지 자체에 터치/클릭 이벤트 바인딩
+    if (mobile) {
+      let touchMoveFlag = false;
+      img.addEventListener('touchmove', () => { touchMoveFlag = true; }, { passive: true });
+      img.addEventListener('touchend', (e) => {
+        if (!touchMoveFlag) {
+          triggerLightbox(e);
+        }
+        touchMoveFlag = false;
+      });
+      img.addEventListener('click', triggerLightbox);
+    }
+
+    // 데스크톱/모바일 공통: 하단 프로젝트명 가이드 텍스트 클릭 시 작동
     if (isClickable) {
       const projectBtn = info.querySelector('.sketch-info-project strong');
-      
-      projectBtn.addEventListener('pointerdown', (e) => {
-        e.stopPropagation();
-      });
-
-      projectBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        let projectKey = '';
-        const normName = meta.project.replace('*', '').toLowerCase();
-        
-        if (normName.includes('bloom')) projectKey = 'volvo-bloom';
-        else if (normName.includes('stormgazer')) projectKey = 'hyundai-stormgazer';
-        else if (normName.includes('play')) projectKey = 'polestar-play';
-        else if (normName.includes('side project')) projectKey = 'side-projects';
-
-        if (projectKey) {
-          const targetPage = meta.page || 1;
-          window.parent.postMessage({ 
-            type: 'open-project-lightbox', 
-            key: projectKey,
-            page: targetPage 
-          }, '*');
-        }
-      });
+      projectBtn.addEventListener('pointerdown', (e) => { e.stopPropagation(); });
+      projectBtn.addEventListener('click', triggerLightbox);
     }
 
     board.appendChild(el);
-    makeDraggable(el);
+    if (!mobile) {
+      makeDraggable(el);
+    }
   };
   
   if (img.complete && img.naturalWidth) place();
@@ -176,7 +259,7 @@ SKETCH_FILES.forEach((s,i) => setTimeout(()=>placeSketch(s,i), i*60));
 function makeDraggable(el) {
   let active=false, sx,sy,ox,oy;
   el.addEventListener('pointerdown', e => {
-    if (e.button!==0) return;
+    if (e.button!==0 || isMobileView()) return;
     e.preventDefault(); e.stopPropagation();
     el.setPointerCapture(e.pointerId);
     el.style.zIndex = ++zTop;
@@ -197,6 +280,7 @@ function makeDraggable(el) {
 /* notify parent for page scroll */
 let wheelAccum=0, wheelTimer=null;
 window.addEventListener('wheel', e => {
+  if (isMobileView()) return;
   wheelAccum += e.deltaY;
   clearTimeout(wheelTimer);
   wheelTimer = setTimeout(()=>{ wheelAccum=0; }, 200);

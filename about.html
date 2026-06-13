@@ -90,7 +90,7 @@
     .right-col {
       padding-left:40px;
       display:grid;
-      grid-template-columns: 140px 40px 1fr 1fr 1fr; /* 카테고리 크기에 맞춰 140px로 조절 */
+      grid-template-columns: 140px 40px 1fr 1fr 1fr; 
       column-gap:0;
       align-content:start;
     }
@@ -172,7 +172,7 @@
     /* HYUNDAI, KIA 타이틀 영역 크기 기존(0.82rem) 유지 */
     .exp-org { font-size:0.82rem; font-weight:400; color:#0D0D11; line-height:1.4; }
     
-    /* ⚠️ 건드리지 말라고 명시하신 하단 프로젝트 상세 정보 및 불릿 크기 원본 그대로 고정 (0.75rem, 0.72rem) */
+    /* 프로젝트 상세 정보 및 불릿 크기 원본 그대로 고정 (0.75rem, 0.72rem) */
     .exp-org .sub     { font-weight:400; font-size:0.75rem; color:#0D0D11; display:block; }
     .exp-org .project { font-size:0.75rem; font-weight:400; color:#0D0D11; display:block; margin-top:6px; }
 
@@ -184,7 +184,6 @@
     .exp-bullets li::before { content:'·'; position:absolute; left:2px; color:#878788; }
 
     /* Exhibition: 타이틀 및 기존 불릿 크기 원본 그대로 고정 */
-    .exhibit-entry .exhibit-body { grid-column:2/4; }
     .exhibit-body .title    { font-size:0.82rem; font-weight:700; color:#0D0D11; }
     .exhibit-body .subtitle { font-size:0.75rem; color:#0D0D11; margin-top:2px; }
     .exhibit-body .bullet {
@@ -192,6 +191,62 @@
       padding-left:10px; position:relative; line-height:1.55;
     }
     .exhibit-body .bullet::before { content:'·'; position:absolute; left:2px; color:#878788; }
+
+
+    /* ── 모바일 가로/세로 레이아웃 변형 분기 ── */
+    @media (max-width: 768px), (max-width: 915px) and (orientation: landscape) {
+      /* ★ 수정: 상단 헤더 공간 확보를 위해 탑 패딩을 120px로 확장 */
+      .body-layout {
+        display: flex;
+        flex-direction: column;
+        padding: 120px 24px 40px;
+      }
+      
+      .left-col {
+        display: contents; 
+      }
+      
+      .right-col {
+        padding-left: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      .cv-section {
+        display: flex;
+        flex-direction: column;
+        padding: 20px 0;
+        gap: 12px;
+      }
+      .cv-section-body {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      .cv-entry, .exp-entry, .exhibit-entry {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        position: relative;
+      }
+      .logo-cell {
+        justify-content: flex-start;
+        padding-top: 0;
+        margin-bottom: 4px;
+      }
+      .cv-entry-date {
+        position: static;
+        text-align: left;
+        margin-top: 2px;
+      }
+
+      .bio { order: 1; margin-bottom: 24px; }
+      .right-col { order: 2; } 
+      
+      .skills-lang { order: 3; margin-top: 32px; border-top: 1px solid #e0e0e0; padding-top: 24px; }
+      .tools-section { order: 4; margin-top: 16px; }
+      .contact-section { order: 5; margin-top: 16px; }
+      .qr-section { order: 6; margin-top: 8px; margin-bottom: 20px; }
+    }
   </style>
 </head>
 <body>
@@ -364,6 +419,7 @@
   let wheelAccum = 0, wheelTimer = null;
   const THRESHOLD = 50;
   window.addEventListener('wheel', (e) => {
+    if (window.innerWidth <= 768) return; 
     const el = document.documentElement;
     const atTop    = el.scrollTop <= 0;
     const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 4;
