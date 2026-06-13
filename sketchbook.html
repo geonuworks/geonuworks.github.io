@@ -12,7 +12,6 @@
     @font-face { font-family:'Poppins'; src:url('source/fonts/Poppins-Medium.ttf') format('truetype'); font-weight:500; }
     @font-face { font-family:'Poppins'; src:url('source/fonts/Poppins-Bold.ttf') format('truetype'); font-weight:700; }
 
-    /* ★ 가로모드 글씨 뻥튀기 방지 연동 */
     html {
       -webkit-text-size-adjust: 100%;
       text-size-adjust: 100%;
@@ -93,33 +92,36 @@
       flex-shrink:0;
     }
 
-    /* ── 모바일 세로/가로 슬라이딩 변환 ── */
+    /* ── 모바일 카루셀 갤러리 변환 (양옆 카드 노출) ── */
     @media (max-width: 768px), (max-width: 915px) and (orientation: landscape) {
       #board {
         display: flex;
         width: 100%;
         height: 100%;
         overflow-x: auto;
-        overflow-y: hidden;
+        overflow-y: hidden; 
         scroll-snap-type: x mandatory;
         scroll-behavior: smooth;
         -webkit-overflow-scrolling: touch;
+        /* ★ 요구사항: 양옆 다른 스케치가 튀어나와 인지되도록 배치 가속 여백 확보 */
+        padding-left: 9vw;  
+        padding-right: 9vw;
       }
       #board::-webkit-scrollbar { display: none; } 
 
       .sketch {
         position: relative !important;
         left: 0 !important; top: 0 !important;
-        width: 100vw !important;
-        height: 100svh !important; /* ★ 주소창 대응 svh 변경 */
+        width: 82vw !important; /* ★ 가로폭을 줄여 이전/다음 스케치가 좌우측에 걸치게 연동 */
+        height: 100svh !important; 
         flex-shrink: 0;
         background: transparent;
         box-shadow: none;
         display: flex;
         align-items: center;
         justify-content: center;
-        scroll-snap-align: start;
-        padding: 40px;
+        scroll-snap-align: center; 
+        padding: 0 12px; 
         cursor: default;
       }
       
@@ -127,7 +129,7 @@
         width: auto;
         height: auto;
         max-width: 100%;
-        max-height: 70vh;
+        max-height: 66vh;
         object-fit: contain;
         background: #fff;
         box-shadow: 0 4px 20px rgba(0,0,0,0.2);
@@ -137,16 +139,15 @@
 
       .sketch-info {
         opacity: 1 !important;
-        bottom: 24px; left: 20px; right: 20px;
+        bottom: 24px; left: 12px; right: 12px;
         border-radius: 8px;
         pointer-events: auto;
       }
     }
-
-    /* ★ 아이폰 가로 모드 상단 주소창 노출 시 내부 드래그 카드 압축 크기 매칭 */
     @media (max-width: 915px) and (orientation: landscape) {
-      .sketch { padding: 20px 40px; height: 100svh !important; }
-      .sketch img { max-height: 55vh !important; }
+      #board { padding-left: 14vw; padding-right: 14vw; }
+      .sketch { width: 72vw !important; padding: 20px 12px; height: 100svh !important; }
+      .sketch img { max-height: 52vh !important; }
       .sketch-info { bottom: 6px; padding: 0.3em 0.8em; }
     }
   </style>
@@ -172,6 +173,9 @@ function placeSketch(src, idx) {
     const vh = window.innerHeight;
     const w  = SKETCH_W;
     const h  = img.naturalWidth ? w/(img.naturalWidth/img.naturalHeight) : w/1.6;
+
+    const x = Math.max(0, Math.min(vw - w, rand(0, vw - w)));
+    const y = Math.max(0, Math.min(vh - h, rand(0, vh - h)));
 
     const el = document.createElement('div');
     el.className = 'sketch';
@@ -199,6 +203,7 @@ function placeSketch(src, idx) {
     info.innerHTML = `<span class="sketch-info-project ${clickableClass}">from <strong>${meta.project}</strong></span><span class="sketch-info-date">${meta.date}</span>`;
     el.appendChild(info);
 
+    /* ★ 라이트박스 신호 송출부 수신 연동 정상화 개수 처리 */
     const triggerLightbox = (e) => {
       if (!isClickable) return;
       e.preventDefault();
@@ -214,6 +219,7 @@ function placeSketch(src, idx) {
 
       if (projectKey) {
         const targetPage = meta.page || 1;
+        // 부모 전송 객체 window.parent 통일
         window.parent.postMessage({ 
           type: 'open-project-lightbox', 
           key: projectKey,
@@ -273,9 +279,29 @@ function makeDraggable(el) {
   el.addEventListener('pointercancel', end);
 }
 
+// ★ 모바일 스케치북 면적 터치 스와이프 상하 전이 브릿지 복원
+let touchY0 = null;
+window.addEventListener('touchstart', e => { touchY0 = e.touches[0].clientY; }, {passive:true});
+window.addEventListener('touchend', e => {
+  if (touchY0 === null || !isMobileView()) return;
+  const dy = touchY0 - e.changedTouches[0].clientY;
+  touchY0 = null;
+  if (Math.abs(dy) > 60) {
+    window.parent.postMessage(dy > 0 ? 'scroll-down-edge' : 'scroll-up-edge', '*');
+  }
+}, {passive:true});
+
 let wheelAccum=0, wheelTimer=null;
 window.addEventListener('wheel', e => {
-  if (isMobileView()) return;
+  if (isMobileView()) {
+    wheelAccum += e.deltaY;
+    clearTimeout(wheelTimer);
+    wheelTimer = setTimeout(()=>{ wheelAccum=0; }, 200);
+    if (Math.abs(wheelAccum) < 40) return;
+    window.parent.postMessage(wheelAccum > 0 ? 'scroll-down-edge' : 'scroll-up-edge', '*');
+    wheelAccum = 0;
+    return;
+  }
   wheelAccum += e.deltaY;
   clearTimeout(wheelTimer);
   wheelTimer = setTimeout(()=>{ wheelAccum=0; }, 200);

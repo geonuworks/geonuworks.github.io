@@ -9,14 +9,14 @@
     @font-face { font-family:'Poppins'; src:url('source/fonts/Poppins-Medium.ttf') format('truetype'); font-weight:500; }
     @font-face { font-family:'Poppins'; src:url('source/fonts/Poppins-Bold.ttf') format('truetype'); font-weight:700; }
 
-    /* ★ 가로모드 글씨 크기 이상 현상 방지 (세로모드와 완전히 같게 유지) */
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+
+    /* Responsive base font ─ matches index.html scaling */
     html { 
       font-size: clamp(12px, 0.9vw, 15px); 
       -webkit-text-size-adjust: 100%;
       text-size-adjust: 100%;
     }
-
-    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
 
     body {
       font-family:'Poppins', sans-serif;
@@ -35,6 +35,7 @@
     /* ── LEFT COLUMN ── */
     .left-col { padding-right:40px; }
 
+    /* 기준 크기(0.82rem)로 통일 */
     .bio {
       font-size:0.82rem; 
       line-height:1.75;
@@ -44,7 +45,6 @@
     .bio strong { font-weight:700; }
     .bio em { font-style:normal; font-weight:700; }
 
-    /* SKILLS & LANGUAGE 디자인 */
     .skills-lang {
       display:grid;
       grid-template-columns:1fr 1fr;
@@ -52,13 +52,7 @@
       margin-bottom:24px;
     }
 
-    /* ★ 추가: TOOLS & CONTACTS 나란히 배치용 그리드 */
-    .tools-contacts-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0 16px;
-    }
-
+    /* [좌측 카테고리] 기준 크기(0.82rem)로 통일 */
     .left-section-label {
       font-size:0.82rem;
       font-weight:700;
@@ -67,11 +61,14 @@
       margin-bottom:10px;
     }
 
+    /* [좌측 항목들] 기준 크기(0.82rem)로 통일 */
     .skill-list { list-style:none; display:flex; flex-direction:column; gap:4px; }
     .skill-list li { font-size:0.82rem; color:#0D0D11; line-height:1.5; }
 
     .lang-list { list-style:none; display:flex; flex-direction:column; gap:4px; }
     .lang-row { display:flex; justify-content:space-between; align-items:baseline; font-size:0.82rem; }
+    .lang-row span:first-child { color:#0D0D11; }
+    .lang-row span:last-child  { color:#0D0D11; }
 
     .tools-section { margin-bottom:24px; }
     .tools-grid { display:flex; flex-direction:column; gap:4px; }
@@ -83,20 +80,26 @@
     .contact-section p { font-size:0.82rem; color:#0D0D11; line-height:1.7; }
     .contact-section a { color:#0D0D11; text-decoration:none; }
 
+    /* QR codes ─ responsive size via em so they scale with font */
     .qr-section { display:flex; gap:24px; margin-top:8px; }
     .qr-item { display:flex; flex-direction:column; align-items:flex-start; gap:6px; }
     .qr-item span { font-size:0.75rem; color:#0D0D11; }
-    .qr-item img { width: 5rem; height: 5rem; display:block; }
+    .qr-item img {
+      width: 5rem;
+      height: 5rem;
+      display:block;
+    }
 
     /* ── RIGHT COLUMN ── */
     .right-col {
       padding-left:40px;
       display:grid;
-      grid-template-columns: 140px 40px 1fr 1fr 1fr; 
+      grid-template-columns: 140px 40px 1fr 1fr 1fr; /* 카테고리 크기에 맞춰 140px로 조절 */
       column-gap:0;
       align-content:start;
     }
 
+    /* each section spans all 5 cols */
     .cv-section {
       grid-column: 1 / 6;
       display:grid;
@@ -108,6 +111,7 @@
     }
     .cv-section:first-child { padding-top:0; border-top:none; }
 
+    /* [우측 카테고리] 기준 크기(0.82rem)로 통일 */
     .cv-section-label {
       grid-column:1;
       font-size:0.82rem;
@@ -118,6 +122,7 @@
       padding-top:2px;
     }
 
+    /* section body spans cols 2-5 */
     .cv-section-body {
       grid-column: 2 / 6;
       display:grid;
@@ -126,6 +131,7 @@
       align-items:start;
     }
 
+    /* each entry spans all 4 cols of section-body (cols 2-5) */
     .cv-entry,
     .exp-entry,
     .exhibit-entry {
@@ -135,6 +141,7 @@
       align-items:start;
     }
 
+    /* col 1 of body (=col 2 page): logo cell, right-aligned, 40px */
     .logo-cell {
       grid-column:1;
       display:flex;
@@ -147,19 +154,29 @@
     .logo-kia     { width:2.2rem; }
     .logo-lg      { width:1.4rem; }
 
+    /* education/award: no logo → empty spacer in col1 */
     .cv-entry-spacer { grid-column:1; }
 
-    /* 각 아이템 내 텍스트 컨테이너 */
+    /* col 2 of body (=col 3 page): institution/name */
     .cv-entry-body { grid-column:2; }
     .exp-body      { grid-column:2; }
     .exhibit-entry .exhibit-body { grid-column:2 / 4; }
     
+    /* EDUCATION 및 AWARD 기관명 크기 기준(0.82rem) 통일 */
     .cv-entry-institution { font-size:0.82rem; font-weight:700; color:#0D0D11; line-height:1.4; }
+
+    /* col 3 of body (=col 4 page): role/result */
     .cv-entry-col3 { grid-column:3; }
+    /* 전공 및 수상내역 역할 크기 기준(0.82rem) 통일 */
     .cv-entry-role { grid-column:3; font-size:0.82rem; font-weight:400; color:#0D0D11; }
+
+    /* col 4 of body (=col 5 page): date, right-aligned ─ 기존 유지 */
     .cv-entry-date { grid-column:4; font-size:0.75rem; color:#878788; text-align:right; white-space:nowrap; }
 
+    /* HYUNDAI, KIA 타이틀 영역 크기 기존(0.82rem) 유지 */
     .exp-org { font-size:0.82rem; font-weight:400; color:#0D0D11; line-height:1.4; }
+    
+    /* ⚠️ 프로젝트 상세 정보 및 불릿 크기 원본 그대로 고정 (0.75rem, 0.72rem) */
     .exp-org .sub     { font-weight:400; font-size:0.75rem; color:#0D0D11; display:block; }
     .exp-org .project { font-size:0.75rem; font-weight:400; color:#0D0D11; display:block; margin-top:6px; }
 
@@ -170,6 +187,8 @@
     }
     .exp-bullets li::before { content:'·'; position:absolute; left:2px; color:#878788; }
 
+    /* Exhibition: 타이틀 및 기존 불릿 크기 원본 그대로 고정 */
+    .exhibit-entry .exhibit-body { grid-column:2/4; }
     .exhibit-body .title    { font-size:0.82rem; font-weight:700; color:#0D0D11; }
     .exhibit-body .subtitle { font-size:0.75rem; color:#0D0D11; margin-top:2px; }
     .exhibit-body .bullet {
@@ -179,97 +198,170 @@
     .exhibit-body .bullet::before { content:'·'; position:absolute; left:2px; color:#878788; }
 
     /* ═══════════════════════════════
-       📱 모바일 공통 최적화 레이아웃
+       📱 모바일 및 가로 모드 최적화 레이아웃 오버라이드
+       (데스크톱 그리드 구조에 절대 오염을 주지 않도록 완벽 분리 격리)
     ═══════════════════════════════ */
     @media (max-width: 768px), (max-width: 915px) and (orientation: landscape) {
       .body-layout {
-        display: flex;
-        flex-direction: column;
-        padding: 120px 24px 40px;
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 120px 24px 40px !important; /* 상단 헤더 안전 여백 확보 */
       }
       
-      .left-col {
-        display: contents; 
+      /* 모바일 레이아웃 단일 열 유연화 */
+      .left-col, .right-col {
+        padding-right: 0 !important;
+        padding-left: 0 !important;
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
       }
       
-      .right-col {
-        padding-left: 0;
-        display: flex;
-        flex-direction: column;
-      }
-      
-      .cv-section {
-        display: flex;
-        flex-direction: column;
-        padding: 20px 0;
-        gap: 12px;
-      }
-      
-      .cv-section-body {
-        display: flex;
-        flex-direction: column;
-        gap: 24px;
+      .cv-section, .cv-section-body, .cv-entry, .exp-entry, .exhibit-entry {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 8px !important;
       }
 
-      /* ★ 요구사항 반영: 모바일에서 정보 헤더 타이틀들을 2단 분할 구조로 변환 */
-      .mobile-split-header {
-        display: flex !important;
-        flex-direction: row !important;
-        justify-content: space-between !important;
-        align-items: baseline !important;
-        width: 100%;
+      .cv-section {
+        padding: 20px 0 !important;
+        border-top: 1px solid #e0e0e0 !important;
       }
-      
-      .cv-entry, .exp-entry, .exhibit-entry {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        position: relative;
-        width: 100%;
-      }
+      .cv-section:first-child { border-top: none !important; }
 
       .logo-cell {
-        justify-content: flex-start;
-        padding-top: 0;
-        margin-bottom: 0px;
+        justify-content: flex-start !important;
+        padding-top: 0 !important;
+        margin-bottom: 2px !important;
       }
 
-      /* 우측 정렬 날짜 스타일 지정 */
+      /* 💡 유연한 모바일 가로/세로 순서 레이아웃 배치 기법 */
+      .bio { order: 1; margin-bottom: 24px !important; }
+      .right-col { order: 2; }
+      
+      /* 모바일 하단 재배치 타겟 구조 */
+      .skills-lang { 
+        order: 3 !important; 
+        margin-top: 32px !important; 
+        border-top: 1px solid #e0e0e0 !important; 
+        padding-top: 24px !important;
+        margin-bottom: 16px !important;
+      }
+
+      /* CONTACTS(좌측) / TOOLS(우측) 가로 정렬 및 순서 지정 */
+      .tools-section { 
+        order: 5 !important; 
+        width: 50% !important;
+        margin-bottom: 0 !important;
+      }
+      .contact-section { 
+        order: 4 !important; 
+        width: 50% !important;
+        margin-bottom: 0 !important;
+      }
+      
+      /* CONTACTS와 TOOLS를 한 줄에 두기 위한 left-col 하위의 흐름 정돈 */
+      .left-col {
+        display: flex !important;
+        flex-direction: column !important;
+      }
+      
+      /* 임시 가로 정렬 바인딩 컨테이너 가상화 효과 */
+      .left-col {
+        position: relative;
+      }
+      
+      /* 모바일 정렬 상태에서 텍스트 감싸기 우회형 구조 설계 */
+      @media (min-width: 0px) {
+        .skills-lang { display: grid !important; grid-template-columns: 1fr 1fr !important; }
+        /* 접점 연동: CONTACTS를 좌측에, TOOLS를 우측에 나란히 같은 줄 배치 */
+        .contact-section, .tools-section { display: inline-block !important; vertical-align: top; }
+        .contact-section { float: left; width: 50% !important; }
+        .tools-section { float: right; width: 50% !important; padding-left: 16px; }
+        .qr-section { clear: both; order: 6 !important; margin-top: 24px !important; }
+      }
+
+      /* 💡 요구사항: 모바일 타이틀 행 좌우 2단 분할 정렬 구조 변환 */
+      .cv-entry, .exp-entry, .exhibit-entry {
+        position: relative;
+      }
+
+      /* EDUCATION 가로 정렬 */
+      .cv-section:nth-of-type(1) .cv-entry-body::after {
+        content: '';
+        display: block;
+        clear: both;
+      }
+      
+      /* 텍스트 2단 강제 개행 매핑 */
+      .cv-entry-institution, .exhibit-body .title {
+        display: inline-block !important;
+        float: left;
+        font-size: 0.82rem !important;
+        font-weight: 700 !important;
+      }
       .cv-entry-date {
-        position: static;
-        text-align: right;
-        font-size: 0.75rem;
-        color: #878788;
-        white-space: nowrap;
+        display: inline-block !important;
+        float: right;
+        text-align: right !important;
+        font-size: 0.75rem !important;
+        color: #878788 !important;
+        position: static !important;
+      }
+      .cv-entry-role, .cv-entry-col3 {
+        clear: both;
+        display: block !important;
+        margin-top: 4px !important;
       }
 
-      /* 모바일 전용 순서 정렬 */
-      .bio { order: 1; margin-bottom: 24px; }
-      .right-col { order: 2; } 
-      
-      .skills-lang { order: 3; margin-top: 32px; border-top: 1px solid #e0e0e0; padding-top: 24px; margin-bottom: 16px; }
-      
-      /* ★ 요구사항 반영: CONTACTS 좌측, TOOLS 우측 나란히 배치 */
-      .tools-contacts-container { 
-        order: 4; 
-        margin-top: 0px;
+      /* EXPERIENCE: Project Manager 라인 2단 정렬 */
+      .exp-entry {
+        display: block !important;
       }
-      .contact-section { order: 1; margin-bottom: 0; }
-      .tools-section { order: 2; margin-bottom: 0; }
-      
-      .qr-section { order: 5; margin-top: 24px; margin-bottom: 20px; }
+      .exp-body {
+        display: block !important;
+      }
+      .exp-body::before {
+        content: 'Project Manager';
+        font-size: 0.82rem !important;
+        font-weight: 700 !important;
+        color: #0D0D11;
+        float: left;
+        margin-bottom: 4px;
+      }
+      /* 기존 독립 배치되어 있던 하단 직무 텍스트는 모바일에서 숨김 (상단 라인 결합 완료) */
+      .right-col .cv-section:nth-of-type(3) .cv-entry-role {
+        display: none !important;
+      }
+
+      /* EXHIBITION: LG Electronics × K-Arts 라인 2단 정렬 */
+      .exhibit-body {
+        display: block !important;
+      }
+      .exhibit-body .subtitle {
+        clear: both;
+      }
+
+      /* ★ 요구사항: 한국예술종합학교 날짜 옆 (estimated) 구문 모바일에서 제거 */
+      .cv-section:nth-of-type(1) .cv-entry:nth-of-type(1) .cv-entry-date {
+        font-size: 0px !important;
+        color: transparent !important;
+      }
+      .cv-section:nth-of-type(1) .cv-entry:nth-of-type(1) .cv-entry-date::before {
+        content: 'Feb. 2020. – Aug. 2027.';
+        font-size: 0.75rem !important;
+        color: #878788 !important;
+      }
     }
 
-    /* ═══════════════════════════════
-       🍏 아이폰 주소창 가림 방지 가로 모드 전용 세부 조정
-    ═══════════════════════════════ */
+    /* 아이폰 가로 모드 뷰포트 맞춤 */
     @media (max-width: 915px) and (orientation: landscape) {
-      .body-layout {
-        padding: 96px 24px 40px; /* 가로 모드 시 상단 주소창 밀림 방지 헤더 안전망 확보 */
-        min-height: 100svh; /* 주소창 크기를 제외한 실제 브라우저 가시 영역 맞춤 */
+      .body-layout { 
+        padding: 96px 24px 40px !important; 
+        min-height: 100svh !important; 
       }
-      .bio { margin-bottom: 16px; }
-      .cv-section { padding: 14px 0; }
+      .cv-section { padding: 14px 0 !important; }
     }
   </style>
 </head>
@@ -305,24 +397,20 @@
         </div>
       </div>
 
-      <div class="tools-contacts-container">
-        
-        <div class="contact-section">
-          <div class="left-section-label">CONTACTS</div>
-          <p><a href="mailto:geonuworks@gmail.com">geonuworks@gmail.com</a></p>
-          <p>+82 10 2811 4285</p>
+      <div class="tools-section">
+        <div class="left-section-label">TOOLS</div>
+        <div class="tools-grid">
+          <div class="tools-row"><span class="tool-key">2D</span><span>Adobe Suite / Figma</span></div>
+          <div class="tools-row"><span class="tool-key">3D</span><span>Blender 3D / Maya</span></div>
+          <div class="tools-row"><span class="tool-key">AI</span><span>Vizcom / Udin BV Optic</span></div>
+          <div class="tools-row"><span class="tool-key">XR</span><span>Gravity Sketch</span></div>
         </div>
+      </div>
 
-        <div class="tools-section">
-          <div class="left-section-label">TOOLS</div>
-          <div class="tools-grid">
-            <div class="tools-row"><span class="tool-key">2D</span><span>Adobe / Figma</span></div>
-            <div class="tools-row"><span class="tool-key">3D</span><span>Blender / Maya</span></div>
-            <div class="tools-row"><span class="tool-key">AI</span><span>Vizcom / Optic</span></div>
-            <div class="tools-row"><span class="tool-key">XR</span><span>Gravity Sketch</span></div>
-          </div>
-        </div>
-
+      <div class="contact-section">
+        <div class="left-section-label">CONTACTS</div>
+        <p><a href="mailto:geonuworks@gmail.com">geonuworks@gmail.com</a></p>
+        <p>+82 10 2811 4285</p>
       </div>
 
       <div class="qr-section">
@@ -343,25 +431,22 @@
       <div class="cv-section">
         <div class="cv-section-label">EDUCATION</div>
         <div class="cv-section-body">
-          
           <div class="cv-entry">
             <div class="cv-entry-spacer"></div>
-            <div class="cv-entry-body mobile-split-header" style="grid-column: 2 / 5;">
+            <div class="cv-entry-body">
               <div class="cv-entry-institution">Korea National University of Arts</div>
-              <div class="cv-entry-date">Feb. 2020. – Aug. 2027. (estimated)</div>
             </div>
-            <div class="cv-entry-col3" style="font-size:0.82rem;font-weight:400;color:#0D0D11;grid-column: 2 / 5;">BA, Transportation Design</div>
+            <div class="cv-entry-col3" style="font-size:0.82rem;font-weight:400;color:#0D0D11;">BA, Transportation Design</div>
+            <div class="cv-entry-date">Feb. 2020. – Aug. 2027. (estimated)</div>
           </div>
-
           <div class="cv-entry">
             <div class="cv-entry-spacer"></div>
-            <div class="cv-entry-body mobile-split-header" style="grid-column: 2 / 5;">
+            <div class="cv-entry-body">
               <div class="cv-entry-institution">Ansan Technical Highschool</div>
-              <div class="cv-entry-date">Feb. 2016. – Feb. 2019.</div>
             </div>
-            <div class="cv-entry-col3" style="font-size:0.82rem;font-weight:400;color:#0D0D11;grid-column: 2 / 5;">highschool diploma, Industrial Design</div>
+            <div class="cv-entry-col3" style="font-size:0.82rem;font-weight:400;color:#0D0D11;">highschool diploma, Industrial Design</div>
+            <div class="cv-entry-date">Feb. 2016. – Feb. 2019.</div>
           </div>
-
         </div>
       </div>
 
@@ -370,11 +455,11 @@
         <div class="cv-section-body">
           <div class="cv-entry">
             <div class="cv-entry-spacer"></div>
-            <div class="cv-entry-body mobile-split-header" style="grid-column: 2 / 5;">
+            <div class="cv-entry-body">
               <div class="cv-entry-institution">Volvo Design Competition 2026</div>
-              <div class="cv-entry-date">Mar. 2026.</div>
             </div>
-            <div class="cv-entry-role" style="grid-column: 2 / 5;">Shortlisted (Phase 1)</div>
+            <div class="cv-entry-col3" style="font-size:0.82rem;font-weight:400;color:#0D0D11;">Shortlisted (Phase 1)</div>
+            <div class="cv-entry-date">Mar. 2026.</div>
           </div>
         </div>
       </div>
@@ -388,11 +473,7 @@
               <img class="logo-hyundai" src="source/icons/logo_hyundai.svg" alt="Hyundai" />
             </div>
             <div class="exp-body">
-              <div class="mobile-split-header">
-                <div class="cv-entry-role" style="font-weight:700; color:#0D0D11;">Project Manager</div>
-                <div class="cv-entry-date">Mar. 2025. – Dec. 2025.</div>
-              </div>
-              <div class="exp-org" style="margin-top: 4px;">
+              <div class="exp-org">
                 <strong>HYUNDAI</strong> industry-academic cooperation
                 <span class="sub">Exterior Design</span>
                 <span class="project">〈AI-driven Design Process Development Research〉</span>
@@ -403,6 +484,8 @@
                 <li>Completed an individual project within the framework, contributing to the successful delivery of 8 projects for HYUNDAI.</li>
               </ul>
             </div>
+            <div class="cv-entry-role">Project Manager</div>
+            <div class="cv-entry-date">Mar. 2025. – Dec. 2025.</div>
           </div>
 
           <div class="exp-entry">
@@ -410,11 +493,7 @@
               <img class="logo-kia" src="source/icons/logo_kia.svg" alt="KIA" />
             </div>
             <div class="exp-body">
-              <div class="mobile-split-header">
-                <div class="cv-entry-role" style="font-weight:700; color:#0D0D11;">Project Manager</div>
-                <div class="cv-entry-date">Mar. 2024. – Jun. 2024.</div>
-              </div>
-              <div class="exp-org" style="margin-top: 4px;">
+              <div class="exp-org">
                 <strong>KIA</strong> industry-academic cooperation
                 <span class="sub">Next Interior Design</span>
                 <span class="project">〈2030 eMPV Advanced Interior Design Research〉</span>
@@ -424,6 +503,8 @@
                 <li>Explored forward-looking meta trends research to define the cultural and technological context.</li>
               </ul>
             </div>
+            <div class="cv-entry-role">Project Manager</div>
+            <div class="cv-entry-date">Mar. 2024. – Jun. 2024.</div>
           </div>
 
         </div>
@@ -436,14 +517,12 @@
             <div class="logo-cell">
               <img class="logo-lg" src="source/icons/logo_lg.svg" alt="LG" />
             </div>
-            <div class="exhibit-body" style="grid-column: 2 / 5;">
-              <div class="mobile-split-header">
-                <div class="title">LG Electronics × K-Arts</div>
-                <div class="cv-entry-date">Dec. 2025. – Apr. 2026.</div>
-              </div>
+            <div class="exhibit-body">
+              <div class="title">LG Electronics × K-Arts</div>
               <div class="subtitle">〈Objects with Nunchi: When Home Appliances Develop Emotional Intelligence〉,<br>Gyeongdong Market, Seoul, 2025</div>
               <div class="bullet">Contributed to the 3D visualization of Furon(LG's Affectionate Intelligence).</div>
             </div>
+            <div class="cv-entry-date">Dec. 2025. – Apr. 2026.</div>
           </div>
         </div>
       </div>
@@ -467,7 +546,7 @@
     const dir = wheelAccum > 0 ? 1 : -1;
     wheelAccum = 0;
     if (dir < 0 && atTop)    window.parent.postMessage('scroll-up-edge',   '*');
-    if (dir > 1 && atBottom) window.parent.postMessage('scroll-down-edge', '*');
+    if (dir > 0 && atBottom) window.parent.postMessage('scroll-down-edge', '*');
   }, { passive: true });
 })();
 </script>
