@@ -9,6 +9,12 @@
     @font-face { font-family:'Poppins'; src:url('source/fonts/Poppins-Medium.ttf') format('truetype'); font-weight:500; }
     @font-face { font-family:'Poppins'; src:url('source/fonts/Poppins-Bold.ttf') format('truetype'); font-weight:700; }
 
+    /* ★ 가로모드 글씨 크기 오작동 방지 복원 */
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
     *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
     html, body { width:100%; height:100%; overflow:hidden; font-family:'Poppins',sans-serif; font-weight:400; color:#0D0D11; }
 
@@ -47,7 +53,6 @@
     /* ── PAGE 1: ARCHIVE ── */
     #page-archive { background:#fff; display:flex; }
 
-    /* Left sidebar */
     .archive-sidebar {
       width:220px;
       flex-shrink:0;
@@ -69,7 +74,6 @@
     .project-nav-item.active { color:#0D0D11; text-decoration:underline; text-underline-offset:3px; }
     .project-nav-item:hover { color:#0D0D11; }
 
-    /* Right content area */
     .archive-content {
       flex:1;
       padding:96px 48px 48px;
@@ -114,10 +118,7 @@
       transition: opacity 0.3s ease; 
       z-index: 2; 
     }
-
-    .cover-layer:hover::after {
-      opacity: 0.1; 
-    }
+    .cover-layer:hover::after { opacity: 0.1; }
 
     .cover-layer img {
       width: 100%;
@@ -128,7 +129,6 @@
       z-index: 1;
     }
 
-    /* Meta row */
     .project-meta {
       display:grid;
       grid-template-columns: 80px 1fr 1fr 1fr;
@@ -172,25 +172,9 @@
       transition: opacity 0.4s ease, transform 0.4s ease;
     }
     #lightbox.visible #lightbox-inner { opacity: 1; transform: translateY(0); }
-
-    #lightbox-inner picture {
-      display: block;
-      width: 100%;
-      margin-bottom: 0;
-      padding: 0;
-    }
-
-    #lightbox-inner picture img {
-      width: 100%;
-      height: auto;
-      display: block;
-      vertical-align: top; 
-    }
-
-    #lightbox-vimeo-wrap {
-      width: 100%;
-      margin-bottom: 8px;
-    }
+    #lightbox-inner picture { display: block; width: 100%; margin-bottom: 0; padding: 0; }
+    #lightbox-inner picture img { width: 100%; height: auto; display: block; vertical-align: top; }
+    #lightbox-vimeo-wrap { width: 100%; margin-bottom: 8px; }
     
     #lightbox-close {
       position:fixed; top:28px; right:48px;
@@ -217,7 +201,6 @@
 
       #page-archive { flex-direction: column; overflow-y: auto; -webkit-overflow-scrolling: touch; }
       
-      /* ★ 수정: 헤더 영역 공간 확보를 위해 패딩 탑을 114px로 대폭 상향조정 */
       .archive-sidebar {
         width: 100%;
         padding: 114px 20px 12px 20px;
@@ -230,19 +213,12 @@
       .archive-sidebar::-webkit-scrollbar { display: none; } 
       .project-nav-item { font-size: 0.85rem; display: inline-block; }
 
-      /* ★ 수정: 메뉴 탭 바와 컨텐츠 겹침 차단을 위해 탑 마진 및 여백 재구성 */
       .archive-content {
         padding: 8px 20px 40px 20px;
         flex-shrink: 0;
         overflow: visible;
       }
       #archive-cover { aspect-ratio: 4/3; }
-
-      @media (orientation: landscape) {
-        /* ★ 가로 모드 대응: 메뉴와 헤더가 안전하게 떨어지도록 높이 밸런스 패딩 설정 */
-        .archive-sidebar { padding: 94px 20px 8px 20px; }
-        #archive-cover { aspect-ratio: 16/6; max-height: 40vh; }
-      }
 
       .project-meta {
         grid-template-columns: 1fr 1fr;
@@ -257,6 +233,15 @@
       
       #lightbox-inner { width: calc(100% - 32px); padding: 60px 0 60px; }
       #lightbox-close { top: 20px; right: 20px; }
+    }
+
+    /* ★ 가로모드 주소창 가림 크래시 완전 방지용 밀도 제어 규격 */
+    @media (max-width: 915px) and (orientation: landscape) {
+      .page { 
+        height: 100svh !important; /* 주소창이 자리 잡고 있어도 스크린 크기 강제 추적 */
+      }
+      .archive-sidebar { padding: 94px 20px 8px 20px; }
+      #archive-cover { aspect-ratio: 16/6; max-height: 38vh; }
     }
   </style>
 </head>
@@ -466,7 +451,11 @@ function goToPage(n) {
   if (n === currentPage || isAnimating) return;
   currentPage = n;
   isAnimating = true;
-  pagesWrapper.style.transform = `translateY(${n * -100}vh)`;
+  
+  // 가로모드 svh 단위 강제 대응에 맞춰 내부 스냅 이격 보완 계산
+  const targetOffset = n * -100;
+  pagesWrapper.style.transform = `translateY(${targetOffset}svh)`;
+  
   document.getElementById('nav-archive').classList.toggle('active',    n === 0);
   document.getElementById('nav-sketchbook').classList.toggle('active', n === 1);
   document.getElementById('nav-about').classList.toggle('active',      n === 2);
