@@ -97,58 +97,71 @@
       #board {
         display: flex;
         width: 100%;
-        height: 100%;
+        height: 100svh;
         overflow-x: auto;
-        overflow-y: hidden; 
+        overflow-y: hidden;
         scroll-snap-type: x mandatory;
-        scroll-behavior: smooth;
         -webkit-overflow-scrolling: touch;
-        /* ★ 요구사항: 양옆 다른 스케치가 튀어나와 인지되도록 배치 가속 여백 확보 */
-        padding-left: 9vw;  
+        padding-left: 9vw;
         padding-right: 9vw;
+        align-items: stretch;
       }
-      #board::-webkit-scrollbar { display: none; } 
+      #board::-webkit-scrollbar { display: none; }
 
       .sketch {
         position: relative !important;
         left: 0 !important; top: 0 !important;
-        width: 82vw !important; /* ★ 가로폭을 줄여 이전/다음 스케치가 좌우측에 걸치게 연동 */
-        height: 100svh !important; 
+        width: 82vw !important;
+        height: 100svh !important;
         flex-shrink: 0;
-        background: transparent;
-        box-shadow: none;
-        display: flex;
+        background: transparent !important;
+        box-shadow: none !important;
+        display: flex !important;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
-        scroll-snap-align: center; 
-        padding: 0 12px; 
-        cursor: default;
-      }
-      
-      .sketch img {
-        width: auto;
-        height: auto;
-        max-width: 100%;
-        max-height: 66vh;
-        object-fit: contain;
-        background: #fff;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-        pointer-events: auto !important; 
-        cursor: pointer;
+        scroll-snap-align: center;
+        padding: 60px 0 80px;
+        cursor: default !important;
+        transition: none !important;
       }
 
+      .sketch img {
+        width: auto !important;
+        height: auto !important;
+        max-width: 100% !important;
+        max-height: calc(100svh - 160px) !important;
+        object-fit: contain !important;
+        background: #fff;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        pointer-events: auto !important;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+
+      /* info bar: absolutely positioned inside the sketch card */
       .sketch-info {
+        position: absolute !important;
+        bottom: 32px !important;
+        left: 0 !important;
+        right: 0 !important;
         opacity: 1 !important;
-        bottom: 24px; left: 12px; right: 12px;
         border-radius: 8px;
-        pointer-events: auto;
+        margin: 0 4px;
+        pointer-events: auto !important;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
       }
     }
+
     @media (max-width: 915px) and (orientation: landscape) {
       #board { padding-left: 14vw; padding-right: 14vw; }
-      .sketch { width: 72vw !important; padding: 20px 12px; height: 100svh !important; }
-      .sketch img { max-height: 52vh !important; }
-      .sketch-info { bottom: 6px; padding: 0.3em 0.8em; }
+      .sketch {
+        width: 72vw !important;
+        padding: 48px 0 64px !important;
+      }
+      .sketch img { max-height: calc(100svh - 120px) !important; }
+      .sketch-info { bottom: 16px !important; padding: 0.3em 0.8em; }
     }
   </style>
 </head>
@@ -186,9 +199,6 @@ function placeSketch(src, idx) {
     }
 
     img.alt=''; img.draggable=false;
-    if (!mobile) {
-      img.style.cssText='display:block;width:100%;height:100%;object-fit:fill;pointer-events:none;user-select:none;-webkit-user-drag:none;';
-    }
     el.appendChild(img);
 
     const key = String(idx+1).padStart(2,'0');

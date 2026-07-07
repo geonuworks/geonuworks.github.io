@@ -198,168 +198,220 @@
     .exhibit-body .bullet::before { content:'·'; position:absolute; left:2px; color:#878788; }
 
     /* ═══════════════════════════════
-       📱 모바일 및 가로 모드 최적화 레이아웃 오버라이드
-       (데스크톱 그리드 구조에 절대 오염을 주지 않도록 완벽 분리 격리)
+       📱 모바일 및 가로 모드 최적화 레이아웃
     ═══════════════════════════════ */
     @media (max-width: 768px), (max-width: 915px) and (orientation: landscape) {
       .body-layout {
         display: flex !important;
         flex-direction: column !important;
-        padding: 120px 24px 40px !important; /* 상단 헤더 안전 여백 확보 */
-      }
-      
-      /* 모바일 레이아웃 단일 열 유연화 */
-      .left-col, .right-col {
-        padding-right: 0 !important;
-        padding-left: 0 !important;
-        width: 100% !important;
-        display: flex !important;
-        flex-direction: column !important;
-      }
-      
-      .cv-section, .cv-section-body, .cv-entry, .exp-entry, .exhibit-entry {
-        display: flex !important;
-        flex-direction: column !important;
-        width: 100% !important;
-        gap: 8px !important;
+        padding: 108px 20px 48px !important;
+        gap: 0 !important;
       }
 
+      /* left-col: flex column, items in order */
+      .left-col {
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 0 !important;
+        width: 100% !important;
+        order: 1;
+      }
+
+      .right-col {
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 0 !important;
+        width: 100% !important;
+        order: 2;
+        margin-top: 8px;
+      }
+
+      /* left-col child ordering */
+      .bio { order: 1; margin-bottom: 20px !important; }
+      .skills-lang {
+        order: 2;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 0 16px !important;
+        padding-top: 20px !important;
+        border-top: 1px solid #e0e0e0;
+        margin-bottom: 20px !important;
+      }
+
+      /* CONTACTS + TOOLS: side by side */
+      .contact-section {
+        order: 3;
+      }
+      .tools-section {
+        order: 4;
+        margin-bottom: 0 !important;
+      }
+
+      /* wrapper trick: wrap contact+tools in a flex row */
+      .left-col .contact-section,
+      .left-col .tools-section {
+        width: 50% !important;
+        float: none !important;
+        display: block !important;
+      }
+
+      /* Use a pseudo-flex row for contact+tools */
+      .left-col::after {
+        content: '';
+        display: table;
+        clear: both;
+      }
+      .contact-section { float: left !important; padding-right: 12px; margin-bottom: 20px !important; }
+      .tools-section   { float: right !important; padding-left: 4px; }
+
+      .qr-section {
+        order: 5;
+        clear: both;
+        padding-top: 20px;
+        margin-top: 20px !important;
+        border-top: 1px solid #e0e0e0;
+      }
+
+      /* ── CV sections: stack vertically ── */
       .cv-section {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px !important;
         padding: 20px 0 !important;
         border-top: 1px solid #e0e0e0 !important;
+        width: 100% !important;
       }
       .cv-section:first-child { border-top: none !important; }
 
+      .cv-section-label {
+        font-size: 0.78rem !important;
+        color: #878788 !important;
+        letter-spacing: 0.08em;
+      }
+
+      .cv-section-body {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 16px !important;
+        width: 100% !important;
+      }
+
+      /* ── each entry ── */
+      .cv-entry,
+      .exp-entry,
+      .exhibit-entry {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 2px !important;
+        width: 100% !important;
+      }
+
+      /* hide spacer/logo cell on mobile */
+      .cv-entry-spacer { display: none !important; }
       .logo-cell {
         justify-content: flex-start !important;
         padding-top: 0 !important;
-        margin-bottom: 2px !important;
+        margin-bottom: 4px !important;
       }
 
-      /* 💡 유연한 모바일 가로/세로 순서 레이아웃 배치 기법 */
-      .bio { order: 1; margin-bottom: 24px !important; }
-      .right-col { order: 2; }
-      
-      /* 모바일 하단 재배치 타겟 구조 */
-      .skills-lang { 
-        order: 3 !important; 
-        margin-top: 32px !important; 
-        border-top: 1px solid #e0e0e0 !important; 
-        padding-top: 24px !important;
-        margin-bottom: 16px !important;
+      /* institution + date: row */
+      .cv-entry-body {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: baseline !important;
+        gap: 8px !important;
+        flex-wrap: wrap;
       }
 
-      /* CONTACTS(좌측) / TOOLS(우측) 가로 정렬 및 순서 지정 */
-      .tools-section { 
-        order: 5 !important; 
-        width: 50% !important;
-        margin-bottom: 0 !important;
+      .cv-entry-institution {
+        flex: 1 !important;
+        font-size: 0.82rem !important;
+        font-weight: 700 !important;
       }
-      .contact-section { 
-        order: 4 !important; 
-        width: 50% !important;
-        margin-bottom: 0 !important;
+
+      /* date beside institution */
+      .cv-entry-date {
+        font-size: 0.72rem !important;
+        color: #878788 !important;
+        text-align: right !important;
+        white-space: nowrap;
+        flex-shrink: 0;
       }
-      
-      /* CONTACTS와 TOOLS를 한 줄에 두기 위한 left-col 하위의 흐름 정돈 */
-      .left-col {
+
+      /* role/major below */
+      .cv-entry-col3,
+      .cv-entry-role {
+        font-size: 0.8rem !important;
+        color: #0D0D11 !important;
+        margin-top: 0 !important;
+      }
+
+      /* EXPERIENCE entries */
+      .exp-body {
         display: flex !important;
         flex-direction: column !important;
-      }
-      
-      /* 임시 가로 정렬 바인딩 컨테이너 가상화 효과 */
-      .left-col {
-        position: relative;
-      }
-      
-      /* 모바일 정렬 상태에서 텍스트 감싸기 우회형 구조 설계 */
-      @media (min-width: 0px) {
-        .skills-lang { display: grid !important; grid-template-columns: 1fr 1fr !important; }
-        /* 접점 연동: CONTACTS를 좌측에, TOOLS를 우측에 나란히 같은 줄 배치 */
-        .contact-section, .tools-section { display: inline-block !important; vertical-align: top; }
-        .contact-section { float: left; width: 50% !important; }
-        .tools-section { float: right; width: 50% !important; padding-left: 16px; }
-        .qr-section { clear: both; order: 6 !important; margin-top: 24px !important; }
+        gap: 2px !important;
       }
 
-      /* 💡 요구사항: 모바일 타이틀 행 좌우 2단 분할 정렬 구조 변환 */
-      .cv-entry, .exp-entry, .exhibit-entry {
-        position: relative;
+      /* org header row: name + role + date */
+      .exp-org {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        align-items: baseline !important;
+        gap: 0 8px !important;
       }
 
-      /* EDUCATION 가로 정렬 */
-      .cv-section:nth-of-type(1) .cv-entry-body::after {
-        content: '';
-        display: block;
-        clear: both;
-      }
-      
-      /* 텍스트 2단 강제 개행 매핑 */
-      .cv-entry-institution, .exhibit-body .title {
-        display: inline-block !important;
-        float: left;
-        font-size: 0.82rem !important;
-        font-weight: 700 !important;
-      }
-      .cv-entry-date {
-        display: inline-block !important;
-        float: right;
-        text-align: right !important;
-        font-size: 0.75rem !important;
-        color: #878788 !important;
-        position: static !important;
-      }
-      .cv-entry-role, .cv-entry-col3 {
-        clear: both;
-        display: block !important;
-        margin-top: 4px !important;
-      }
-
-      /* EXPERIENCE: Project Manager 라인 2단 정렬 */
-      .exp-entry {
-        display: block !important;
-      }
-      .exp-body {
-        display: block !important;
-      }
-      .exp-body::before {
-        content: 'Project Manager';
-        font-size: 0.82rem !important;
-        font-weight: 700 !important;
-        color: #0D0D11;
-        float: left;
-        margin-bottom: 4px;
-      }
-      /* 기존 독립 배치되어 있던 하단 직무 텍스트는 모바일에서 숨김 (상단 라인 결합 완료) */
+      /* role & date: pull right */
       .right-col .cv-section:nth-of-type(3) .cv-entry-role {
-        display: none !important;
+        display: block !important;
+        font-size: 0.78rem !important;
+        color: #878788 !important;
+        margin-left: auto;
       }
 
-      /* EXHIBITION: LG Electronics × K-Arts 라인 2단 정렬 */
+      /* exp-entry: put logo+body in column, date floated */
+      .exp-entry {
+        position: relative !important;
+      }
+      .exp-entry .cv-entry-date {
+        position: absolute !important;
+        top: 0 !important;
+        right: 0 !important;
+      }
+
+      /* exhibit */
       .exhibit-body {
         display: block !important;
       }
+      .exhibit-body .title {
+        display: block !important;
+        font-size: 0.82rem !important;
+        font-weight: 700 !important;
+      }
       .exhibit-body .subtitle {
-        clear: both;
+        display: block !important;
+        font-size: 0.75rem !important;
+        margin-top: 2px;
       }
 
-      /* ★ 요구사항: 한국예술종합학교 날짜 옆 (estimated) 구문 모바일에서 제거 */
+      /* ★ 한국예술종합학교 날짜: estimated 제거 */
       .cv-section:nth-of-type(1) .cv-entry:nth-of-type(1) .cv-entry-date {
         font-size: 0px !important;
         color: transparent !important;
       }
       .cv-section:nth-of-type(1) .cv-entry:nth-of-type(1) .cv-entry-date::before {
         content: 'Feb. 2020. – Aug. 2027.';
-        font-size: 0.75rem !important;
+        font-size: 0.72rem !important;
         color: #878788 !important;
       }
     }
 
-    /* 아이폰 가로 모드 뷰포트 맞춤 */
+    /* 아이폰 가로 모드 */
     @media (max-width: 915px) and (orientation: landscape) {
-      .body-layout { 
-        padding: 96px 24px 40px !important; 
-        min-height: 100svh !important; 
+      .body-layout {
+        padding: 88px 20px 40px !important;
       }
       .cv-section { padding: 14px 0 !important; }
     }
@@ -532,10 +584,13 @@
 
 <script>
 (function() {
+  const isMobile = () => window.innerWidth <= 768 || (window.innerWidth <= 915 && window.innerHeight < window.innerWidth);
+
+  /* ── wheel: desktop only, edge-boundary page change ── */
   let wheelAccum = 0, wheelTimer = null;
   const THRESHOLD = 50;
   window.addEventListener('wheel', (e) => {
-    if (window.innerWidth <= 768) return; 
+    if (isMobile()) return;
     const el = document.documentElement;
     const atTop    = el.scrollTop <= 0;
     const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 4;
@@ -547,6 +602,23 @@
     wheelAccum = 0;
     if (dir < 0 && atTop)    window.parent.postMessage('scroll-up-edge',   '*');
     if (dir > 0 && atBottom) window.parent.postMessage('scroll-down-edge', '*');
+  }, { passive: true });
+
+  /* ── touch swipe: mobile page navigation ── */
+  let touchY0 = null;
+  window.addEventListener('touchstart', e => {
+    touchY0 = e.touches[0].clientY;
+  }, { passive: true });
+  window.addEventListener('touchend', e => {
+    if (touchY0 === null) return;
+    const dy = touchY0 - e.changedTouches[0].clientY;
+    touchY0 = null;
+    if (Math.abs(dy) < 60) return;
+    const el = document.documentElement;
+    const atTop    = el.scrollTop <= 0;
+    const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 4;
+    if (dy < 0 && atTop)    window.parent.postMessage('scroll-up-edge',   '*');
+    if (dy > 0 && atBottom) window.parent.postMessage('scroll-down-edge', '*');
   }, { passive: true });
 })();
 </script>
