@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Geonu Jo</title>
+
+  <style>
+    @font-face { font-family:'Poppins'; src:url('source/fonts/Poppins-Regular.ttf') format('truetype'); font-weight:400; }
+    @font-face { font-family:'Poppins'; src:url('source/fonts/Poppins-Medium.ttf') format('truetype'); font-weight:500; }
+    @font-face { font-family:'Poppins'; src:url('source/fonts/Poppins-Bold.ttf') format('truetype'); font-weight:700; }
+
+    html { -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+
+    html, body {
+      width:100%; min-height:100%;
+      font-family:'Poppins', sans-serif;
+      background:#141414;
+      color:#fff;
+      overflow-x:hidden;
+    }
+
+    /* ── NAV ── */
+    #global-nav {
+      position:fixed; top:0; left:0; right:0; z-index:500;
+      display:flex; align-items:baseline;
+      padding:28px 48px 0;
+      pointer-events:none;
+    }
+    #global-nav * { pointer-events:auto; }
+    .nav-name  { font-size:0.95rem; font-weight:400; width:220px; flex-shrink:0; color:#e8e8e8; }
+    .nav-title { font-size:0.95rem; font-weight:400; color:#e8e8e8; }
+    .nav-year  { font-size:0.95rem; font-weight:400; flex:1; padding-left:40px; color:#e8e8e8; }
+    .nav-links { display:flex; gap:40px; }
+    .nav-links a {
+      font-size:0.95rem; font-weight:400; color:#e8e8e8;
+      text-decoration:none;
+    }
+    .nav-links a:hover { text-decoration:underline; text-underline-offset:3px; }
+
+    /* ── BACK BUTTON ── */
+    #btn-back {
+      position:fixed; top:28px; right:48px; z-index:501;
+      font-size:0.85rem; color:#e8e8e8;
+      cursor:pointer; font-family:'Poppins',sans-serif;
+      background:none; border:none; padding:0;
+      opacity:0;
+      animation: fadeIn 0.4s ease 0.2s forwards;
+    }
+    #btn-back:hover { text-decoration:underline; text-underline-offset:2px; }
+
+    @keyframes fadeIn { to { opacity:1; } }
+
+    /* ── CONTENT ── */
+    #project-inner {
+      width: calc(100% - 240px);
+      margin: 0 auto;
+      padding: 100px 0 120px;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: slideUp 0.45s ease 0.1s forwards;
+    }
+    @keyframes slideUp { to { opacity:1; transform:translateY(0); } }
+
+    #project-inner picture { display:block; width:100%; }
+    #project-inner picture img { width:100%; height:auto; display:block; vertical-align:top; }
+
+    #vimeo-wrap { width:60%; margin:0 auto 8px; }
+
+    /* ── 404 fallback ── */
+    #not-found {
+      display:none;
+      position:fixed; inset:0;
+      align-items:center; justify-content:center;
+      flex-direction:column; gap:16px;
+      color:#e8e8e8; font-size:1rem;
+    }
+    #not-found a { color:#e8e8e8; text-decoration:underline; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px), (max-width: 915px) and (orientation: landscape) {
+      #global-nav {
+        padding: 16px 20px 0;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .nav-name { font-size:0.9rem; width:auto; }
+      .nav-title, .nav-year { display:none; }
+      .nav-links { gap:24px; margin-top:4px; }
+      .nav-links a { font-size:0.9rem; }
+
+      #btn-back { top:20px; right:20px; }
+
+      #project-inner {
+        width: calc(100% - 32px);
+        padding: 80px 0 80px;
+      }
+
+      #vimeo-wrap { width:100%; }
+    }
+  </style>
+</head>
+<body>
+
+<nav id="global-nav">
+  <span class="nav-name">Geonu Jo</span>
+  <span class="nav-title">Motions in Preferable Future</span>
+  <span class="nav-year">2026</span>
+  <div class="nav-links">
+    <a href="index.html">Archive</a>
+    <a href="index.html#sketchbook">Sketchbook</a>
+    <a href="index.html#about">About</a>
+  </div>
+</nav>
+
+<button id="btn-back">✕ close</button>
+
+<div id="project-inner"></div>
+
+<div id="not-found">
+  <span>Project not found.</span>
+  <a href="index.html">← Back to Archive</a>
+</div>
+
+<script>
+const PROJECTS = {
+  'volvo-bloom': {
+    title: 'Volvo BLOOM*',
+    path:'source/projects/volvo-bloom/',
+    images: Array.from({length:16}, (_,i) => String(i+1).padStart(2,'0')+'.jpg'),
+    vimeo: '<div style="padding:68.52% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/1188949481?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&loop=1" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="BLOOM* (Volvo Design Competition 2026)"></iframe></div><script src="https://player.vimeo.com/api/player.js"><\/script>'
+  },
+  'hyundai-stormgazer': {
+    title: 'HYUNDAI STORMGAZER',
+    path:'source/projects/hyundai-stormgazer/',
+    images: Array.from({length:13}, (_,i) => String(i+1).padStart(2,'0')+'.jpg')
+  },
+  'polestar-play': {
+    title: 'Polestar PLAY!',
+    path:'source/projects/polestar-play/',
+    images: Array.from({length:12}, (_,i) => String(i+1).padStart(2,'0')+'.jpg')
+  },
+  'side-projects': {
+    title: 'Side Projects',
+    path:'source/projects/side-projects/',
+    images: ['01.jpg']
+  }
+};
+
+/* ── URL에서 key 읽기 ── */
+function getKey() {
+  // /project/volvo-bloom  또는  ?key=volvo-bloom 둘 다 지원
+  const pathMatch = location.pathname.match(/\/project\/([^/?#]+)/);
+  if (pathMatch) return pathMatch[1];
+  return new URLSearchParams(location.search).get('key') || '';
+}
+
+function isMobile() {
+  return window.innerWidth <= 768 || (window.innerWidth <= 915 && window.innerHeight < window.innerWidth);
+}
+
+function render(key, scrollToPage) {
+  const p = PROJECTS[key];
+  if (!p) {
+    document.getElementById('project-inner').style.display = 'none';
+    document.getElementById('not-found').style.display = 'flex';
+    document.title = 'Geonu Jo — Not Found';
+    return;
+  }
+
+  document.title = `Geonu Jo — ${p.title}`;
+  const inner = document.getElementById('project-inner');
+  inner.innerHTML = '';
+
+  // Vimeo
+  if (p.vimeo) {
+    const wrap = document.createElement('div');
+    wrap.id = 'vimeo-wrap';
+    if (isMobile()) wrap.style.width = '100%';
+    wrap.innerHTML = p.vimeo;
+    inner.appendChild(wrap);
+    if (!document.querySelector('script[src*="vimeo.com/api/player"]')) {
+      const s = document.createElement('script');
+      s.src = 'https://player.vimeo.com/api/player.js';
+      document.head.appendChild(s);
+    }
+  }
+
+  // Images
+  p.images.forEach((f, idx) => {
+    const webpSrc = p.path + 'webp/' + f.replace(/\.(jpg|jpeg)$/i, '.webp');
+    const jpgSrc  = p.path + 'jpg/' + f;
+
+    const picture = document.createElement('picture');
+    picture.dataset.pageIndex = idx + 1;
+
+    const source = document.createElement('source');
+    source.srcset = webpSrc;
+    source.type = 'image/webp';
+    picture.appendChild(source);
+
+    const img = document.createElement('img');
+    img.src = jpgSrc;
+    img.alt = f;
+    img.decoding = 'async';
+    picture.appendChild(img);
+
+    inner.appendChild(picture);
+  });
+
+  // startPage 스크롤
+  const targetPage = scrollToPage > 1 ? scrollToPage : null;
+  if (targetPage) {
+    const tryScroll = () => {
+      const el = inner.querySelector(`picture[data-page-index="${targetPage}"]`);
+      if (el) {
+        const img = el.querySelector('img');
+        const doScroll = () => el.scrollIntoView({ behavior:'auto', block:'start' });
+        if (img.complete && img.naturalWidth) doScroll();
+        else img.onload = doScroll;
+      }
+    };
+    requestAnimationFrame(tryScroll);
+  }
+}
+
+/* ── 뒤로가기: index.html 아카이브로 복귀 ── */
+document.getElementById('btn-back').addEventListener('click', () => {
+  // 히스토리에 index가 있으면 back(), 없으면 직접 이동
+  if (document.referrer && document.referrer.includes(location.hostname)) {
+    history.back();
+  } else {
+    location.href = 'index.html';
+  }
+});
+
+/* ── init ── */
+const key = getKey();
+const startPage = parseInt(new URLSearchParams(location.search).get('page') || '1', 10);
+render(key, startPage);
+</script>
+</body>
+</html>
