@@ -16,8 +16,8 @@
     html, body {
       width:100%; min-height:100%;
       font-family:'Poppins', sans-serif;
-      background:#fff;
-      color:#0D0D11;
+      background:#0D0D11;
+      color:#e8e8e8;
       overflow-x:hidden;
     }
 
@@ -29,39 +29,56 @@
       pointer-events:none;
     }
     #global-nav * { pointer-events:auto; }
-    .nav-name  { font-size:0.95rem; font-weight:400; width:220px; flex-shrink:0; color:#0D0D11; }
-    .nav-title { font-size:0.95rem; font-weight:400; color:#0D0D11; }
-    .nav-year  { font-size:0.95rem; font-weight:400; flex:1; padding-left:40px; color:#0D0D11; }
+    .nav-name  { font-size:0.95rem; font-weight:400; width:220px; flex-shrink:0; color:#e8e8e8; }
+    .nav-title { font-size:0.95rem; font-weight:400; color:#e8e8e8; }
+    .nav-year  { font-size:0.95rem; font-weight:400; flex:1; padding-left:40px; color:#e8e8e8; }
     .nav-links { display:flex; gap:40px; }
-    .nav-links a {
-      font-size:0.95rem; font-weight:400; color:#0D0D11;
-      text-decoration:none;
-    }
+    .nav-links a { font-size:0.95rem; font-weight:400; color:#e8e8e8; text-decoration:none; }
     .nav-links a:hover { text-decoration:underline; text-underline-offset:3px; }
 
-    /* ── BACK BUTTON ── */
-    #btn-back {
-      position:fixed; top:52px; right:48px; z-index:501;
-      font-size:0.85rem; color:#0D0D11;
-      cursor:pointer; font-family:'Poppins',sans-serif;
-      background:none; border:none; padding:0;
-      opacity:0;
-      animation: fadeIn 0.4s ease 0.2s forwards;
+    /* ── LAYOUT: sidebar + content + close column ── */
+    #layout {
+      display:flex;
+      min-height:100vh;
     }
-    #btn-back:hover { text-decoration:underline; text-underline-offset:2px; }
 
-    @keyframes fadeIn { to { opacity:1; } }
+    /* ── LEFT SIDEBAR: project index ── */
+    #proj-sidebar {
+      width:220px;
+      flex-shrink:0;
+      padding:110px 0 48px 48px;
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      position:sticky;
+      top:0;
+      height:100vh;
+      overflow:hidden;
+    }
 
-    /* ── CONTENT ── */
+    .proj-nav-item {
+      font-size:0.88rem;
+      font-weight:400;
+      color:#444448;
+      cursor:pointer;
+      line-height:1.5;
+      transition:color 0.2s;
+      white-space:nowrap;
+      text-decoration:none;
+    }
+    .proj-nav-item strong { font-weight:700; }
+    .proj-nav-item.active { color:#e8e8e8; text-decoration:underline; text-underline-offset:3px; }
+    .proj-nav-item:hover  { color:#e8e8e8; }
+
+    /* ── CENTER: images ── */
     #project-inner {
-      width: calc(100% - 240px);
-      margin: 0 auto;
-      padding: 100px 0 120px;
-      display: flex;
-      flex-direction: column;
-      opacity: 0;
-      transform: translateY(16px);
-      animation: slideUp 0.45s ease 0.1s forwards;
+      flex:1;
+      padding:96px 0 120px;
+      display:flex;
+      flex-direction:column;
+      opacity:0;
+      transform:translateY(16px);
+      animation:slideUp 0.45s ease 0.1s forwards;
     }
     @keyframes slideUp { to { opacity:1; transform:translateY(0); } }
 
@@ -70,36 +87,92 @@
 
     #vimeo-wrap { width:60%; margin:0 auto 8px; }
 
-    /* ── 404 fallback ── */
+    /* ── RIGHT COLUMN: close button ── */
+    #close-col {
+      width:220px;
+      flex-shrink:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:sticky;
+      top:0;
+      height:100vh;
+    }
+
+    #btn-close {
+      width:64px; height:64px;
+      border-radius:50%;
+      border:1.5px solid rgba(232,232,232,0.35);
+      background:rgba(232,232,232,0.08);
+      color:#e8e8e8;
+      font-size:1.1rem;
+      cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      transition:background 0.2s, border-color 0.2s, transform 0.2s;
+      backdrop-filter:blur(4px);
+      -webkit-backdrop-filter:blur(4px);
+      opacity:0;
+      animation:fadeIn 0.4s ease 0.3s forwards;
+    }
+    #btn-close:hover {
+      background:rgba(232,232,232,0.18);
+      border-color:rgba(232,232,232,0.7);
+      transform:scale(1.06);
+    }
+    @keyframes fadeIn { to { opacity:1; } }
+
+    /* ── 404 ── */
     #not-found {
-      display:none;
-      position:fixed; inset:0;
+      display:none; position:fixed; inset:0;
       align-items:center; justify-content:center;
       flex-direction:column; gap:16px;
-      color:#0D0D11; font-size:1rem;
+      color:#e8e8e8; font-size:1rem;
     }
-    #not-found a { color:#0D0D11; text-decoration:underline; }
+    #not-found a { color:#e8e8e8; text-decoration:underline; }
 
     /* ── MOBILE ── */
     @media (max-width: 768px), (max-width: 915px) and (orientation: landscape) {
       #global-nav {
-        padding: 16px 20px 0;
-        flex-direction: column;
-        gap: 4px;
+        padding:16px 20px 0;
+        flex-direction:column;
+        gap:4px;
       }
       .nav-name { font-size:0.9rem; width:auto; }
       .nav-title, .nav-year { display:none; }
       .nav-links { gap:24px; margin-top:4px; }
       .nav-links a { font-size:0.9rem; }
 
-      #btn-back { top:48px; right:20px; }
+      #layout { flex-direction:column; }
+
+      #proj-sidebar {
+        position:static;
+        width:100%;
+        height:auto;
+        padding:100px 20px 16px;
+        flex-direction:row;
+        overflow-x:auto;
+        gap:20px;
+        flex-shrink:0;
+      }
+      #proj-sidebar::-webkit-scrollbar { display:none; }
+      .proj-nav-item { white-space:nowrap; font-size:0.85rem; }
 
       #project-inner {
-        width: calc(100% - 32px);
-        padding: 80px 0 80px;
+        padding:16px 20px 100px;
       }
 
       #vimeo-wrap { width:100%; }
+
+      #close-col {
+        position:fixed;
+        bottom:24px; right:20px;
+        width:auto; height:auto;
+        top:auto;
+      }
+      #btn-close {
+        width:52px; height:52px;
+        font-size:1rem;
+      }
     }
   </style>
 </head>
@@ -116,9 +189,21 @@
   </div>
 </nav>
 
-<button id="btn-back">✕ close</button>
+<div id="layout">
+  <aside id="proj-sidebar">
+    <a class="proj-nav-item" href="p.html?key=bloom">Volvo <strong>BLOOM*</strong></a>
+    <a class="proj-nav-item" href="p.html?key=stormgazer">HYUNDAI <strong>STORMGAZER</strong></a>
+    <a class="proj-nav-item" href="p.html?key=play">Polestar <strong>PLAY!</strong></a>
+    <a class="proj-nav-item" href="p.html?key=mazda">Mazda <strong>MELTING POINT</strong></a>
+    <a class="proj-nav-item" href="p.html?key=side">Side Projects</a>
+  </aside>
 
-<div id="project-inner"></div>
+  <main id="project-inner"></main>
+
+  <div id="close-col">
+    <button id="btn-close" aria-label="Close">✕</button>
+  </div>
+</div>
 
 <div id="not-found">
   <span>Project not found.</span>
@@ -128,43 +213,49 @@
 <script>
 const PROJECTS = {
   'bloom': {
-    title: 'Volvo BLOOM*',
+    title:'Volvo BLOOM*',
     path:'source/projects/volvo-bloom/',
-    images: Array.from({length:15}, (_,i) => String(i+1).padStart(2,'0')+'.jpg'),
-    vimeo: '<div style="padding:68.52% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/1188949481?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&loop=1" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="BLOOM* (Volvo Design Competition 2026)"></iframe></div><script src="https://player.vimeo.com/api/player.js"><\/script>'
+    images:Array.from({length:15},(_,i)=>String(i+1).padStart(2,'0')+'.jpg'),
+    vimeo:'<div style="padding:68.52% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/1188949481?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&loop=1" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="BLOOM*"></iframe></div><script src="https://player.vimeo.com/api/player.js"><\/script>'
   },
   'stormgazer': {
-    title: 'HYUNDAI STORMGAZER',
+    title:'HYUNDAI STORMGAZER',
     path:'source/projects/hyundai-stormgazer/',
-    images: Array.from({length:13}, (_,i) => String(i+1).padStart(2,'0')+'.jpg')
+    images:Array.from({length:13},(_,i)=>String(i+1).padStart(2,'0')+'.jpg')
   },
   'play': {
-    title: 'Polestar PLAY!',
+    title:'Polestar PLAY!',
     path:'source/projects/polestar-play/',
-    images: Array.from({length:12}, (_,i) => String(i+1).padStart(2,'0')+'.jpg')
+    images:Array.from({length:12},(_,i)=>String(i+1).padStart(2,'0')+'.jpg')
   },
   'mazda': {
-    title: 'Mazda MELTING POINT',
+    title:'Mazda MELTING POINT',
     path:'source/projects/mazda-melting-point/',
-    images: Array.from({length:7}, (_,i) => String(i+1).padStart(2,'0')+'.jpg')
+    images:Array.from({length:7},(_,i)=>String(i+1).padStart(2,'0')+'.jpg')
   },
   'side': {
-    title: 'Side Projects',
+    title:'Side Projects',
     path:'source/projects/side-projects/',
-    images: ['01.jpg']
+    images:['01.jpg']
   }
 };
 
-/* ── URL에서 key 읽기 ── */
 function getKey() {
-  // /project/volvo-bloom  또는  ?key=volvo-bloom 둘 다 지원
-  const pathMatch = location.pathname.match(/\/project\/([^/?#]+)/);
-  if (pathMatch) return pathMatch[1];
+  const m = location.pathname.match(/\/p\/([^/?#]+)/);
+  if (m) return m[1];
   return new URLSearchParams(location.search).get('key') || '';
 }
 
 function isMobile() {
   return window.innerWidth <= 768 || (window.innerWidth <= 915 && window.innerHeight < window.innerWidth);
+}
+
+/* 현재 key로 sidebar active 표시 */
+function markActive(key) {
+  document.querySelectorAll('.proj-nav-item').forEach(el => {
+    const elKey = new URLSearchParams(new URL(el.href, location.href).search).get('key');
+    el.classList.toggle('active', elKey === key);
+  });
 }
 
 function render(key, scrollToPage) {
@@ -177,10 +268,11 @@ function render(key, scrollToPage) {
   }
 
   document.title = `Geonu Jo — ${p.title}`;
+  markActive(key);
+
   const inner = document.getElementById('project-inner');
   inner.innerHTML = '';
 
-  // Vimeo
   if (p.vimeo) {
     const wrap = document.createElement('div');
     wrap.id = 'vimeo-wrap';
@@ -194,21 +286,17 @@ function render(key, scrollToPage) {
     }
   }
 
-  // Images
   p.images.forEach((f, idx) => {
-    const webpSrc = p.path + 'webp/' + f.replace(/\.(jpg|jpeg)$/i, '.webp');
-    const jpgSrc  = p.path + 'jpg/' + f;
-
     const picture = document.createElement('picture');
     picture.dataset.pageIndex = idx + 1;
 
     const source = document.createElement('source');
-    source.srcset = webpSrc;
+    source.srcset = p.path + 'webp/' + f.replace(/\.(jpg|jpeg)$/i, '.webp');
     source.type = 'image/webp';
     picture.appendChild(source);
 
     const img = document.createElement('img');
-    img.src = jpgSrc;
+    img.src = p.path + 'jpg/' + f;
     img.alt = f;
     img.decoding = 'async';
     picture.appendChild(img);
@@ -216,25 +304,21 @@ function render(key, scrollToPage) {
     inner.appendChild(picture);
   });
 
-  // startPage 스크롤
   const targetPage = scrollToPage > 1 ? scrollToPage : null;
   if (targetPage) {
-    const tryScroll = () => {
+    requestAnimationFrame(() => {
       const el = inner.querySelector(`picture[data-page-index="${targetPage}"]`);
-      if (el) {
-        const img = el.querySelector('img');
-        const doScroll = () => el.scrollIntoView({ behavior:'auto', block:'start' });
-        if (img.complete && img.naturalWidth) doScroll();
-        else img.onload = doScroll;
-      }
-    };
-    requestAnimationFrame(tryScroll);
+      if (!el) return;
+      const img = el.querySelector('img');
+      const doScroll = () => el.scrollIntoView({ behavior:'auto', block:'start' });
+      if (img.complete && img.naturalWidth) doScroll();
+      else img.onload = doScroll;
+    });
   }
 }
 
-/* ── 뒤로가기: index.html 아카이브로 복귀 ── */
-document.getElementById('btn-back').addEventListener('click', () => {
-  // 히스토리에 index가 있으면 back(), 없으면 직접 이동
+/* close */
+document.getElementById('btn-close').addEventListener('click', () => {
   if (document.referrer && document.referrer.includes(location.hostname)) {
     history.back();
   } else {
@@ -242,7 +326,6 @@ document.getElementById('btn-back').addEventListener('click', () => {
   }
 });
 
-/* ── init ── */
 const key = getKey();
 const startPage = parseInt(new URLSearchParams(location.search).get('page') || '1', 10);
 render(key, startPage);

@@ -35,11 +35,6 @@
     .nav-links a.active { text-decoration:underline; text-underline-offset:3px; }
     .nav-links a:hover  { text-decoration:underline; text-underline-offset:3px; }
     
-    #global-nav.on-archive .nav-name,
-    #global-nav.on-archive .nav-title,
-    #global-nav.on-archive .nav-year,
-    #global-nav.on-archive .nav-links a { color:#e8e8e8; }
-
     #global-nav.on-sketchbook .nav-name,
     #global-nav.on-sketchbook .nav-title,
     #global-nav.on-sketchbook .nav-year,
@@ -55,7 +50,7 @@
     .page { width:100%; height:100vh; position:relative; }
 
     /* ── PAGE 1: ARCHIVE ── */
-    #page-archive { background:#0D0D11; display:flex; }
+    #page-archive { background:#fff; display:flex; }
 
     .archive-sidebar {
       width:220px;
@@ -68,19 +63,19 @@
     .project-nav-item {
       font-size:0.88rem;
       font-weight:400;
-      color:#555558;
+      color:#878788;
       cursor:pointer;
       line-height:1.5;
       transition:color 0.2s;
       white-space:nowrap;
     }
     .project-nav-item strong { font-weight:700; }
-    .project-nav-item.active { color:#e8e8e8; text-decoration:underline; text-underline-offset:3px; }
-    .project-nav-item:hover { color:#e8e8e8; }
+    .project-nav-item.active { color:#0D0D11; text-decoration:underline; text-underline-offset:3px; }
+    .project-nav-item:hover { color:#0D0D11; }
 
     .archive-content {
       flex:1;
-      padding:96px 268px 48px 48px;
+      padding:96px 48px 48px;
       display:flex;
       flex-direction:column;
       overflow:hidden;
@@ -139,10 +134,10 @@
       padding-top:14px;
       flex-shrink:0;
     }
-    .meta-num     { font-size:0.82rem; color:#e8e8e8; }
-    .meta-context { font-size:0.82rem; color:#e8e8e8; }
-    .meta-tags    { font-size:0.82rem; color:#e8e8e8; display:flex; flex-direction:column; gap:2px; }
-    .meta-date    { font-size:0.82rem; color:#e8e8e8; text-align:right; }
+    .meta-num     { font-size:0.82rem; color:#0D0D11; }
+    .meta-context { font-size:0.82rem; color:#0D0D11; }
+    .meta-tags    { font-size:0.82rem; color:#0D0D11; display:flex; flex-direction:column; gap:2px; }
+    .meta-date    { font-size:0.82rem; color:#0D0D11; text-align:right; }
 
     /* ── PAGE 2: SKETCHBOOK (iframe) ── */
     #page-sketchbook { background:#b8b8b8; }
@@ -405,8 +400,6 @@ let currentPage = 0;
 let isAnimating = false;
 const ANIM_MS   = 900;
 
-globalNav.classList.add('on-archive');
-
 function goToPage(n) {
   n = Math.max(0, Math.min(2, n));
   if (n === currentPage || isAnimating) return;
@@ -419,7 +412,6 @@ function goToPage(n) {
   document.getElementById('nav-archive').classList.toggle('active',    n === 0);
   document.getElementById('nav-sketchbook').classList.toggle('active', n === 1);
   document.getElementById('nav-about').classList.toggle('active',      n === 2);
-  globalNav.classList.toggle('on-archive',    n === 0);
   globalNav.classList.toggle('on-sketchbook', n === 1);
   setTimeout(() => { isAnimating = false; }, ANIM_MS);
 }
