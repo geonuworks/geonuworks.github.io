@@ -222,10 +222,10 @@ function placeSketch(src, idx) {
       let projectKey = '';
       const normName = meta.project.replace('*', '').toLowerCase();
       
-      if (normName.includes('bloom')) projectKey = 'volvo-bloom';
-      else if (normName.includes('stormgazer')) projectKey = 'hyundai-stormgazer';
-      else if (normName.includes('play')) projectKey = 'polestar-play';
-      else if (normName.includes('side project')) projectKey = 'side-projects';
+      if (normName.includes('bloom')) projectKey = 'bloom';
+      else if (normName.includes('stormgazer')) projectKey = 'stormgazer';
+      else if (normName.includes('play')) projectKey = 'play';
+      else if (normName.includes('side project')) projectKey = 'side';
 
       if (projectKey) {
         const targetPage = meta.page || 1;

@@ -223,19 +223,19 @@
 
     <div class="page" id="page-archive">
       <aside class="archive-sidebar">
-        <div class="project-nav-item active" data-key="volvo-bloom">
+        <div class="project-nav-item active" data-key="bloom">
           Volvo <strong>BLOOM*</strong>
         </div>
-        <div class="project-nav-item" data-key="hyundai-stormgazer">
+        <div class="project-nav-item" data-key="stormgazer">
           HYUNDAI <strong>STORMGAZER</strong>
         </div>
-        <div class="project-nav-item" data-key="polestar-play">
+        <div class="project-nav-item" data-key="play">
           Polestar <strong>PLAY!</strong>
         </div>
-        <div class="project-nav-item" data-key="kia-gaia">
+        <div class="project-nav-item" data-key="gaia">
           KIA <strong>GAIA</strong> (WIP)
         </div>
-        <div class="project-nav-item" data-key="side-projects">
+        <div class="project-nav-item" data-key="side">
           Side Projects
         </div>
       </aside>
@@ -267,7 +267,7 @@
 
 <script>
 const PROJECTS = {
-  'volvo-bloom': {
+  'bloom': {
     num:'01', context:'Volvo Design Competition 2026',
     tags:['Exterior Design','Interior Design','3D Modeling'],
     date:'Mar. 2026. (1 month)',
@@ -275,28 +275,28 @@ const PROJECTS = {
     images: Array.from({length:16}, (_,i) => String(i+1).padStart(2,'0')+'.jpg'),
     vimeo: '<div style="padding:68.52% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/1188949481?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&loop=1" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="BLOOM* (Volvo Design Competition 2026)"></iframe></div><script src="https://player.vimeo.com/api/player.js"><\/script>'
   },
-  'hyundai-stormgazer': {
+  'stormgazer': {
     num:'02', context:'HYUNDAI industry-academic cooperation',
     tags:['Exterior Design','3D Modeling'],
     date:'Jul. 2025. - Nov. 2025. (4 months)',
     path:'source/projects/hyundai-stormgazer/',
     images: Array.from({length:13}, (_,i) => String(i+1).padStart(2,'0')+'.jpg')
   },
-  'polestar-play': {
+  'play': {
     num:'03', context:'Polestar Design Contest 2024',
     tags:['Exterior Design','Interior Design', '3D Modeling'],
     date:'Apr. 2024. - May. 2024. (2 months)',
     path:'source/projects/polestar-play/',
     images: Array.from({length:12}, (_,i) => String(i+1).padStart(2,'0')+'.jpg')
   },
-  'kia-gaia': {
+  'gaia': {
     num:'04', context:'BA Thesis Project (wip)',
     tags:['Exterior Design', 'Interior Design', '3D Modeling'],
     date:'Apr. 2026. - Dec. 2026. (9 months)',
     path:'source/projects/kia-gaia/',
     images: Array.from({length:8}, (_,i) => String(i+1).padStart(2,'0')+'.jpg')
   },
-  'side-projects': {
+  'side': {
     num:'05', context:'Various',
     tags:['Sketching','Modeling'],
     date:'2024. –',
@@ -386,11 +386,11 @@ document.querySelectorAll('.project-nav-item').forEach(el => {
 });
 
 initCoverLayers();
-selectProject('volvo-bloom');
+selectProject('bloom');
 
 document.getElementById('archive-cover').addEventListener('click', () => {
-  if (activeKey === 'kia-gaia') return;
-  if (activeKey) location.href = `project.html?key=${activeKey}`;
+  if (activeKey === 'gaia') return;
+  if (activeKey) location.href = `p.html?key=${activeKey}`;
 });
 
 /* ── PAGE SNAPPING ── */
@@ -470,9 +470,9 @@ window.addEventListener('message', (e) => {
   if (e.data && e.data.type === 'open-project-lightbox') {
     const targetKey = e.data.key;
     const p = PROJECTS[targetKey];
-    if (p && targetKey !== 'kia-gaia') {
+    if (p && targetKey !== 'gaia') {
       const startPage = e.data.page || 1;
-      location.href = `project.html?key=${targetKey}&page=${startPage}`;
+      location.href = `p.html?key=${targetKey}&page=${startPage}`;
     }
   }
 });
