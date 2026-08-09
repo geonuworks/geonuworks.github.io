@@ -36,23 +36,20 @@
     .nav-links a { font-size:0.95rem; font-weight:400; color:#e8e8e8; text-decoration:none; }
     .nav-links a:hover { text-decoration:underline; text-underline-offset:3px; }
 
-    /* ── LAYOUT: sidebar + content + close column ── */
-    #layout {
-      display:flex;
-      min-height:100vh;
-    }
+    /* ── LAYOUT wrapper (just a block container now) ── */
+    #layout { display:block; }
 
     /* ── LEFT SIDEBAR: project index ── */
     #proj-sidebar {
+      position:fixed;
+      top:0; left:0;
       width:220px;
-      flex-shrink:0;
+      height:100vh;
       padding:110px 0 48px 48px;
       display:flex;
       flex-direction:column;
       gap:6px;
-      position:sticky;
-      top:0;
-      height:100vh;
+      z-index:400;
       overflow:hidden;
     }
 
@@ -72,7 +69,8 @@
 
     /* ── CENTER: images ── */
     #project-inner {
-      flex:1;
+      margin-left:220px;
+      margin-right:220px;
       padding:96px 0 120px;
       display:flex;
       flex-direction:column;
@@ -89,14 +87,14 @@
 
     /* ── RIGHT COLUMN: close button ── */
     #close-col {
+      position:fixed;
+      top:0; right:0;
       width:220px;
-      flex-shrink:0;
+      height:100vh;
       display:flex;
       align-items:center;
       justify-content:center;
-      position:sticky;
-      top:0;
-      height:100vh;
+      z-index:400;
     }
 
     #btn-close {
@@ -142,37 +140,34 @@
       .nav-links { gap:24px; margin-top:4px; }
       .nav-links a { font-size:0.9rem; }
 
-      #layout { flex-direction:column; }
-
       #proj-sidebar {
-        position:static;
         width:100%;
         height:auto;
-        padding:100px 20px 16px;
+        padding:90px 20px 12px;
         flex-direction:row;
         overflow-x:auto;
         gap:20px;
-        flex-shrink:0;
+        bottom:auto;
       }
       #proj-sidebar::-webkit-scrollbar { display:none; }
-      .proj-nav-item { white-space:nowrap; font-size:0.85rem; }
+      .proj-nav-item { font-size:0.85rem; }
 
       #project-inner {
-        padding:16px 20px 100px;
+        margin-left:0;
+        margin-right:0;
+        padding:160px 20px 100px;
       }
 
       #vimeo-wrap { width:100%; }
 
       #close-col {
-        position:fixed;
-        bottom:24px; right:20px;
-        width:auto; height:auto;
         top:auto;
+        bottom:24px;
+        right:20px;
+        width:auto;
+        height:auto;
       }
-      #btn-close {
-        width:52px; height:52px;
-        font-size:1rem;
-      }
+      #btn-close { width:52px; height:52px; font-size:1rem; }
     }
   </style>
 </head>
