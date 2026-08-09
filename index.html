@@ -145,43 +145,7 @@
     /* ── PAGE 3: ABOUT ── */
     #page-about { background:#fff; }
 
-    /* ── LIGHTBOX ── */
-    #lightbox {
-      position: fixed; 
-      inset: 0; 
-      z-index: 1000;
-      background: rgba(0,0,0,0); 
-      display: none;
-      overflow-y: auto;
-      transition: background 0.4s ease;
-      overscroll-behavior-y: contain; 
-    }
-    #lightbox.visible { background:rgba(0,0,0,0.88); }
-    
-    #lightbox-inner {
-      position: relative;
-      width: calc(100% - 240px);
-      margin: 0 auto;
-      padding: 80px 0 120px;
-      display: flex; 
-      flex-direction: column;
-      opacity: 0; 
-      transform: translateY(20px);
-      transition: opacity 0.4s ease, transform 0.4s ease;
-    }
-    #lightbox.visible #lightbox-inner { opacity: 1; transform: translateY(0); }
-    #lightbox-inner picture { display: block; width: 100%; margin-bottom: 0; padding: 0; }
-    #lightbox-inner picture img { width: 100%; height: auto; display: block; vertical-align: top; }
-    #lightbox-vimeo-wrap { width: 100%; margin-bottom: 8px; }
-    
-    #lightbox-close {
-      position:fixed; top:28px; right:48px;
-      font-size:0.85rem; color:#fff; cursor:pointer;
-      font-family:'Poppins',sans-serif; z-index:1001;
-      opacity:0; transition:opacity 0.4s ease;
-    }
-    #lightbox.visible #lightbox-close { opacity:1; }
-    #lightbox-close:hover { text-decoration:underline; }
+
 
     /* ═══════════════════════════════
        MOBILE RESPONSIVE LAYOUT STYLES
@@ -229,8 +193,7 @@
       /* ★ 요구사항 반영: 아카이브 페이지 날짜 정보 정렬 왼쪽으로 통합 수정 */
       .meta-date { text-align: left; font-size: 0.8rem; color: #878788; margin-top: 2px; }
       
-      #lightbox-inner { width: calc(100% - 32px); padding: 60px 0 60px; }
-      #lightbox-close { top: 20px; right: 20px; }
+
     }
 
     @media (max-width: 915px) and (orientation: landscape) {
@@ -300,10 +263,7 @@
   </div>
 </div>
 
-<div id="lightbox">
-  <span id="lightbox-close">✕ close</span>
-  <div id="lightbox-inner"></div>
-</div>
+
 
 <script>
 const PROJECTS = {
@@ -347,7 +307,6 @@ const PROJECTS = {
 
 let activeKey = '';
 let lastActiveKey = null;
-let lightboxScrollTimer = null;
 
 function isMobileLayout() {
   return window.innerWidth <= 768 || (window.innerWidth <= 915 && window.innerHeight < window.innerWidth);
@@ -431,8 +390,7 @@ selectProject('volvo-bloom');
 
 document.getElementById('archive-cover').addEventListener('click', () => {
   if (activeKey === 'kia-gaia') return;
-  const p = PROJECTS[activeKey];
-  if (p) openLightbox(p.path, p.images, p.vimeo || null);
+  if (activeKey) location.href = `project.html?key=${activeKey}`;
 });
 
 /* ── PAGE SNAPPING ── */
@@ -467,9 +425,6 @@ let wheelAccum = 0, wheelTimer = null;
 const WHEEL_THRESHOLD = 50;
 
 window.addEventListener('wheel', (e) => {
-  const lb = document.getElementById('lightbox');
-  if (lb && lb.style.display === 'block' && lb.classList.contains('visible')) return;
-
   if (currentPage === 0) {
     if (isMobileLayout()) return; 
     const atBottom = archivePage.scrollTop + archivePage.clientHeight >= archivePage.scrollHeight - 4;
@@ -496,8 +451,6 @@ window.addEventListener('touchstart', e => {
 
 window.addEventListener('touchend', e => {
   if (touchY0 === null || isAnimating) return;
-  if (document.getElementById('lightbox').style.display === 'block') return;
-  
   if (currentPage === 1) {
     const dx = touchX0 - e.changedTouches[0].clientX;
     if (Math.abs(dx) > 40) return; 
@@ -517,12 +470,9 @@ window.addEventListener('message', (e) => {
   if (e.data && e.data.type === 'open-project-lightbox') {
     const targetKey = e.data.key;
     const p = PROJECTS[targetKey];
-    
-    if (p) {
-      selectProject(targetKey);
-      if (targetKey === 'kia-gaia') return; 
+    if (p && targetKey !== 'kia-gaia') {
       const startPage = e.data.page || 1;
-      openLightbox(p.path, p.images, p.vimeo || null, startPage);
+      location.href = `project.html?key=${targetKey}&page=${startPage}`;
     }
   }
 });
@@ -538,101 +488,7 @@ function preloadProjectCovers() {
 }
 preloadProjectCovers();
 
-/* ── LIGHTBOX CONTROLLER ── */
-function openLightbox(path, images, vimeo, startPage = 1) {
-  const lb    = document.getElementById('lightbox');
-  const inner = document.getElementById('lightbox-inner');
-  inner.innerHTML = '';
-  lb.onscroll = null; 
 
-  if (vimeo) {
-    const wrap = document.createElement('div');
-    wrap.id = 'lightbox-vimeo-wrap';
-    wrap.style.cssText = 'width:60%; margin:0 auto 8px;';
-    if(isMobileLayout()) wrap.style.width = '100%';
-    wrap.innerHTML = vimeo;
-    inner.appendChild(wrap);
-    if (!document.querySelector('script[src*="vimeo.com/api/player"]')) {
-      const s = document.createElement('script');
-      s.src = 'https://player.vimeo.com/api/player.js';
-      document.head.appendChild(s);
-    }
-  }
-
-  images.forEach((f, idx) => {
-    const webpFileName = f.replace(/\.(jpg|jpeg)$/i, '.webp');
-    const webpSrc = path + 'webp/' + webpFileName;
-    const jpgSrc  = path + 'jpg/' + f;
-
-    const picture = document.createElement('picture');
-    picture.dataset.pageIndex = idx + 1;
-    picture.style.cssText = 'display:block; width:100%; margin-bottom:0;'; 
-
-    const source = document.createElement('source');
-    source.srcset = webpSrc;
-    source.type = 'image/webp';
-    picture.appendChild(source);
-
-    const img = document.createElement('img');
-    img.src = jpgSrc;
-    img.alt = f;
-    img.decoding = "sync";
-    img.style.cssText = 'width:100%; display:block; height:auto;';
-
-    picture.appendChild(img);
-    inner.appendChild(picture);
-  });
-
-  lb.style.display = 'block';
-  lb.scrollTop = 0; 
-
-  requestAnimationFrame(() => {
-    lb.classList.add('visible');
-    if (images.length === 0) return;
-
-    const targetPageNum = startPage > 1 ? startPage : 1;
-    const targetPicture = inner.querySelector(`picture[data-page-index="${targetPageNum}"]`);
-    
-    if (targetPicture) {
-      const targetImg = targetPicture.querySelector('img');
-      const scrollToTarget = () => {
-        targetPicture.scrollIntoView({ behavior: 'auto', block: 'start' });
-        if (targetPageNum === 1 && vimeo) {
-          lb.scrollTop = 0;
-        }
-        targetImg.onload = null;
-        targetImg.onerror = null;
-      };
-
-      if (targetImg.complete && targetImg.naturalWidth) {
-        lightboxScrollTimer = setTimeout(scrollToTarget, 50);
-      } else {
-        targetImg.onload = () => { lightboxScrollTimer = setTimeout(scrollToTarget, 100); };
-        targetImg.onerror = () => { scrollToTarget(); }; 
-      }
-    } else {
-      lb.scrollTop = 0;
-    }
-  });
-}
-
-function closeLightbox() {
-  if (lightboxScrollTimer) {
-    clearTimeout(lightboxScrollTimer);
-    lightboxScrollTimer = null;
-  }
-  const lb = document.getElementById('lightbox');
-  lb.classList.remove('visible');
-  setTimeout(() => { 
-    lb.style.display = 'none'; 
-    document.getElementById('lightbox-inner').innerHTML = ''; 
-  }, 420);
-}
-
-document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
-document.getElementById('lightbox').addEventListener('click', e => {
-  if(e.target.id === 'lightbox' || e.target.id === 'lightbox-inner') closeLightbox();
-});
 </script>
 </body>
 </html>
