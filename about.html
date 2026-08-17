@@ -29,7 +29,7 @@
       display:grid;
       grid-template-columns: 1fr 1fr;
       min-height:100vh;
-      padding-top:80px;
+      padding-top:48px;
     }
 
     /* ── LEFT COLUMN ── */
@@ -185,6 +185,8 @@
     .cv-row-bullets li::before { content:'·'; position:absolute; left:2px; color:#878788; }
 
     .cv-row-role { font-size:0.75rem; color:#0D0D11; white-space:nowrap; text-align:right; }
+    /* 모바일에서만 날짜를 role 옆에 붙여 보여주기 위해 · 이후는 데스크톱에서 숨김 */
+    .cv-row-role .role-date { display:none; }
     .cv-row-date { font-size:0.7rem; color:#0D0D11; white-space:nowrap; text-align:right; }
 
     /* education / award: no logo, 3-col */
@@ -205,6 +207,7 @@
       .body-layout {
         grid-template-columns:1fr;
         min-height:auto;
+        padding-top:60px;
       }
 
       .left-col {
@@ -221,13 +224,35 @@
       .cv-card { grid-template-columns:1fr; }
       .cv-card-label { padding:10px 14px; }
 
+      /* logo + main 위, role + date 아래 별도 행으로 */
       .cv-row {
-        grid-template-columns:auto 1fr;
-        gap:0 10px;
+        grid-template-columns: auto 1fr auto;
+        grid-template-rows: auto auto;
+        gap:4px 12px;
       }
-      .cv-row-role, .cv-row-date { text-align:left; }
-      .cv-row.no-logo { grid-template-columns:1fr; }
-      .cv-row.exhibit-row { grid-template-columns:auto 1fr; }
+      .cv-row-logo { grid-column:1; grid-row:1; }
+      .cv-row-main { grid-column:2 / 4; grid-row:1; }
+      .cv-row-role {
+        grid-column:1 / 3; grid-row:2;
+        text-align:left;
+        font-size:0.72rem;
+        color:#878788;
+        white-space:normal;
+      }
+      .cv-row-date {
+        grid-column:3; grid-row:2;
+        font-size:0.72rem;
+        color:#878788;
+        text-align:right;
+        white-space:nowrap;
+      }
+
+      .cv-row.no-logo { grid-template-columns:1fr auto; }
+      .cv-row.exhibit-row { grid-template-columns: auto 1fr; grid-template-rows: auto auto; }
+      .cv-row.exhibit-row .cv-row-date {
+        grid-column:1 / 3; grid-row:2;
+        text-align:left;
+      }
     }
   </style>
 </head>
