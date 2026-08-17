@@ -11,9 +11,8 @@
 
     *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
 
-    /* Responsive base font ─ matches index.html scaling */
-    html { 
-      font-size: clamp(12px, 0.9vw, 15px); 
+    html {
+      font-size: clamp(11px, 0.85vw, 14px);
       -webkit-text-size-adjust: 100%;
       text-size-adjust: 100%;
     }
@@ -23,397 +22,212 @@
       font-weight:400;
       background:#ffffff;
       color:#0D0D11;
+      min-height:100vh;
     }
 
-    /* ── BODY LAYOUT ── */
     .body-layout {
       display:grid;
-      grid-template-columns: 300px 1fr;
-      padding:100px 48px 48px;
+      grid-template-columns: 1fr 1fr;
+      min-height:100vh;
+      padding-top:80px;
     }
 
     /* ── LEFT COLUMN ── */
-    .left-col { padding-right:40px; }
-
-    /* 기준 크기(0.82rem)로 통일 */
-    .bio {
-      font-size:0.82rem; 
-      line-height:1.75;
-      color:#0D0D11;
-      margin-bottom:28px;
-    }
-    .bio strong { font-weight:700; }
-    .bio em { font-style:normal; font-weight:700; }
-
-    .skills-lang {
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:0 16px;
-      margin-bottom:24px;
+    .left-col {
+      padding:40px 32px 48px;
+      display:flex;
+      flex-direction:column;
+      gap:0;
     }
 
-    /* [좌측 카테고리] 기준 크기(0.82rem)로 통일 */
-    .left-section-label {
-      font-size:0.82rem;
+    /* Name hero */
+    .name-hero {
+      margin-bottom:40px;
+    }
+    .name-icon {
+      width:18px; height:18px;
+      background:#0D0D11;
+      display:block;
+      margin-bottom:8px;
+    }
+    .name-hero h1 {
+      font-size:clamp(28px, 3.5vw, 52px);
       font-weight:700;
-      letter-spacing:0.05em;
+      line-height:1.1;
       color:#0D0D11;
+    }
+
+    /* Box sections */
+    .box-section {
+      border:1px solid #0D0D11;
+      padding:16px 20px;
+      margin-bottom:16px;
+    }
+    .box-label {
+      font-size:0.72rem;
+      font-weight:700;
+      letter-spacing:0.1em;
+      color:#0D0D11;
+      margin-bottom:12px;
+    }
+
+    /* EDUCATION in box */
+    .edu-entry {
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:2px 16px;
       margin-bottom:10px;
     }
+    .edu-entry:last-child { margin-bottom:0; }
+    .edu-name { font-size:0.78rem; font-weight:700; color:#0D0D11; grid-column:1; }
+    .edu-date { font-size:0.72rem; color:#0D0D11; grid-column:2; text-align:right; white-space:nowrap; }
+    .edu-major{ font-size:0.75rem; color:#0D0D11; grid-column:1 / 3; }
 
-    /* [좌측 항목들] 기준 크기(0.82rem)로 통일 */
-    .skill-list { list-style:none; display:flex; flex-direction:column; gap:4px; }
-    .skill-list li { font-size:0.82rem; color:#0D0D11; line-height:1.5; }
-
-    .lang-list { list-style:none; display:flex; flex-direction:column; gap:4px; }
-    .lang-row { display:flex; justify-content:space-between; align-items:baseline; font-size:0.82rem; }
-    .lang-row span:first-child { color:#0D0D11; }
-    .lang-row span:last-child  { color:#0D0D11; }
-
-    .tools-section { margin-bottom:24px; }
-    .tools-grid { display:flex; flex-direction:column; gap:4px; }
-    .tools-row { display:grid; grid-template-columns:28px 1fr; font-size:0.82rem; line-height:1.6; }
-    .tools-row .tool-key { color:#878788; font-weight:400; }
-    .tools-row span:last-child { color:#0D0D11; }
-
-    .contact-section { margin-bottom:20px; }
-    .contact-section p { font-size:0.82rem; color:#0D0D11; line-height:1.7; }
-    .contact-section a { color:#0D0D11; text-decoration:none; }
-
-    /* QR codes ─ responsive size via em so they scale with font */
-    .qr-section { display:flex; gap:24px; margin-top:8px; }
-    .qr-item { display:flex; flex-direction:column; align-items:flex-start; gap:6px; }
-    .qr-item span { font-size:0.75rem; color:#0D0D11; }
-    .qr-item img {
-      width: 5rem;
-      height: 5rem;
-      display:block;
+    /* TOOLS / LANGUAGES / SKILLS side by side */
+    .tls-row {
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:16px;
+      margin-bottom:16px;
     }
+    .tls-box {
+      border:1px solid #0D0D11;
+      padding:14px 16px;
+    }
+    .tls-item { font-size:0.75rem; color:#0D0D11; line-height:1.7; }
+    .tls-item .tls-key { color:#878788; font-size:0.72rem; }
+    .lang-row-item { display:flex; justify-content:space-between; font-size:0.75rem; line-height:1.8; }
+    .lang-row-item span:first-child { font-weight:500; }
+
+    /* CONTACT box */
+    .contact-box {
+      border:1px solid #0D0D11;
+      padding:14px 20px;
+      margin-bottom:16px;
+    }
+    .contact-box p { font-size:0.78rem; line-height:1.7; }
+    .contact-box a { color:#0D0D11; text-decoration:none; }
+    .contact-box .qr-row { display:flex; gap:20px; margin-top:10px; }
+    .qr-item { display:flex; flex-direction:column; align-items:flex-start; gap:4px; }
+    .qr-item img { width:4.2rem; height:4.2rem; display:block; }
+    .qr-item span { font-size:0.68rem; color:#0D0D11; }
 
     /* ── RIGHT COLUMN ── */
     .right-col {
-      padding-left:40px;
-      display:grid;
-      grid-template-columns: 140px 40px 1fr 1fr 1fr; /* 카테고리 크기에 맞춰 140px로 조절 */
-      column-gap:0;
-      align-content:start;
+      padding:40px 32px 48px;
+      display:flex;
+      flex-direction:column;
+      gap:0;
     }
 
-    /* each section spans all 5 cols */
-    .cv-section {
-      grid-column: 1 / 6;
+    /* CV section cards */
+    .cv-card {
       display:grid;
-      grid-template-columns: subgrid;
-      padding:28px 0;
-      border-top:1px solid #e0e0e0;
-      align-items:start;
-      column-gap:10px;
+      grid-template-columns:120px 1fr;
+      border:1px solid #0D0D11;
+      margin-bottom:16px;
+      overflow:hidden;
     }
-    .cv-section:first-child { padding-top:0; border-top:none; }
 
-    /* [우측 카테고리] 기준 크기(0.82rem)로 통일 */
-    .cv-section-label {
-      grid-column:1;
-      font-size:0.82rem;
+    .cv-card-label {
+      background:#0D0D11;
+      color:#fff;
+      font-size:0.72rem;
       font-weight:700;
-      letter-spacing:0.08em;
-      color:#0D0D11;
-      text-transform:uppercase;
+      letter-spacing:0.1em;
+      padding:16px 14px;
+      display:flex;
+      align-items:flex-start;
+    }
+
+    .cv-card-body {
+      padding:0;
+      display:flex;
+      flex-direction:column;
+    }
+
+    /* Entry rows inside cards */
+    .cv-row {
+      display:grid;
+      grid-template-columns:auto 1fr auto auto;
+      gap:0 20px;
+      padding:14px 16px;
+      border-bottom:1px solid #e0e0e0;
+      align-items:start;
+    }
+    .cv-row:last-child { border-bottom:none; }
+
+    .cv-row-logo {
+      width:48px;
+      display:flex;
+      align-items:flex-start;
       padding-top:2px;
     }
+    .cv-row-logo img { display:block; height:auto; }
+    .logo-dvision  { width:52px; }
+    .logo-hyundai  { width:28px; }
+    .logo-kia      { width:34px; }
+    .logo-lg       { width:22px; }
 
-    /* section body spans cols 2-5 */
-    .cv-section-body {
-      grid-column: 2 / 6;
-      display:grid;
-      grid-template-columns: subgrid;
-      row-gap:16px;
-      align-items:start;
-    }
-
-    /* each entry spans all 4 cols of section-body (cols 2-5) */
-    .cv-entry,
-    .exp-entry,
-    .exhibit-entry {
-      grid-column: 1 / 5;
-      display:grid;
-      grid-template-columns: subgrid;
-      align-items:start;
-    }
-
-    /* col 1 of body (=col 2 page): logo cell, right-aligned, 40px */
-    .logo-cell {
-      grid-column:1;
+    .cv-row-main {
       display:flex;
-      justify-content:flex-end;
-      align-items:flex-start;
-      padding-top:3px;
+      flex-direction:column;
+      gap:2px;
     }
-    .logo-cell img { display:block; height:auto; }
-    .logo-hyundai { width:1.8rem; }
-    .logo-kia     { width:2.2rem; }
-    .logo-lg      { width:1.4rem; }
-
-    /* education/award: no logo → empty spacer in col1 */
-    .cv-entry-spacer { grid-column:1; }
-
-    /* col 2 of body (=col 3 page): institution/name */
-    .cv-entry-body { grid-column:2; }
-    .exp-body      { grid-column:2; }
-    .exhibit-entry .exhibit-body { grid-column:2 / 4; }
-    
-    /* EDUCATION 및 AWARD 기관명 크기 기준(0.82rem) 통일 */
-    .cv-entry-institution { font-size:0.82rem; font-weight:700; color:#0D0D11; line-height:1.4; }
-
-    /* col 3 of body (=col 4 page): role/result */
-    .cv-entry-col3 { grid-column:3; }
-    /* 전공 및 수상내역 역할 크기 기준(0.82rem) 통일 */
-    .cv-entry-role { grid-column:3; font-size:0.82rem; font-weight:400; color:#0D0D11; }
-
-    /* col 4 of body (=col 5 page): date, right-aligned ─ 기존 유지 */
-    .cv-entry-date { grid-column:4; font-size:0.75rem; color:#878788; text-align:right; white-space:nowrap; }
-
-    /* HYUNDAI, KIA 타이틀 영역 크기 기존(0.82rem) 유지 */
-    .exp-org { font-size:0.82rem; font-weight:400; color:#0D0D11; line-height:1.4; }
-    
-    /* ⚠️ 프로젝트 상세 정보 및 불릿 크기 원본 그대로 고정 (0.75rem, 0.72rem) */
-    .exp-org .sub     { font-weight:400; font-size:0.75rem; color:#0D0D11; display:block; }
-    .exp-org .project { font-size:0.75rem; font-weight:400; color:#0D0D11; display:block; margin-top:6px; }
-
-    .exp-bullets { margin-top:4px; list-style:none; display:flex; flex-direction:column; gap:2px; }
-    .exp-bullets li {
-      font-size:0.72rem; color:#0D0D11; line-height:1.55;
+    .cv-row-title    { font-size:0.8rem; font-weight:700; color:#0D0D11; line-height:1.35; }
+    .cv-row-subtitle { font-size:0.75rem; color:#0D0D11; line-height:1.4; }
+    .cv-row-project  { font-size:0.72rem; color:#0D0D11; margin-top:4px; }
+    .cv-row-bullets  { list-style:none; margin-top:4px; display:flex; flex-direction:column; gap:2px; }
+    .cv-row-bullets li {
+      font-size:0.7rem; color:#0D0D11; line-height:1.5;
       padding-left:10px; position:relative;
     }
-    .exp-bullets li::before { content:'·'; position:absolute; left:2px; color:#878788; }
+    .cv-row-bullets li::before { content:'·'; position:absolute; left:2px; color:#878788; }
 
-    /* Exhibition: 타이틀 및 기존 불릿 크기 원본 그대로 고정 */
-    .exhibit-entry .exhibit-body { grid-column:2/4; }
-    .exhibit-body .title    { font-size:0.82rem; font-weight:700; color:#0D0D11; }
-    .exhibit-body .subtitle { font-size:0.75rem; color:#0D0D11; margin-top:2px; }
-    .exhibit-body .bullet {
-      font-size:0.72rem; color:#0D0D11; margin-top:6px;
-      padding-left:10px; position:relative; line-height:1.55;
+    .cv-row-role { font-size:0.75rem; color:#0D0D11; white-space:nowrap; text-align:right; }
+    .cv-row-date { font-size:0.7rem; color:#0D0D11; white-space:nowrap; text-align:right; }
+
+    /* education / award: no logo, 3-col */
+    .cv-row.no-logo {
+      grid-template-columns:1fr auto auto;
+      gap:0 16px;
     }
-    .exhibit-body .bullet::before { content:'·'; position:absolute; left:2px; color:#878788; }
 
-    /* ═══════════════════════════════
-       📱 모바일 및 가로 모드 최적화 레이아웃
-    ═══════════════════════════════ */
+    /* exhibit: logo + body spans 3 cols + date */
+    .cv-row.exhibit-row {
+      grid-template-columns:auto 1fr auto;
+    }
+    .cv-row.exhibit-row .cv-row-logo { width:36px; }
+
+    /* ── MOBILE ── */
     @media (max-width: 768px), (max-width: 915px) and (orientation: landscape) {
+
       .body-layout {
-        display: flex !important;
-        flex-direction: column !important;
-        padding: 108px 20px 48px !important;
-        gap: 0 !important;
+        grid-template-columns:1fr;
+        min-height:auto;
       }
 
-      /* left-col: flex column, items in order */
       .left-col {
-        display: flex !important;
-        flex-direction: column !important;
-        padding: 0 !important;
-        width: 100% !important;
-        order: 1;
+        padding:20px 16px 32px;
+        border-right:none;
+        border-bottom:1px solid #e0e0e0;
       }
 
-      .right-col {
-        display: flex !important;
-        flex-direction: column !important;
-        padding: 0 !important;
-        width: 100% !important;
-        order: 2;
-        margin-top: 8px;
-      }
+      .name-hero h1 { font-size:clamp(24px, 8vw, 40px); }
+      .tls-row { grid-template-columns:1fr 1fr; }
 
-      /* left-col child ordering */
-      .bio { order: 1; margin-bottom: 20px !important; }
-      .skills-lang {
-        order: 2;
-        display: grid !important;
-        grid-template-columns: 1fr 1fr !important;
-        gap: 0 16px !important;
-        padding-top: 20px !important;
-        border-top: 1px solid #e0e0e0;
-        margin-bottom: 20px !important;
-      }
+      .right-col { padding:20px 16px 48px; }
 
-      /* CONTACTS + TOOLS: side by side */
-      .contact-section {
-        order: 3;
-      }
-      .tools-section {
-        order: 4;
-        margin-bottom: 0 !important;
-      }
+      .cv-card { grid-template-columns:1fr; }
+      .cv-card-label { padding:10px 14px; }
 
-      /* wrapper trick: wrap contact+tools in a flex row */
-      .left-col .contact-section,
-      .left-col .tools-section {
-        width: 50% !important;
-        float: none !important;
-        display: block !important;
+      .cv-row {
+        grid-template-columns:auto 1fr;
+        gap:0 10px;
       }
-
-      /* Use a pseudo-flex row for contact+tools */
-      .left-col::after {
-        content: '';
-        display: table;
-        clear: both;
-      }
-      .contact-section { float: left !important; padding-right: 12px; margin-bottom: 20px !important; }
-      .tools-section   { float: right !important; padding-left: 4px; }
-
-      .qr-section {
-        order: 5;
-        clear: both;
-        padding-top: 20px;
-        margin-top: 20px !important;
-        border-top: 1px solid #e0e0e0;
-      }
-
-      /* ── CV sections: stack vertically ── */
-      .cv-section {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 12px !important;
-        padding: 20px 0 !important;
-        border-top: 1px solid #e0e0e0 !important;
-        width: 100% !important;
-      }
-      .cv-section:first-child { border-top: none !important; }
-
-      .cv-section-label {
-        font-size: 0.78rem !important;
-        color: #878788 !important;
-        letter-spacing: 0.08em;
-      }
-
-      .cv-section-body {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 16px !important;
-        width: 100% !important;
-      }
-
-      /* ── each entry ── */
-      .cv-entry,
-      .exp-entry,
-      .exhibit-entry {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 2px !important;
-        width: 100% !important;
-      }
-
-      /* hide spacer/logo cell on mobile */
-      .cv-entry-spacer { display: none !important; }
-      .logo-cell {
-        justify-content: flex-start !important;
-        padding-top: 0 !important;
-        margin-bottom: 4px !important;
-      }
-
-      /* institution + date: row */
-      .cv-entry-body {
-        display: flex !important;
-        flex-direction: row !important;
-        justify-content: space-between !important;
-        align-items: baseline !important;
-        gap: 8px !important;
-        flex-wrap: wrap;
-      }
-
-      .cv-entry-institution {
-        flex: 1 !important;
-        font-size: 0.82rem !important;
-        font-weight: 700 !important;
-      }
-
-      /* date beside institution */
-      .cv-entry-date {
-        font-size: 0.72rem !important;
-        color: #878788 !important;
-        text-align: right !important;
-        white-space: nowrap;
-        flex-shrink: 0;
-      }
-
-      /* role/major below */
-      .cv-entry-col3,
-      .cv-entry-role {
-        font-size: 0.8rem !important;
-        color: #0D0D11 !important;
-        margin-top: 0 !important;
-      }
-
-      /* EXPERIENCE entries */
-      .exp-body {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 2px !important;
-      }
-
-      /* org header row: name + role + date */
-      .exp-org {
-        display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: wrap !important;
-        align-items: baseline !important;
-        gap: 0 8px !important;
-      }
-
-      /* role & date: pull right */
-      .right-col .cv-section:nth-of-type(3) .cv-entry-role {
-        display: block !important;
-        font-size: 0.78rem !important;
-        color: #878788 !important;
-        margin-left: auto;
-      }
-
-      /* exp-entry: put logo+body in column, date floated */
-      .exp-entry {
-        position: relative !important;
-      }
-      .exp-entry .cv-entry-date {
-        position: absolute !important;
-        top: 0 !important;
-        right: 0 !important;
-      }
-
-      /* exhibit */
-      .exhibit-body {
-        display: block !important;
-      }
-      .exhibit-body .title {
-        display: block !important;
-        font-size: 0.82rem !important;
-        font-weight: 700 !important;
-      }
-      .exhibit-body .subtitle {
-        display: block !important;
-        font-size: 0.75rem !important;
-        margin-top: 2px;
-      }
-
-      /* ★ 한국예술종합학교 날짜: estimated 제거 */
-      .cv-section:nth-of-type(1) .cv-entry:nth-of-type(1) .cv-entry-date {
-        font-size: 0px !important;
-        color: transparent !important;
-      }
-      .cv-section:nth-of-type(1) .cv-entry:nth-of-type(1) .cv-entry-date::before {
-        content: 'Feb. 2020. – Aug. 2027.';
-        font-size: 0.72rem !important;
-        color: #878788 !important;
-      }
-    }
-
-    /* 아이폰 가로 모드 */
-    @media (max-width: 915px) and (orientation: landscape) {
-      .body-layout {
-        padding: 88px 20px 40px !important;
-      }
-      .cv-section { padding: 14px 0 !important; }
+      .cv-row-role, .cv-row-date { text-align:left; }
+      .cv-row.no-logo { grid-template-columns:1fr; }
+      .cv-row.exhibit-row { grid-template-columns:auto 1fr; }
     }
   </style>
 </head>
@@ -421,160 +235,148 @@
 
   <div class="body-layout">
 
+    <!-- ── LEFT ── -->
     <aside class="left-col">
 
-      <div class="bio">
-        <p>I'm <strong>Geonu Jo</strong>, a 4th-year mobility design student who is interested in future-oriented designs.</p>
-        <br>
-        <p>Buckminster Fuller, an American architect, once said, <em>"The best way to predict the future is to design it."</em> As a design student, my role is not only to adapt to new technologies but to use them as tools to reshape the future.</p>
-        <br>
-        <p>Through speculative mobility projects, I've developed a mindset that constantly asks, <em>"What's next?"</em> I aim to design transportations actively shape the upcoming future.</p>
+      <div class="name-hero">
+        <span class="name-icon"></span>
+        <h1>Geonu Jo</h1>
       </div>
 
-      <div class="skills-lang">
-        <div>
-          <div class="left-section-label">SKILLS</div>
-          <ul class="skill-list">
-            <li>Creative Thinking</li>
-            <li>Team Leadership</li>
-            <li>XR Sketch</li>
-          </ul>
+      <!-- EDUCATION -->
+      <div class="box-section">
+        <div class="box-label">EDUCATION</div>
+        <div class="edu-entry">
+          <div class="edu-name">Korea National University of Arts</div>
+          <div class="edu-date">Feb. 2020. – Feb. 2027</div>
+          <div class="edu-major">BA, Transportation Design</div>
         </div>
-        <div>
-          <div class="left-section-label">LANGUAGE</div>
-          <ul class="lang-list">
-            <li class="lang-row"><span>English</span><span>advanced</span></li>
-            <li class="lang-row"><span>Korean</span><span>native</span></li>
-          </ul>
+        <div class="edu-entry">
+          <div class="edu-name">Ansan Technical Highschool</div>
+          <div class="edu-date">Feb. 2016. – Feb. 2019</div>
+          <div class="edu-major">diploma, Industrial Design</div>
         </div>
       </div>
 
-      <div class="tools-section">
-        <div class="left-section-label">TOOLS</div>
-        <div class="tools-grid">
-          <div class="tools-row"><span class="tool-key">2D</span><span>Adobe Suite / Figma</span></div>
-          <div class="tools-row"><span class="tool-key">3D</span><span>Blender 3D / Maya</span></div>
-          <div class="tools-row"><span class="tool-key">AI</span><span>Vizcom / Udin BV Optic</span></div>
-          <div class="tools-row"><span class="tool-key">XR</span><span>Gravity Sketch</span></div>
+      <!-- TOOLS / LANGUAGES / SKILLS -->
+      <div class="tls-row">
+        <div class="tls-box">
+          <div class="box-label">TOOLS</div>
+          <div class="tls-item"><span class="tls-key">2D&nbsp;</span>Adobe Suite / Figma</div>
+          <div class="tls-item"><span class="tls-key">3D&nbsp;</span>Blender 3D / Maya</div>
+          <div class="tls-item"><span class="tls-key">VR&nbsp;</span>Gravity Sketch</div>
+          <div class="tls-item"><span class="tls-key">AI&nbsp;&nbsp;</span>Vizcom / Udin BV Optic</div>
+        </div>
+        <div class="tls-box">
+          <div class="box-label">LANGUAGES</div>
+          <div class="lang-row-item"><span>English</span><span>advanced</span></div>
+          <div class="lang-row-item"><span><strong>German</strong></span><span>beginner</span></div>
+          <div class="lang-row-item"><span><strong>Korean</strong></span><span>native</span></div>
+        </div>
+        <div class="tls-box">
+          <div class="box-label">SKILLS</div>
+          <div class="tls-item">Creative Thinking</div>
+          <div class="tls-item">VR Sketching</div>
+          <div class="tls-item">AI-Aided Design</div>
         </div>
       </div>
 
-      <div class="contact-section">
-        <div class="left-section-label">CONTACTS</div>
+      <!-- CONTACT -->
+      <div class="contact-box">
+        <div class="box-label">CONTACT</div>
         <p><a href="mailto:geonuworks@gmail.com">geonuworks@gmail.com</a></p>
         <p>+82 10 2811 4285</p>
-      </div>
-
-      <div class="qr-section">
-        <div class="qr-item">
-          <img src="source/icons/qr_linkedin.svg" alt="LinkedIn QR" />
-          <span>Linkedin</span>
-        </div>
-        <div class="qr-item">
-          <img src="source/icons/qr_instagram.svg" alt="Instagram QR" />
-          <span>Instagram</span>
+        <p>&nbsp;</p>
+        <p>https://geonuworks.com</p>
+        <div class="qr-row">
+          <div class="qr-item">
+            <img src="source/icons/qr_linkedin.svg" alt="LinkedIn QR" />
+            <span>LinkedIn</span>
+          </div>
+          <div class="qr-item">
+            <img src="source/icons/qr_instagram.svg" alt="Instagram QR" />
+            <span>Instagram</span>
+          </div>
         </div>
       </div>
 
     </aside>
 
+    <!-- ── RIGHT ── -->
     <main class="right-col">
 
-      <div class="cv-section">
-        <div class="cv-section-label">EDUCATION</div>
-        <div class="cv-section-body">
-          <div class="cv-entry">
-            <div class="cv-entry-spacer"></div>
-            <div class="cv-entry-body">
-              <div class="cv-entry-institution">Korea National University of Arts</div>
-            </div>
-            <div class="cv-entry-col3" style="font-size:0.82rem;font-weight:400;color:#0D0D11;">BA, Transportation Design</div>
-            <div class="cv-entry-date">Feb. 2020. – Aug. 2027. (estimated)</div>
-          </div>
-          <div class="cv-entry">
-            <div class="cv-entry-spacer"></div>
-            <div class="cv-entry-body">
-              <div class="cv-entry-institution">Ansan Technical Highschool</div>
-            </div>
-            <div class="cv-entry-col3" style="font-size:0.82rem;font-weight:400;color:#0D0D11;">highschool diploma, Industrial Design</div>
-            <div class="cv-entry-date">Feb. 2016. – Feb. 2019.</div>
-          </div>
-        </div>
-      </div>
+      <!-- EXPERIENCE -->
+      <div class="cv-card">
+        <div class="cv-card-label">EXPERIENCE</div>
+        <div class="cv-card-body">
 
-      <div class="cv-section">
-        <div class="cv-section-label">HONOR &amp; AWARD</div>
-        <div class="cv-section-body">
-          <div class="cv-entry">
-            <div class="cv-entry-spacer"></div>
-            <div class="cv-entry-body">
-              <div class="cv-entry-institution">Volvo Design Competition 2026</div>
+          <!-- DVISION -->
+          <div class="cv-row">
+            <div class="cv-row-logo">
+              <img class="logo-dvision" src="source/icons/logo_dvision.svg" alt="DVISION" />
             </div>
-            <div class="cv-entry-col3" style="font-size:0.82rem;font-weight:400;color:#0D0D11;">Shortlisted (Phase 1)</div>
-            <div class="cv-entry-date">Mar. 2026.</div>
+            <div class="cv-row-main">
+              <div class="cv-row-title">Automotive Design</div>
+              <div class="cv-row-subtitle">involved in global automotive OEM design projects.</div>
+            </div>
+            <div class="cv-row-role">Student Researcher</div>
+            <div class="cv-row-date">Jun. 2026. – Oct. 2026.</div>
           </div>
-        </div>
-      </div>
 
-      <div class="cv-section">
-        <div class="cv-section-label">EXPERIENCE</div>
-        <div class="cv-section-body">
-
-          <div class="exp-entry">
-            <div class="logo-cell">
+          <!-- HYUNDAI -->
+          <div class="cv-row">
+            <div class="cv-row-logo">
               <img class="logo-hyundai" src="source/icons/logo_hyundai.svg" alt="Hyundai" />
             </div>
-            <div class="exp-body">
-              <div class="exp-org">
-                <strong>HYUNDAI</strong> industry-academic cooperation
-                <span class="sub">Exterior Design</span>
-                <span class="project">〈AI-driven Design Process Development Research〉</span>
-              </div>
-              <ul class="exp-bullets">
+            <div class="cv-row-main">
+              <div class="cv-row-title">industry-academic cooperation<br>Exterior Design</div>
+              <div class="cv-row-project">〈AI-driven Design Process Development Research〉</div>
+              <ul class="cv-row-bullets">
                 <li>Built and implemented an AI-driven design framework to unify workflows across multiple projects.</li>
                 <li>Led team operations by defining strategy and delegating tasks.</li>
-                <li>Completed an individual project within the framework, contributing to the successful delivery of 8 projects for HYUNDAI.</li>
+                <li>Completed an individual project, contributing to the successful delivery of 8 projects for HYUNDAI.</li>
               </ul>
             </div>
-            <div class="cv-entry-role">Project Manager</div>
-            <div class="cv-entry-date">Mar. 2025. – Dec. 2025.</div>
+            <div class="cv-row-role">Project Manager</div>
+            <div class="cv-row-date">Mar. 2025. – Dec. 2025.</div>
           </div>
 
-          <div class="exp-entry">
-            <div class="logo-cell">
+          <!-- KIA -->
+          <div class="cv-row">
+            <div class="cv-row-logo">
               <img class="logo-kia" src="source/icons/logo_kia.svg" alt="KIA" />
             </div>
-            <div class="exp-body">
-              <div class="exp-org">
-                <strong>KIA</strong> industry-academic cooperation
-                <span class="sub">Next Interior Design</span>
-                <span class="project">〈2030 eMPV Advanced Interior Design Research〉</span>
-              </div>
-              <ul class="exp-bullets">
+            <div class="cv-row-main">
+              <div class="cv-row-title">Next Interior Design<br>industry-academic cooperation</div>
+              <div class="cv-row-project">〈2030 eMPV Advanced Interior Design Research〉</div>
+              <ul class="cv-row-bullets">
                 <li>Led the project team in developing a future-oriented interior vision for a 2030 eMPV concept.</li>
                 <li>Explored forward-looking meta trends research to define the cultural and technological context.</li>
               </ul>
             </div>
-            <div class="cv-entry-role">Project Manager</div>
-            <div class="cv-entry-date">Mar. 2024. – Jun. 2024.</div>
+            <div class="cv-row-role">Project Manager</div>
+            <div class="cv-row-date">Mar. 2024. – Jun. 2024.</div>
           </div>
 
         </div>
       </div>
 
-      <div class="cv-section">
-        <div class="cv-section-label">EXHIBITION</div>
-        <div class="cv-section-body">
-          <div class="exhibit-entry">
-            <div class="logo-cell">
+      <!-- EXHIBITION -->
+      <div class="cv-card">
+        <div class="cv-card-label">EXHIBITION</div>
+        <div class="cv-card-body">
+          <div class="cv-row exhibit-row">
+            <div class="cv-row-logo">
               <img class="logo-lg" src="source/icons/logo_lg.svg" alt="LG" />
             </div>
-            <div class="exhibit-body">
-              <div class="title">LG Electronics × K-Arts</div>
-              <div class="subtitle">〈Objects with Nunchi: When Home Appliances Develop Emotional Intelligence〉,<br>Gyeongdong Market, Seoul, 2025</div>
-              <div class="bullet">Contributed to the 3D visualization of Furon(LG's Affectionate Intelligence).</div>
+            <div class="cv-row-main">
+              <div class="cv-row-title">LG Electronics</div>
+              <div class="cv-row-subtitle">〈Objects with Nunchi: When Home Appliances Develop Emotional Intelligence〉, Gyeongdong Market, Seoul, 2025</div>
+              <ul class="cv-row-bullets">
+                <li>Contributed to the 3D visualization of Furon(LG's Affectionate Intelligence).</li>
+              </ul>
             </div>
-            <div class="cv-entry-date">Dec. 2025. – Apr. 2026.</div>
+            <div class="cv-row-date">Dec. 2025. – Apr. 2026.</div>
           </div>
         </div>
       </div>
@@ -586,7 +388,6 @@
 (function() {
   const isMobile = () => window.innerWidth <= 768 || (window.innerWidth <= 915 && window.innerHeight < window.innerWidth);
 
-  /* ── wheel: desktop only, edge-boundary page change ── */
   let wheelAccum = 0, wheelTimer = null;
   const THRESHOLD = 50;
   window.addEventListener('wheel', (e) => {
@@ -604,11 +405,8 @@
     if (dir > 0 && atBottom) window.parent.postMessage('scroll-down-edge', '*');
   }, { passive: true });
 
-  /* ── touch swipe: mobile page navigation ── */
   let touchY0 = null;
-  window.addEventListener('touchstart', e => {
-    touchY0 = e.touches[0].clientY;
-  }, { passive: true });
+  window.addEventListener('touchstart', e => { touchY0 = e.touches[0].clientY; }, { passive: true });
   window.addEventListener('touchend', e => {
     if (touchY0 === null) return;
     const dy = touchY0 - e.changedTouches[0].clientY;
