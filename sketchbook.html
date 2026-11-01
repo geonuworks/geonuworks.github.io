@@ -291,15 +291,27 @@ function makeDraggable(el) {
 }
 
 // ★ 모바일 스케치북 면적 터치 스와이프 상하 전이 브릿지 복원
-let touchY0 = null;
-window.addEventListener('touchstart', e => { touchY0 = e.touches[0].clientY; }, {passive:true});
+// 좌우 스와이프(스케치 넘기기) 중 살짝 섞인 상하 움직임으로 페이지가 넘어가지 않도록,
+// 수평 기준 각도가 MIN_VERTICAL_ANGLE(도) 미만이면 좌우 스와이프로 보고 페이지 전환을 무시한다.
+const MIN_VERTICAL_ANGLE = 30;
+const MIN_VERTICAL_DIST  = 60;   // 페이지 전환에 필요한 최소 세로 이동거리(px)
+let touchX0 = null, touchY0 = null;
+window.addEventListener('touchstart', e => {
+  touchX0 = e.touches[0].clientX;
+  touchY0 = e.touches[0].clientY;
+}, {passive:true});
+window.addEventListener('touchcancel', () => { touchX0 = touchY0 = null; }, {passive:true});
 window.addEventListener('touchend', e => {
-  if (touchY0 === null || !isMobileView()) return;
+  if (touchY0 === null || !isMobileView()) { touchX0 = touchY0 = null; return; }
+  const dx = e.changedTouches[0].clientX - touchX0;
   const dy = touchY0 - e.changedTouches[0].clientY;
-  touchY0 = null;
-  if (Math.abs(dy) > 60) {
-    window.parent.postMessage(dy > 0 ? 'scroll-down-edge' : 'scroll-up-edge', '*');
-  }
+  touchX0 = touchY0 = null;
+
+  if (Math.abs(dy) <= MIN_VERTICAL_DIST) return;
+  const angle = Math.atan2(Math.abs(dy), Math.abs(dx)) * 180 / Math.PI;  // 수평 기준 0~90°
+  if (angle < MIN_VERTICAL_ANGLE) return;   // 거의 수평 → 좌우 스와이프로 처리
+
+  window.parent.postMessage(dy > 0 ? 'scroll-down-edge' : 'scroll-up-edge', '*');
 }, {passive:true});
 
 let wheelAccum=0, wheelTimer=null;
