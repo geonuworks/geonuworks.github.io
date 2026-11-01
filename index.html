@@ -42,12 +42,15 @@
 
     /* ── PAGE SCROLL ── */
     #scroll-container { position:fixed; inset:0; overflow:hidden; }
+    /* 페이지 높이를 vh/svh 단위 대신 컨테이너 비율(%)로 통일:
+       모바일·아이패드에서 주소창 때문에 vh와 svh가 달라 페이지가 어긋나던 문제 방지 */
     #pages-wrapper {
-      width:100%; 
+      width:100%;
+      height:300%;
       transition: transform 0.85s cubic-bezier(0.76,0,0.24,1);
       will-change: transform;
     }
-    .page { width:100%; height:100vh; position:relative; }
+    .page { width:100%; height:33.3333%; position:relative; overflow:hidden; }
 
     /* ── PAGE 1: ARCHIVE ── */
     #page-archive { background:#fff; display:flex; }
@@ -197,9 +200,6 @@
     }
 
     @media (max-width: 915px) and (orientation: landscape) {
-      .page { 
-        height: 100svh !important; 
-      }
       .archive-sidebar { padding: 94px 20px 8px 20px; }
       #archive-cover { aspect-ratio: 16/6; max-height: 38vh; }
     }
@@ -290,9 +290,9 @@ const PROJECTS = {
     images: Array.from({length:12}, (_,i) => String(i+1).padStart(2,'0')+'.jpg')
   },
   'mazda': {
-    num:'04', context:'KISKA internship pre-task submission',
-    tags:['Exterior Design'],
-    date:'Jul. 8. 2026. - Jul. 15. 2026.(1 week)',
+    num:'04', context:'Mazda Design Competition 2025',
+    tags:['Exterior Design', 'Interior Design', '3D Modeling'],
+    date:'',
     path:'source/projects/mazda-melting-point/',
     images: Array.from({length:7}, (_,i) => String(i+1).padStart(2,'0')+'.jpg')
   },
@@ -406,8 +406,8 @@ function goToPage(n) {
   currentPage = n;
   isAnimating = true;
   
-  const targetOffset = n * -100;
-  pagesWrapper.style.transform = `translateY(${targetOffset}svh)`;
+  // translateY의 %는 wrapper(=페이지 3장) 높이 기준이므로 한 페이지 = 100/3 %
+  pagesWrapper.style.transform = `translateY(${-n * (100 / 3)}%)`;
   
   document.getElementById('nav-archive').classList.toggle('active',    n === 0);
   document.getElementById('nav-sketchbook').classList.toggle('active', n === 1);
